@@ -162,6 +162,35 @@ export const Game = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [playerPosition]);
 
+  const getCellBackground = (x: number, y: number) => {
+    // Brauner Streifen in der Mitte (4 Spalten breit)
+    const middleStart = Math.floor(GRID_SIZE / 2) - 2;
+    if (x >= middleStart && x < middleStart + 4) {
+      return 'bg-[#8B4513]/20'; // Transparentes Braun für den Mittelstreifen
+    }
+    
+    // Schachbrettmuster für den Rest
+    return (x + y) % 2 === 0 ? 'bg-[#90B167]/10' : 'bg-[#90B167]/20';
+  };
+
+  // Erstelle ein Array mit allen Feldern
+  const gridCells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => {
+    const x = i % GRID_SIZE;
+    const y = Math.floor(i / GRID_SIZE);
+    return (
+      <div
+        key={`cell-${x}-${y}`}
+        className={`absolute ${getCellBackground(x, y)}`}
+        style={{
+          left: `${(x * 800) / GRID_SIZE}px`,
+          top: `${(y * 800) / GRID_SIZE}px`,
+          width: `${800 / GRID_SIZE}px`,
+          height: `${800 / GRID_SIZE}px`,
+        }}
+      />
+    );
+  });
+
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       <div className="flex items-center gap-4">
@@ -176,10 +205,8 @@ export const Game = () => {
       </div>
       <div 
         className="relative w-[800px] h-[800px] bg-grass rounded-lg border-4 border-fence overflow-hidden"
-        style={{ 
-          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,0,0,0.1) 39px, rgba(0,0,0,0.1) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,0,0,0.1) 39px, rgba(0,0,0,0.1) 40px)'
-        }}
       >
+        {gridCells}
         {obstacles.map(obstacle => (
           <Obstacle 
             key={obstacle.id}
