@@ -42,7 +42,8 @@ export const updateAnimalPositions = (
     if (animal.caught) return animal;
 
     // Prüfe, ob genug Zeit seit der letzten Bewegung vergangen ist
-    if ((currentTime % 750) < animal.moveDelay) {
+    const shouldMove = (currentTime + animal.moveDelay) % 750 < 50;
+    if (!shouldMove) {
       return animal;
     }
 
