@@ -5,8 +5,8 @@ import { Obstacle } from './Obstacle';
 import { ScoreBoard } from './ScoreBoard';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { getDistance, moveTowardsPlayer, moveAwayFromPlayer, getRandomMove } from '../utils/animalMovement';
 import { GRID_SIZE, INITIAL_ANIMALS, INITIAL_OBSTACLES } from '../config/gameConfig';
+import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 
 export type Position = {
   x: number;
@@ -21,30 +21,6 @@ export type AnimalType = {
   lastMoveDirection?: 'towards' | 'away';
 };
 
-const isPositionBlocked = (position: Position, obstacles: typeof INITIAL_OBSTACLES) => {
-  return obstacles.some(obstacle => 
-    obstacle.position.x === position.x && 
-    obstacle.position.y === position.y
-  );
-};
-
-const getValidMove = (
-  currentPos: Position, 
-  newPos: Position, 
-  obstacles: typeof INITIAL_OBSTACLES
-): Position => {
-  if (
-    newPos.x < 0 || 
-    newPos.x >= GRID_SIZE || 
-    newPos.y < 0 || 
-    newPos.y >= GRID_SIZE ||
-    isPositionBlocked(newPos, obstacles)
-  ) {
-    return currentPos;
-  }
-  return newPos;
-};
-
 export const Game = () => {
   const [playerPosition, setPlayerPosition] = useState<Position>({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
   const [animals, setAnimals] = useState<AnimalType[]>(INITIAL_ANIMALS);
@@ -54,6 +30,7 @@ export const Game = () => {
   const resetGame = () => {
     setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
     setAnimals(INITIAL_ANIMALS);
+    positionQueue.clear();
     toast({
       title: "Spiel neu gestartet",
       description: "Fang alle Tiere wieder ein!",
@@ -79,65 +56,13 @@ export const Game = () => {
     );
   }, [toast]);
 
-  const updateAnimalPositions = useCallback((currentAnimals: AnimalType[], currentPlayerPos: Position) => {
-    console.log('Updating animal positions. Player at:', currentPlayerPos);
-    const updatedAnimals = currentAnimals.map(animal => {
-      if (animal.caught) return animal;
-
-      let newPosition: Position;
-
-      switch (animal.type) {
-        case 'pig':
-          newPosition = getRandomMove(animal.position, GRID_SIZE);
-          console.log('Pig moving randomly to:', newPosition);
-          break;
-        case 'cat':
-          const newDirection = animal.lastMoveDirection === 'towards' ? 'away' : 'towards';
-          newPosition = newDirection === 'towards'
-            ? moveTowardsPlayer(animal.position, currentPlayerPos)
-            : moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
-          console.log('Cat moving', newDirection, 'player to:', newPosition);
-          break;
-        case 'chicken':
-          const distanceToPlayer = getDistance(animal.position, currentPlayerPos);
-          console.log('Chicken distance to player:', distanceToPlayer);
-          if (distanceToPlayer <= 3) {
-            newPosition = moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
-            console.log('Chicken running away to:', newPosition);
-          } else {
-            newPosition = getRandomMove(animal.position, GRID_SIZE);
-            console.log('Chicken moving randomly to:', newPosition);
-          }
-          break;
-        default:
-          return animal;
-      }
-
-      const validPosition = getValidMove(animal.position, newPosition, obstacles);
-      console.log(`${animal.type} final position after obstacle check:`, validPosition);
-
-      return {
-        ...animal,
-        position: validPosition,
-        lastMoveDirection: animal.type === 'cat' 
-          ? (animal.lastMoveDirection === 'towards' ? 'away' : 'towards') 
-          : animal.lastMoveDirection
-      };
-    });
-
-    // Überprüfe Kollisionen mit der Spielerposition nach der Bewegung der Tiere
-    checkCollisions(currentPlayerPos);
-
-    return updatedAnimals;
-  }, [obstacles, checkCollisions]);
-
   useEffect(() => {
     const moveInterval = setInterval(() => {
-      setAnimals(prevAnimals => updateAnimalPositions(prevAnimals, playerPosition));
+      setAnimals(prevAnimals => updateAnimalPositions(prevAnimals, obstacles));
     }, 750);
 
     return () => clearInterval(moveInterval);
-  }, [updateAnimalPositions, playerPosition]);
+  }, [obstacles]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const newPosition = { ...playerPosition };
@@ -161,6 +86,7 @@ export const Game = () => {
 
     const validPosition = getValidMove(playerPosition, newPosition, obstacles);
     setPlayerPosition(validPosition);
+    positionQueue.add(validPosition);
     checkCollisions(validPosition);
   };
 
@@ -183,7 +109,6 @@ export const Game = () => {
     if (x >= middleStart && x < middleStart + 4) {
       return 'bg-[#8B4513]/20';
     }
-    
     return (x + y) % 2 === 0 ? 'bg-[#90B167]/10' : 'bg-[#90B167]/20';
   };
 
