@@ -19,17 +19,26 @@ export type AnimalType = {
   position: Position;
   caught: boolean;
   lastMoveDirection?: 'towards' | 'away';
+  moveDelay: number; // Neue Property für individuelle Verzögerung
 };
 
 export const Game = () => {
   const [playerPosition, setPlayerPosition] = useState<Position>({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
-  const [animals, setAnimals] = useState<AnimalType[]>(INITIAL_ANIMALS);
+  const [animals, setAnimals] = useState<AnimalType[]>(
+    INITIAL_ANIMALS.map(animal => ({
+      ...animal,
+      moveDelay: Math.floor(Math.random() * 750) // Zufällige Verzögerung zwischen 0-750ms
+    }))
+  );
   const [obstacles] = useState(INITIAL_OBSTACLES);
   const { toast } = useToast();
 
   const resetGame = () => {
     setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
-    setAnimals(INITIAL_ANIMALS);
+    setAnimals(INITIAL_ANIMALS.map(animal => ({
+      ...animal,
+      moveDelay: Math.floor(Math.random() * 750) // Zufällige Verzögerung zwischen 0-750ms
+    })));
     positionQueue.clear();
     toast({
       title: "Spiel neu gestartet",

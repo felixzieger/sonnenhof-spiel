@@ -36,10 +36,15 @@ export const updateAnimalPositions = (
   const currentPlayerPos = positionQueue.getLatest();
   if (!currentPlayerPos) return currentAnimals;
 
-  console.log('Updating animal positions. Player at:', currentPlayerPos);
+  const currentTime = Date.now();
   
   return currentAnimals.map(animal => {
     if (animal.caught) return animal;
+
+    // Prüfe, ob genug Zeit seit der letzten Bewegung vergangen ist
+    if ((currentTime % 750) < animal.moveDelay) {
+      return animal;
+    }
 
     let newPosition: Position;
 
