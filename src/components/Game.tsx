@@ -242,3 +242,6 @@ export const Game = () => {
       </div>
     </div>
   );
+};
+
+export default Game;
