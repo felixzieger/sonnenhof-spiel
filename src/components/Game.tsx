@@ -3,6 +3,7 @@ import { Player } from './Player';
 import { Animal } from './Animal';
 import { ScoreBoard } from './ScoreBoard';
 import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
 
 export type Position = {
   x: number;
@@ -17,16 +18,25 @@ export type AnimalType = {
 };
 
 const GRID_SIZE = 20;
-const MOVEMENT_SPEED = 40;
+const INITIAL_ANIMALS = [
+  { id: 1, type: 'cat', position: { x: 2, y: 2 }, caught: false },
+  { id: 2, type: 'chicken', position: { x: 15, y: 15 }, caught: false },
+  { id: 3, type: 'pig', position: { x: 5, y: 18 }, caught: false },
+] as const;
 
 export const Game = () => {
   const [playerPosition, setPlayerPosition] = useState<Position>({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
-  const [animals, setAnimals] = useState<AnimalType[]>([
-    { id: 1, type: 'cat', position: { x: 2, y: 2 }, caught: false },
-    { id: 2, type: 'chicken', position: { x: 15, y: 15 }, caught: false },
-    { id: 3, type: 'pig', position: { x: 5, y: 18 }, caught: false },
-  ]);
+  const [animals, setAnimals] = useState<AnimalType[]>(INITIAL_ANIMALS);
   const { toast } = useToast();
+
+  const resetGame = () => {
+    setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
+    setAnimals(INITIAL_ANIMALS);
+    toast({
+      title: "Spiel neu gestartet",
+      description: "Fang alle Tiere wieder ein!",
+    });
+  };
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const newPosition = { ...playerPosition };
@@ -85,7 +95,16 @@ export const Game = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 p-4">
-      <ScoreBoard animals={animals} />
+      <div className="flex items-center gap-4">
+        <ScoreBoard animals={animals} />
+        <Button 
+          onClick={resetGame}
+          variant="outline"
+          className="bg-white hover:bg-gray-100"
+        >
+          🔄 Neu starten
+        </Button>
+      </div>
       <div 
         className="relative w-[800px] h-[800px] bg-grass rounded-lg border-4 border-fence overflow-hidden"
         style={{ 
