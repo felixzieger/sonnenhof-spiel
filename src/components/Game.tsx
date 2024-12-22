@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Player } from './Player';
 import { Animal } from './Animal';
 import { ScoreBoard } from './ScoreBoard';
@@ -40,76 +40,110 @@ export const Game = () => {
     });
   };
 
-  useEffect(() => {
-    // Bewegung für Schweine (alle 1.5 Sekunden statt 3)
-    const pigInterval = setInterval(() => {
-      setAnimals(prevAnimals => 
-        prevAnimals.map(animal => {
-          if (animal.type === 'pig' && !animal.caught) {
+  const updateAnimalPositions = useCallback((currentAnimals: AnimalType[], currentPlayerPos: Position) => {
+    return currentAnimals.map(animal => {
+      if (animal.caught) return animal;
+
+      switch (animal.type) {
+        case 'pig':
+          return {
+            ...animal,
+            position: getRandomMove(animal.position, GRID_SIZE)
+          };
+        case 'cat':
+          const newDirection = animal.lastMoveDirection === 'towards' ? 'away' : 'towards';
+          const newPosition = newDirection === 'towards'
+            ? moveTowardsPlayer(animal.position, currentPlayerPos)
+            : moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
+          return {
+            ...animal,
+            position: newPosition,
+            lastMoveDirection: newDirection
+          };
+        case 'chicken':
+          const distanceToPlayer = getDistance(animal.position, currentPlayerPos);
+          if (distanceToPlayer <= 3) {
+            return {
+              ...animal,
+              position: moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE)
+            };
+          } else {
             return {
               ...animal,
               position: getRandomMove(animal.position, GRID_SIZE)
             };
           }
+        default:
           return animal;
-        })
-      );
-    }, 1500);
+      }
+    });
+  }, []);
 
-    // Bewegung für Katzen (jede Sekunde statt 2)
-    const catInterval = setInterval(() => {
-      setAnimals(prevAnimals => 
-        prevAnimals.map(animal => {
-          if (animal.type === 'cat' && !animal.caught) {
-            const newDirection = animal.lastMoveDirection === 'towards' ? 'away' : 'towards';
-            const newPosition = newDirection === 'towards' 
-              ? moveTowardsPlayer(animal.position, playerPosition)
-              : moveAwayFromPlayer(animal.position, playerPosition, GRID_SIZE);
-            
-            return {
-              ...animal,
-              position: newPosition,
-              lastMoveDirection: newDirection
-            };
-          }
-          return animal;
-        })
-      );
-    }, 1000);
+  useEffect(() => {
+    const intervals: NodeJS.Timeout[] = [];
 
-    // Bewegung für Hühner (alle 500ms)
-    const chickenInterval = setInterval(() => {
-      setAnimals(prevAnimals => 
-        prevAnimals.map(animal => {
-          if (animal.type === 'chicken' && !animal.caught) {
-            const distanceToPlayer = getDistance(animal.position, playerPosition);
-            
-            // Wenn der Spieler in der Nähe ist (Radius 3), fliehen
-            if (distanceToPlayer <= 3) {
+    // Bewegung für Schweine (alle 1.5 Sekunden)
+    intervals.push(
+      setInterval(() => {
+        setAnimals(prevAnimals =>
+          prevAnimals.map(animal =>
+            animal.type === 'pig' && !animal.caught
+              ? { ...animal, position: getRandomMove(animal.position, GRID_SIZE) }
+              : animal
+          )
+        );
+      }, 1500)
+    );
+
+    // Bewegung für Katzen (jede Sekunde)
+    intervals.push(
+      setInterval(() => {
+        setAnimals(prevAnimals =>
+          prevAnimals.map(animal => {
+            if (animal.type === 'cat' && !animal.caught) {
+              const newDirection = animal.lastMoveDirection === 'towards' ? 'away' : 'towards';
+              const newPosition = newDirection === 'towards'
+                ? moveTowardsPlayer(animal.position, playerPosition)
+                : moveAwayFromPlayer(animal.position, playerPosition, GRID_SIZE);
               return {
                 ...animal,
-                position: moveAwayFromPlayer(animal.position, playerPosition, GRID_SIZE)
-              };
-            } 
-            // Ansonsten zufällige Bewegung wie Schweine
-            else {
-              return {
-                ...animal,
-                position: getRandomMove(animal.position, GRID_SIZE)
+                position: newPosition,
+                lastMoveDirection: newDirection
               };
             }
-          }
-          return animal;
-        })
-      );
-    }, 500);
+            return animal;
+          })
+        );
+      }, 1000)
+    );
 
-    return () => {
-      clearInterval(pigInterval);
-      clearInterval(catInterval);
-      clearInterval(chickenInterval);
-    };
-  }, [playerPosition]);
+    // Bewegung für Hühner (alle 500ms)
+    intervals.push(
+      setInterval(() => {
+        setAnimals(prevAnimals =>
+          prevAnimals.map(animal => {
+            if (animal.type === 'chicken' && !animal.caught) {
+              const distanceToPlayer = getDistance(animal.position, playerPosition);
+              if (distanceToPlayer <= 3) {
+                return {
+                  ...animal,
+                  position: moveAwayFromPlayer(animal.position, playerPosition, GRID_SIZE)
+                };
+              } else {
+                return {
+                  ...animal,
+                  position: getRandomMove(animal.position, GRID_SIZE)
+                };
+              }
+            }
+            return animal;
+          })
+        );
+      }, 500)
+    );
+
+    return () => intervals.forEach(clearInterval);
+  }, []); // Leeres Dependency Array
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const newPosition = { ...playerPosition };
