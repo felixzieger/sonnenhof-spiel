@@ -76,7 +76,7 @@ export const Game = () => {
   };
 
   useEffect(() => {
-    // Bewegung für Schweine (alle 3 Sekunden)
+    // Bewegung für Schweine (alle 1.5 Sekunden statt 3)
     const pigInterval = setInterval(() => {
       setAnimals(prevAnimals => 
         prevAnimals.map(animal => {
@@ -89,9 +89,9 @@ export const Game = () => {
           return animal;
         })
       );
-    }, 3000);
+    }, 1500);
 
-    // Bewegung für Katzen (alle 2 Sekunden)
+    // Bewegung für Katzen (jede Sekunde statt 2)
     const catInterval = setInterval(() => {
       setAnimals(prevAnimals => 
         prevAnimals.map(animal => {
@@ -110,9 +110,9 @@ export const Game = () => {
           return animal;
         })
       );
-    }, 2000);
+    }, 1000);
 
-    // Bewegung für Hühner (jede Sekunde)
+    // Bewegung für Hühner (alle 500ms statt 1 Sekunde)
     const chickenInterval = setInterval(() => {
       setAnimals(prevAnimals => 
         prevAnimals.map(animal => {
@@ -128,7 +128,7 @@ export const Game = () => {
           return animal;
         })
       );
-    }, 1000);
+    }, 500);
 
     return () => {
       clearInterval(pigInterval);
