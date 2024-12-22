@@ -60,9 +60,26 @@ export const Game = () => {
     });
   };
 
+  const checkCollisions = useCallback((position: Position) => {
+    setAnimals(prevAnimals => 
+      prevAnimals.map(animal => {
+        if (!animal.caught && 
+            Math.abs(animal.position.x - position.x) < 1 && 
+            Math.abs(animal.position.y - position.y) < 1) {
+          toast({
+            title: "Tier gefangen!",
+            description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
+          });
+          return { ...animal, caught: true };
+        }
+        return animal;
+      })
+    );
+  }, [toast]);
+
   const updateAnimalPositions = useCallback((currentAnimals: AnimalType[], currentPlayerPos: Position) => {
     console.log('Updating animal positions. Player at:', currentPlayerPos);
-    return currentAnimals.map(animal => {
+    const updatedAnimals = currentAnimals.map(animal => {
       if (animal.caught) return animal;
 
       let newPosition: Position;
@@ -105,7 +122,16 @@ export const Game = () => {
           : animal.lastMoveDirection
       };
     });
-  }, [obstacles]);
+
+    // Überprüfe Kollisionen nach der Bewegung der Tiere
+    updatedAnimals.forEach(animal => {
+      if (!animal.caught) {
+        checkCollisions(animal.position);
+      }
+    });
+
+    return updatedAnimals;
+  }, [obstacles, checkCollisions]);
 
   useEffect(() => {
     const moveInterval = setInterval(() => {
@@ -113,7 +139,7 @@ export const Game = () => {
     }, 750);
 
     return () => clearInterval(moveInterval);
-  }, [updateAnimalPositions]);
+  }, [updateAnimalPositions, playerPosition]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const newPosition = { ...playerPosition };
@@ -138,23 +164,6 @@ export const Game = () => {
     const validPosition = getValidMove(playerPosition, newPosition, obstacles);
     setPlayerPosition(validPosition);
     checkCollisions(validPosition);
-  };
-
-  const checkCollisions = (newPosition: Position) => {
-    setAnimals(prevAnimals => 
-      prevAnimals.map(animal => {
-        if (!animal.caught && 
-            Math.abs(animal.position.x - newPosition.x) < 1 && 
-            Math.abs(animal.position.y - newPosition.y) < 1) {
-          toast({
-            title: "Tier gefangen!",
-            description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
-          });
-          return { ...animal, caught: true };
-        }
-        return animal;
-      })
-    );
   };
 
   const getAnimalName = (type: AnimalType['type']) => {
