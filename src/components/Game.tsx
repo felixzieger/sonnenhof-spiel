@@ -61,6 +61,7 @@ export const Game = () => {
   };
 
   const updateAnimalPositions = useCallback((currentAnimals: AnimalType[], currentPlayerPos: Position) => {
+    console.log('Updating animal positions. Player at:', currentPlayerPos);
     return currentAnimals.map(animal => {
       if (animal.caught) return animal;
 
@@ -69,26 +70,32 @@ export const Game = () => {
       switch (animal.type) {
         case 'pig':
           newPosition = getRandomMove(animal.position, GRID_SIZE);
+          console.log('Pig moving randomly to:', newPosition);
           break;
         case 'cat':
           const newDirection = animal.lastMoveDirection === 'towards' ? 'away' : 'towards';
           newPosition = newDirection === 'towards'
             ? moveTowardsPlayer(animal.position, currentPlayerPos)
             : moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
+          console.log('Cat moving', newDirection, 'player to:', newPosition);
           break;
         case 'chicken':
           const distanceToPlayer = getDistance(animal.position, currentPlayerPos);
           newPosition = distanceToPlayer <= 3
             ? moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE)
             : getRandomMove(animal.position, GRID_SIZE);
+          console.log('Chicken at distance', distanceToPlayer, 'moving to:', newPosition);
           break;
         default:
           return animal;
       }
 
+      const validPosition = getValidMove(animal.position, newPosition, obstacles);
+      console.log(`${animal.type} final position after obstacle check:`, validPosition);
+
       return {
         ...animal,
-        position: getValidMove(animal.position, newPosition, obstacles),
+        position: validPosition,
         lastMoveDirection: animal.type === 'cat' 
           ? (animal.lastMoveDirection === 'towards' ? 'away' : 'towards') 
           : animal.lastMoveDirection
@@ -104,7 +111,7 @@ export const Game = () => {
     }, 750));
 
     return () => intervals.forEach(clearInterval);
-  }, []);
+  }, [playerPosition, updateAnimalPositions]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const newPosition = { ...playerPosition };
@@ -163,17 +170,14 @@ export const Game = () => {
   }, [playerPosition]);
 
   const getCellBackground = (x: number, y: number) => {
-    // Brauner Streifen in der Mitte (4 Spalten breit)
     const middleStart = Math.floor(GRID_SIZE / 2) - 2;
     if (x >= middleStart && x < middleStart + 4) {
-      return 'bg-[#8B4513]/20'; // Transparentes Braun für den Mittelstreifen
+      return 'bg-[#8B4513]/20';
     }
     
-    // Schachbrettmuster für den Rest
     return (x + y) % 2 === 0 ? 'bg-[#90B167]/10' : 'bg-[#90B167]/20';
   };
 
-  // Erstelle ein Array mit allen Feldern
   const gridCells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => {
     const x = i % GRID_SIZE;
     const y = Math.floor(i / GRID_SIZE);
