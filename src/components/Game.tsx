@@ -104,14 +104,12 @@ export const Game = () => {
   }, [obstacles]);
 
   useEffect(() => {
-    const intervals: NodeJS.Timeout[] = [];
-
-    intervals.push(setInterval(() => {
+    const moveInterval = setInterval(() => {
       setAnimals(prevAnimals => updateAnimalPositions(prevAnimals, playerPosition));
-    }, 750));
+    }, 750);
 
-    return () => intervals.forEach(clearInterval);
-  }, [playerPosition, updateAnimalPositions]);
+    return () => clearInterval(moveInterval);
+  }, [updateAnimalPositions]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const newPosition = { ...playerPosition };
