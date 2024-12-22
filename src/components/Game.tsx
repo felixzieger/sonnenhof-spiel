@@ -22,7 +22,7 @@ const INITIAL_ANIMALS = [
   { id: 1, type: 'cat', position: { x: 2, y: 2 }, caught: false },
   { id: 2, type: 'chicken', position: { x: 15, y: 15 }, caught: false },
   { id: 3, type: 'pig', position: { x: 5, y: 18 }, caught: false },
-] as const;
+];
 
 export const Game = () => {
   const [playerPosition, setPlayerPosition] = useState<Position>({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
