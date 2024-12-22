@@ -37,12 +37,21 @@ export const updateAnimalPositions = (
   if (!currentPlayerPos) return currentAnimals;
 
   const currentTime = Date.now();
+  console.log('Current time:', currentTime);
   
   return currentAnimals.map(animal => {
     if (animal.caught) return animal;
 
     // Prüfe, ob genug Zeit seit der letzten Bewegung vergangen ist
-    const shouldMove = (currentTime + animal.moveDelay) % 750 < 50;
+    const timeSinceLastMove = currentTime % 750;
+    const shouldMove = timeSinceLastMove >= animal.moveDelay && timeSinceLastMove < (animal.moveDelay + 50);
+    
+    console.log(`Animal ${animal.id} (${animal.type}):`, {
+      moveDelay: animal.moveDelay,
+      timeSinceLastMove,
+      shouldMove
+    });
+
     if (!shouldMove) {
       return animal;
     }
