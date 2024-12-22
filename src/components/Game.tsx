@@ -81,10 +81,14 @@ export const Game = () => {
           break;
         case 'chicken':
           const distanceToPlayer = getDistance(animal.position, currentPlayerPos);
-          newPosition = distanceToPlayer <= 3
-            ? moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE)
-            : getRandomMove(animal.position, GRID_SIZE);
-          console.log('Chicken at distance', distanceToPlayer, 'moving to:', newPosition);
+          console.log('Chicken distance to player:', distanceToPlayer);
+          if (distanceToPlayer <= 3) {
+            newPosition = moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
+            console.log('Chicken running away to:', newPosition);
+          } else {
+            newPosition = getRandomMove(animal.position, GRID_SIZE);
+            console.log('Chicken moving randomly to:', newPosition);
+          }
           break;
         default:
           return animal;
