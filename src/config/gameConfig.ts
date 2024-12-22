@@ -27,7 +27,7 @@ export const INITIAL_OBSTACLES: Obstacle[] = [
 ];
 
 export const INITIAL_ANIMALS = [
-  { id: 1, type: 'cat', position: { x: 2, y: 2 }, caught: false },
-  { id: 2, type: 'chicken', position: { x: 15, y: 15 }, caught: false },
-  { id: 3, type: 'pig', position: { x: 5, y: 18 }, caught: false },
+  { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false },
+  { id: 2, type: 'chicken' as const, position: { x: 15, y: 15 }, caught: false },
+  { id: 3, type: 'pig' as const, position: { x: 5, y: 18 }, caught: false },
 ];
