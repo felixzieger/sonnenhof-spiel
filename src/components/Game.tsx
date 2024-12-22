@@ -60,12 +60,14 @@ export const Game = () => {
     });
   };
 
-  const checkCollisions = useCallback((position: Position) => {
+  const checkCollisions = useCallback((playerPos: Position) => {
+    console.log('Checking collisions with player at:', playerPos);
     setAnimals(prevAnimals => 
       prevAnimals.map(animal => {
         if (!animal.caught && 
-            Math.abs(animal.position.x - position.x) < 1 && 
-            Math.abs(animal.position.y - position.y) < 1) {
+            Math.abs(animal.position.x - playerPos.x) < 1 && 
+            Math.abs(animal.position.y - playerPos.y) < 1) {
+          console.log(`Collision detected with ${animal.type} at position:`, animal.position);
           toast({
             title: "Tier gefangen!",
             description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
@@ -123,12 +125,8 @@ export const Game = () => {
       };
     });
 
-    // Überprüfe Kollisionen nach der Bewegung der Tiere
-    updatedAnimals.forEach(animal => {
-      if (!animal.caught) {
-        checkCollisions(animal.position);
-      }
-    });
+    // Überprüfe Kollisionen mit der Spielerposition nach der Bewegung der Tiere
+    checkCollisions(currentPlayerPos);
 
     return updatedAnimals;
   }, [obstacles, checkCollisions]);
@@ -244,4 +242,3 @@ export const Game = () => {
       </div>
     </div>
   );
-};
