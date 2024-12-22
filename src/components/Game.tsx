@@ -18,7 +18,7 @@ export type AnimalType = {
 };
 
 const GRID_SIZE = 20;
-const INITIAL_ANIMALS = [
+const INITIAL_ANIMALS: AnimalType[] = [
   { id: 1, type: 'cat', position: { x: 2, y: 2 }, caught: false },
   { id: 2, type: 'chicken', position: { x: 15, y: 15 }, caught: false },
   { id: 3, type: 'pig', position: { x: 5, y: 18 }, caught: false },
