@@ -15,14 +15,11 @@ export const ScoreBoard = ({ animals }: ScoreBoardProps) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-2">Gefangene Tiere:</h2>
-      <div className="flex gap-4">
-        <div>Katzen: {getCaughtCount('cat')}/{getTotalCount('cat')}</div>
-        <div>Hühner: {getCaughtCount('chicken')}/{getTotalCount('chicken')}</div>
-        <div>Schweine: {getCaughtCount('pig')}/{getTotalCount('pig')}</div>
-        <div>Pferde: {getCaughtCount('horse')}/{getTotalCount('horse')}</div>
-      </div>
+    <div className="flex gap-4">
+      <div>Katzen: {getCaughtCount('cat')}/{getTotalCount('cat')}</div>
+      <div>Hühner: {getCaughtCount('chicken')}/{getTotalCount('chicken')}</div>
+      <div>Schweine: {getCaughtCount('pig')}/{getTotalCount('pig')}</div>
+      <div>Pferde: {getCaughtCount('horse')}/{getTotalCount('horse')}</div>
     </div>
   );
 };

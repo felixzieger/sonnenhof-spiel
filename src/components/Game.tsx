@@ -220,23 +220,27 @@ export const Game = () => {
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       <div className="flex items-center gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
           <h2 className="text-xl font-bold">Level {currentLevel}</h2>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md flex items-center gap-2">
+        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center gap-2">
           <Hourglass className="w-6 h-6" />
           <span className="font-mono text-2xl font-bold">
             {formatTime(gameCompleted ? totalTime : currentTime)}
           </span>
         </div>
-        <ScoreBoard animals={animals} />
-        <Button 
-          onClick={resetGame}
-          variant="outline"
-          className="bg-white hover:bg-gray-100"
-        >
-          🔄 Neu starten
-        </Button>
+        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
+          <ScoreBoard animals={animals} />
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
+          <Button 
+            onClick={resetGame}
+            variant="outline"
+            className="bg-white hover:bg-gray-100"
+          >
+            🔄 Neu starten
+          </Button>
+        </div>
       </div>
       <div 
         className="relative w-[800px] h-[800px] rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
