@@ -18,6 +18,9 @@ export default {
       },
     },
     extend: {
+      backgroundImage: {
+        'farm-aerial': "url('/lovable-uploads/281eb186-f757-4b9f-8ae3-460443537fa1.png')",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -52,7 +55,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Spielfarben
         grass: "#90b167",
         fence: "#8b4513",
         "game-bg": "#c8e6c9",

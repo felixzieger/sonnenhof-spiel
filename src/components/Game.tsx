@@ -197,11 +197,7 @@ export const Game = () => {
   }, [playerPosition, gameCompleted]);
 
   const getCellBackground = (x: number, y: number) => {
-    const middleStart = Math.floor(GRID_SIZE / 2) - 2;
-    if (x >= middleStart && x < middleStart + 4) {
-      return 'bg-[#8B4513]/20';
-    }
-    return (x + y) % 2 === 0 ? 'bg-[#90B167]/10' : 'bg-[#90B167]/20';
+    return 'bg-transparent';
   };
 
   const gridCells = Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => {
@@ -243,7 +239,7 @@ export const Game = () => {
         </Button>
       </div>
       <div 
-        className="relative w-[800px] h-[800px] bg-grass rounded-lg border-4 border-fence overflow-hidden"
+        className="relative w-[800px] h-[800px] rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
       >
         {gridCells}
         {obstacles.map(obstacle => (
