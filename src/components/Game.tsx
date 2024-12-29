@@ -3,7 +3,6 @@ import { Player } from './Player';
 import { Animal } from './Animal';
 import { Obstacle } from './Obstacle';
 import { ScoreBoard } from './ScoreBoard';
-import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
@@ -42,7 +41,7 @@ export const Game = () => {
   );
   const [obstacles] = useState(INITIAL_OBSTACLES);
   const [gameCompleted, setGameCompleted] = useState(false);
-  const { toast } = useToast();
+  const [showLevelMessage, setShowLevelMessage] = useState(true);
 
   const startLevel = (level: number) => {
     setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
@@ -51,10 +50,8 @@ export const Game = () => {
       moveDelay: Math.floor(Math.random() * 300)
     })));
     positionQueue.clear();
-    toast({
-      title: `Level ${level}`,
-      description: LEVEL_CONFIGS[level].message,
-    });
+    setShowLevelMessage(true);
+    setTimeout(() => setShowLevelMessage(false), 3000); // Hide message after 3 seconds
   };
 
   const resetGame = () => {
@@ -212,9 +209,18 @@ export const Game = () => {
             />
           )
         ))}
+        {/* Level Message Overlay */}
+        {showLevelMessage && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
+              <h2 className="text-xl font-bold mb-2">Level {currentLevel}</h2>
+              <p>{LEVEL_CONFIGS[currentLevel].message}</p>
+            </div>
+          </div>
+        )}
       </div>
       <AlertDialog open={gameCompleted}>
-        <AlertDialogContent>
+        <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <AlertDialogHeader>
             <AlertDialogTitle>Gratulation!</AlertDialogTitle>
             <AlertDialogDescription>
