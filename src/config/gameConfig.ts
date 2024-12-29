@@ -113,7 +113,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
         },
         caught: false,
         moveDelay: generateMoveDelay()
-      }))
+      })),
       ...Array.from({ length: 10 }, (_, i) => ({
         id: i + 4,
         type: 'chicken' as const,
