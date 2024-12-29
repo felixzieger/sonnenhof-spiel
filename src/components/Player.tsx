@@ -7,7 +7,7 @@ interface PlayerProps {
 }
 
 export const Player = ({ position, gridSize }: PlayerProps) => {
-  const size = 800 / gridSize; // 800px ist die Spielfeldgröße
+  const size = 800 / gridSize;
 
   return (
     <div 
@@ -17,6 +17,8 @@ export const Player = ({ position, gridSize }: PlayerProps) => {
         top: `${position.y * size}px`,
         width: `${size}px`,
         height: `${size}px`,
+        transform: 'rotateX(-45deg) rotateZ(45deg)',
+        transformStyle: 'preserve-3d'
       }}
     >
       <div className="w-full h-full bg-blue-600 rounded-full border-2 border-white shadow-lg" />

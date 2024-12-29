@@ -28,6 +28,8 @@ export const Obstacle = ({ type, position, gridSize }: ObstacleProps) => {
         width: `${size}px`,
         height: `${size}px`,
         fontSize: `${size * 0.7}px`,
+        transform: 'rotateX(-45deg) rotateZ(45deg)',
+        transformStyle: 'preserve-3d'
       }}
     >
       {getObstacleEmoji()}
