@@ -3,10 +3,19 @@ import { Player } from './Player';
 import { Animal } from './Animal';
 import { Obstacle } from './Obstacle';
 import { ScoreBoard } from './ScoreBoard';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export type Position = {
   x: number;
@@ -32,6 +41,7 @@ export const Game = () => {
     }))
   );
   const [obstacles] = useState(INITIAL_OBSTACLES);
+  const [gameCompleted, setGameCompleted] = useState(false);
   const { toast } = useToast();
 
   const startLevel = (level: number) => {
@@ -49,24 +59,22 @@ export const Game = () => {
 
   const resetGame = () => {
     setCurrentLevel(1);
+    setGameCompleted(false);
     startLevel(1);
   };
 
   const checkLevelComplete = useCallback(() => {
     const allCaught = animals.every(animal => animal.caught);
-    if (allCaught) {
+    if (allCaught && !gameCompleted) {
       if (currentLevel < 3) {
         const nextLevel = currentLevel + 1;
         setCurrentLevel(nextLevel);
         startLevel(nextLevel);
       } else {
-        toast({
-          title: "Gratulation!",
-          description: "Du hast alle Level geschafft und die Farm gerettet!",
-        });
+        setGameCompleted(true);
       }
     }
-  }, [animals, currentLevel, toast]);
+  }, [animals, currentLevel, gameCompleted]);
 
   const checkCollisions = useCallback((playerPos: Position) => {
     console.log('Checking collisions with player at:', playerPos);
@@ -100,6 +108,8 @@ export const Game = () => {
   }, [animals, checkLevelComplete]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
+    if (gameCompleted) return;
+    
     const newPosition = { ...playerPosition };
 
     switch (e.key) {
@@ -137,7 +147,7 @@ export const Game = () => {
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [playerPosition]);
+  }, [playerPosition, gameCompleted]);
 
   const getCellBackground = (x: number, y: number) => {
     const middleStart = Math.floor(GRID_SIZE / 2) - 2;
@@ -203,6 +213,21 @@ export const Game = () => {
           )
         ))}
       </div>
+      <AlertDialog open={gameCompleted}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Gratulation!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Du hast alle Level geschafft und die Farm gerettet!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={resetGame}>
+              Nochmal spielen
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
