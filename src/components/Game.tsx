@@ -54,7 +54,6 @@ export const Game = () => {
     })));
     positionQueue.clear();
     setShowLevelMessage(true);
-    setTimeout(() => setShowLevelMessage(false), 3000); // Hide message after 3 seconds
   };
 
   const resetGame = () => {
