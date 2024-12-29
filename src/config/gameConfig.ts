@@ -26,28 +26,18 @@ export const INITIAL_OBSTACLES: Obstacle[] = [
   { id: 12, type: 'tree', position: { x: 19, y: 19 } },
 ];
 
+const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100; // Generates delays of 0, 100, 200, or 300
+
 export const LEVEL_CONFIGS = {
   1: {
     animals: [
-      { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: 0 },
+      { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: generateMoveDelay() },
     ],
     message: "Level 1: Fang die Katze ein!"
   },
   2: {
-    animals: Array.from({ length: 13 }, (_, i) => ({
-      id: i + 1,
-      type: i < 3 ? 'cat' as const : 'chicken' as const,
-      position: {
-        x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-        y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-      },
-      caught: false,
-      moveDelay: 0
-    })),
-    message: "Level 2: Oh nein! Der Hühnerpförtner ist kaputt und die Hühner sind ausgebüchst! Fang sie alle ein!"
-  },
-  3: {
     animals: [
+      // 3 Katzen
       ...Array.from({ length: 3 }, (_, i) => ({
         id: i + 1,
         type: 'cat' as const,
@@ -56,8 +46,9 @@ export const LEVEL_CONFIGS = {
           y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
         },
         caught: false,
-        moveDelay: 0
+        moveDelay: generateMoveDelay()
       })),
+      // 10 Hühner
       ...Array.from({ length: 10 }, (_, i) => ({
         id: i + 4,
         type: 'chicken' as const,
@@ -66,8 +57,36 @@ export const LEVEL_CONFIGS = {
           y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
         },
         caught: false,
-        moveDelay: 0
+        moveDelay: generateMoveDelay()
+      }))
+    ],
+    message: "Level 2: Oh nein! Der Hühnerpförtner ist kaputt und die Hühner sind ausgebüchst! Fang sie alle ein!"
+  },
+  3: {
+    animals: [
+      // 3 Katzen
+      ...Array.from({ length: 3 }, (_, i) => ({
+        id: i + 1,
+        type: 'cat' as const,
+        position: {
+          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
+          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
+        },
+        caught: false,
+        moveDelay: generateMoveDelay()
       })),
+      // 10 Hühner
+      ...Array.from({ length: 10 }, (_, i) => ({
+        id: i + 4,
+        type: 'chicken' as const,
+        position: {
+          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
+          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
+        },
+        caught: false,
+        moveDelay: generateMoveDelay()
+      })),
+      // 2 Schweine
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 14,
         type: 'pig' as const,
@@ -76,8 +95,9 @@ export const LEVEL_CONFIGS = {
           y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
         },
         caught: false,
-        moveDelay: 0
+        moveDelay: generateMoveDelay()
       })),
+      // 2 Pferde
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 16,
         type: 'horse' as const,
@@ -86,7 +106,7 @@ export const LEVEL_CONFIGS = {
           y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
         },
         caught: false,
-        moveDelay: 0
+        moveDelay: generateMoveDelay()
       }))
     ],
     message: "Level 3: Die Farm spielt verrückt! Alle Tiere laufen wild umher!"
