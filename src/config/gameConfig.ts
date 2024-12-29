@@ -10,19 +10,19 @@ export interface Obstacle {
 }
 
 export const INITIAL_OBSTACLES: Obstacle[] = [
-  { id: 1, type: 'house', position: { x: 3, y: 3 } },
-  { id: 2, type: 'house', position: { x: 4, y: 3 } },
-  { id: 3, type: 'house', position: { x: 15, y: 4 } },
-  { id: 4, type: 'house', position: { x: 16, y: 4 } },
-  // Bäume am Rand
-  { id: 5, type: 'tree', position: { x: 0, y: 0 } },
-  { id: 6, type: 'tree', position: { x: 1, y: 0 } },
-  { id: 7, type: 'tree', position: { x: 18, y: 0 } },
-  { id: 8, type: 'tree', position: { x: 19, y: 0 } },
-  { id: 9, type: 'tree', position: { x: 0, y: 19 } },
-  { id: 10, type: 'tree', position: { x: 1, y: 19 } },
-  { id: 11, type: 'tree', position: { x: 18, y: 19 } },
-  { id: 12, type: 'tree', position: { x: 19, y: 19 } },
+  { id: 1, type: 'red', position: { x: 3, y: 3 } },
+  { id: 2, type: 'red', position: { x: 4, y: 3 } },
+  { id: 3, type: 'blue', position: { x: 15, y: 4 } },
+  { id: 4, type: 'blue', position: { x: 16, y: 4 } },
+  // Hindernisse am Rand
+  { id: 5, type: 'red', position: { x: 0, y: 0 } },
+  { id: 6, type: 'red', position: { x: 1, y: 0 } },
+  { id: 7, type: 'blue', position: { x: 18, y: 0 } },
+  { id: 8, type: 'blue', position: { x: 19, y: 0 } },
+  { id: 9, type: 'red', position: { x: 0, y: 19 } },
+  { id: 10, type: 'red', position: { x: 1, y: 19 } },
+  { id: 11, type: 'blue', position: { x: 18, y: 19 } },
+  { id: 12, type: 'blue', position: { x: 19, y: 19 } },
 ];
 
 const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100;

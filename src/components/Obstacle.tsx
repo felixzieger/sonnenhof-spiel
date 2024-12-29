@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type ObstacleType = 'house' | 'tree';
+export type ObstacleType = 'red' | 'blue';
 
 interface ObstacleProps {
   type: ObstacleType;
@@ -11,26 +11,23 @@ interface ObstacleProps {
 export const Obstacle = ({ type, position, gridSize }: ObstacleProps) => {
   const size = 800 / gridSize;
 
-  const getObstacleEmoji = () => {
+  const getObstacleColor = () => {
     switch (type) {
-      case 'house': return '🏠';
-      case 'tree': return '🌳';
-      default: return '❓';
+      case 'red': return 'bg-red-500/50';
+      case 'blue': return 'bg-blue-500/50';
+      default: return 'bg-gray-500/50';
     }
   };
 
   return (
     <div 
-      className="absolute flex items-center justify-center"
+      className={`absolute ${getObstacleColor()} rounded-md border-2 border-white/20`}
       style={{
         left: `${position.x * size}px`,
         top: `${position.y * size}px`,
         width: `${size}px`,
         height: `${size}px`,
-        fontSize: `${size * 0.7}px`,
       }}
-    >
-      {getObstacleEmoji()}
-    </div>
+    />
   );
 };
