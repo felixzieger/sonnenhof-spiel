@@ -59,16 +59,6 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
         caught: false,
         moveDelay: generateMoveDelay()
       })),
-      ...Array.from({ length: 10 }, (_, i) => ({
-        id: i + 4,
-        type: 'chicken' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
-        caught: false,
-        moveDelay: generateMoveDelay()
-      })),
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 14,
         type: 'pig' as const,
@@ -104,6 +94,26 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
         caught: false,
         moveDelay: generateMoveDelay()
       })),
+      ...Array.from({ length: 2 }, (_, i) => ({
+        id: i + 14,
+        type: 'pig' as const,
+        position: {
+          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
+          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
+        },
+        caught: false,
+        moveDelay: generateMoveDelay()
+      })),
+      ...Array.from({ length: 2 }, (_, i) => ({
+        id: i + 16,
+        type: 'horse' as const,
+        position: {
+          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
+          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
+        },
+        caught: false,
+        moveDelay: generateMoveDelay()
+      }))
       ...Array.from({ length: 10 }, (_, i) => ({
         id: i + 4,
         type: 'chicken' as const,
