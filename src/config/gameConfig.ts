@@ -9,10 +9,10 @@ export const INITIAL_OBSTACLES: Position[] = [
   ...createObstacleArea({ x: 2, y: 7 }, 2, 4),
   
   // Scheune mitte
-  ...createObstacleArea({ x: 6, y: 7 }, 8, 4),
+  ...createObstacleArea({ x: 6, y: 7 }, 7, 4),
   
-  // maschinenhalle unten
-  ...createObstacleArea({ x: 8, y: 16 }, 6, 2),
+  // Maschinenhalle unten
+  ...createObstacleArea({ x: 8, y: 15 }, 5, 2),
   
   // altes Haus
   ...createObstacleArea({ x: 11, y: 1 }, 2, 3),
