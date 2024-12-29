@@ -1,5 +1,6 @@
 import { Position } from '../components/Game';
 import { ObstacleType } from '../components/Obstacle';
+import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
 
 export const GRID_SIZE = 20;
 
@@ -33,7 +34,25 @@ export const LEVEL_CONFIGS = {
     animals: [
       { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: generateMoveDelay() },
     ],
-    message: "Level 1: Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein! Nutze die Pfeiltasten, um dich auf dem Bauernhof zu bewegen."
+    message: (
+      <>
+        Level 1: Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein!
+        <div className="mt-4 flex flex-col items-center">
+          <p>Nutze die Pfeiltasten, um dich auf dem Bauernhof zu bewegen:</p>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            <div></div>
+            <ArrowUp className="w-6 h-6" />
+            <div></div>
+            <ArrowLeft className="w-6 h-6" />
+            <div></div>
+            <ArrowRight className="w-6 h-6" />
+            <div></div>
+            <ArrowDown className="w-6 h-6" />
+            <div></div>
+          </div>
+        </div>
+      </>
+    ),
   },
   2: {
     animals: [
