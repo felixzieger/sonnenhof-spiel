@@ -144,6 +144,13 @@ export const Game = () => {
   const handleKeyPress = (e: KeyboardEvent) => {
     if (gameCompleted) return;
     
+    // Start timer on first movement if not already started
+    if (!startTime && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      const now = Date.now();
+      setStartTime(now);
+      setCurrentTime(0);
+    }
+    
     // Hide level message on any arrow key press
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
       setShowLevelMessage(false);
