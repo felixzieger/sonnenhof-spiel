@@ -1,6 +1,6 @@
 import { Position } from '../components/Game';
 import { ObstacleType } from '../components/Obstacle';
-import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { LevelMessage } from '../components/LevelMessage';
 
 export const GRID_SIZE = 20;
 
@@ -11,7 +11,6 @@ export interface Obstacle {
 }
 
 export const INITIAL_OBSTACLES: Obstacle[] = [
-  // Häuser
   { id: 1, type: 'house', position: { x: 3, y: 3 } },
   { id: 2, type: 'house', position: { x: 4, y: 3 } },
   { id: 3, type: 'house', position: { x: 15, y: 4 } },
@@ -27,36 +26,17 @@ export const INITIAL_OBSTACLES: Obstacle[] = [
   { id: 12, type: 'tree', position: { x: 19, y: 19 } },
 ];
 
-const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100; // Generates delays of 0, 100, 200, or 300
+const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100;
 
 export const LEVEL_CONFIGS = {
   1: {
     animals: [
       { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: generateMoveDelay() },
     ],
-    message: (
-      <>
-        Level 1: Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein!
-        <div className="mt-4 flex flex-col items-center">
-          <p>Nutze die Pfeiltasten, um dich auf dem Bauernhof zu bewegen:</p>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            <div></div>
-            <ArrowUp className="w-6 h-6" />
-            <div></div>
-            <ArrowLeft className="w-6 h-6" />
-            <div></div>
-            <ArrowRight className="w-6 h-6" />
-            <div></div>
-            <ArrowDown className="w-6 h-6" />
-            <div></div>
-          </div>
-        </div>
-      </>
-    ),
+    message: <LevelMessage level={1} showControls={true} />
   },
   2: {
     animals: [
-      // 3 Katzen
       ...Array.from({ length: 3 }, (_, i) => ({
         id: i + 1,
         type: 'cat' as const,
@@ -101,11 +81,10 @@ export const LEVEL_CONFIGS = {
         moveDelay: generateMoveDelay()
       }))
     ],
-    message: "Level 2: Das Stalltor stand offen, Pferde und Schweine sind ausgebüchst. Fang sie schnell wieder ein!"
+    message: <LevelMessage level={2} />
   },
   3: {
     animals: [
-      // 3 Katzen
       ...Array.from({ length: 3 }, (_, i) => ({
         id: i + 1,
         type: 'cat' as const,
@@ -128,6 +107,6 @@ export const LEVEL_CONFIGS = {
         moveDelay: generateMoveDelay()
       }))
     ],
-    message: "Level 3: Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Bauernhof spielt verrückt! Fang alle Tiere wieder ein!"
+    message: <LevelMessage level={3} />
   }
 };
