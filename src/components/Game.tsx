@@ -5,7 +5,7 @@ import { Obstacle } from './Obstacle';
 import { ScoreBoard } from './ScoreBoard';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { GRID_SIZE, INITIAL_ANIMALS, INITIAL_OBSTACLES } from '../config/gameConfig';
+import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 
 export type Position = {
@@ -23,28 +23,50 @@ export type AnimalType = {
 };
 
 export const Game = () => {
+  const [currentLevel, setCurrentLevel] = useState(1);
   const [playerPosition, setPlayerPosition] = useState<Position>({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
-  const [animals, setAnimals] = useState<AnimalType[]>(
-    INITIAL_ANIMALS.map(animal => ({
+  const [animals, setAnimals] = useState<AnimalType[]>(() => 
+    LEVEL_CONFIGS[1].animals.map(animal => ({
       ...animal,
-      moveDelay: Math.floor(Math.random() * 300) // Reduziert auf 0-300ms
+      moveDelay: Math.floor(Math.random() * 300)
     }))
   );
   const [obstacles] = useState(INITIAL_OBSTACLES);
   const { toast } = useToast();
 
-  const resetGame = () => {
+  const startLevel = (level: number) => {
     setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
-    setAnimals(INITIAL_ANIMALS.map(animal => ({
+    setAnimals(LEVEL_CONFIGS[level].animals.map(animal => ({
       ...animal,
-      moveDelay: Math.floor(Math.random() * 300) // Reduziert auf 0-300ms
+      moveDelay: Math.floor(Math.random() * 300)
     })));
     positionQueue.clear();
     toast({
-      title: "Spiel neu gestartet",
-      description: "Fang alle Tiere wieder ein!",
+      title: `Level ${level}`,
+      description: LEVEL_CONFIGS[level].message,
     });
   };
+
+  const resetGame = () => {
+    setCurrentLevel(1);
+    startLevel(1);
+  };
+
+  const checkLevelComplete = useCallback(() => {
+    const allCaught = animals.every(animal => animal.caught);
+    if (allCaught) {
+      if (currentLevel < 3) {
+        const nextLevel = currentLevel + 1;
+        setCurrentLevel(nextLevel);
+        startLevel(nextLevel);
+      } else {
+        toast({
+          title: "Gratulation!",
+          description: "Du hast alle Level geschafft und die Farm gerettet!",
+        });
+      }
+    }
+  }, [animals, currentLevel, toast]);
 
   const checkCollisions = useCallback((playerPos: Position) => {
     console.log('Checking collisions with player at:', playerPos);
@@ -72,6 +94,10 @@ export const Game = () => {
 
     return () => clearInterval(moveInterval);
   }, [obstacles]);
+
+  useEffect(() => {
+    checkLevelComplete();
+  }, [animals, checkLevelComplete]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
     const newPosition = { ...playerPosition };
@@ -141,6 +167,9 @@ export const Game = () => {
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       <div className="flex items-center gap-4">
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold">Level {currentLevel}</h2>
+        </div>
         <ScoreBoard animals={animals} />
         <Button 
           onClick={resetGame}
