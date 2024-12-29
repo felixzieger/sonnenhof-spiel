@@ -33,7 +33,7 @@ export const LEVEL_CONFIGS = {
     animals: [
       { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: generateMoveDelay() },
     ],
-    message: "Level 1: Fang die Katze ein!"
+    message: "Level 1: Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein!"
   },
   2: {
     animals: [
@@ -82,7 +82,7 @@ export const LEVEL_CONFIGS = {
         moveDelay: generateMoveDelay()
       }))
     ],
-    message: "Level 2: Die Farm spielt verrückt! Alle Tiere laufen wild umher!"
+    message: "Level 2: Das Stalltor stand offen, Pferde und Schweine sind ausgebüchst. Fang sie schnell wieder ein!"
   },
   3: {
     animals: [
@@ -109,6 +109,6 @@ export const LEVEL_CONFIGS = {
         moveDelay: generateMoveDelay()
       }))
     ],
-    message: "Level 3: Oh nein! Der Hühnerpförtner ist kaputt und die Hühner sind ausgebüchst! Fang sie alle ein!"
+    message: "Level 3: Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Bauernhof spielt verrückt! Fang alle Tiere wieder ein!"
   }
 };
