@@ -29,6 +29,34 @@ export const getValidMove = (
   return newPos;
 };
 
+const getHorseMove = (position: Position, gridSize: number): Position => {
+  // Generate random movement distance between 2 and 3 fields
+  const moveDistance = Math.floor(Math.random() * 2) + 2; // This gives us either 2 or 3
+  
+  // Get random direction
+  const directions = [
+    { dx: 1, dy: 0 },    // right
+    { dx: -1, dy: 0 },   // left
+    { dx: 0, dy: 1 },    // down
+    { dx: 0, dy: -1 },   // up
+    { dx: 1, dy: 1 },    // diagonal down-right
+    { dx: -1, dy: 1 },   // diagonal down-left
+    { dx: 1, dy: -1 },   // diagonal up-right
+    { dx: -1, dy: -1 },  // diagonal up-left
+  ];
+  
+  const direction = directions[Math.floor(Math.random() * directions.length)];
+  
+  // Calculate new position with the random distance
+  const newPosition = {
+    x: Math.max(0, Math.min(gridSize - 1, position.x + (direction.dx * moveDistance))),
+    y: Math.max(0, Math.min(gridSize - 1, position.y + (direction.dy * moveDistance)))
+  };
+  
+  console.log('Horse moving from:', position, 'to:', newPosition, 'with distance:', moveDistance);
+  return newPosition;
+};
+
 export const updateAnimalPositions = (
   currentAnimals: AnimalType[], 
   obstacles: typeof INITIAL_OBSTACLES
@@ -55,6 +83,10 @@ export const updateAnimalPositions = (
     let newPosition: Position;
 
     switch (animal.type) {
+      case 'horse':
+        newPosition = getHorseMove(animal.position, GRID_SIZE);
+        console.log('Horse moving to:', newPosition);
+        break;
       case 'pig':
         newPosition = getRandomMove(animal.position, GRID_SIZE);
         console.log('Pig moving randomly to:', newPosition);
