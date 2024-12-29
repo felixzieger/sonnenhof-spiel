@@ -1,14 +1,14 @@
 import { Position, AnimalType } from '../components/Game';
-import { GRID_SIZE, INITIAL_OBSTACLES } from '../config/gameConfig';
+import { GRID_SIZE } from '../config/gameConfig';
 import { getDistance, moveTowardsPlayer, moveAwayFromPlayer, getRandomMove } from './animalMovement';
 import { PositionQueue } from './positionQueue';
 
 export const positionQueue = new PositionQueue();
 
-export const isPositionBlocked = (position: Position, obstacles: typeof INITIAL_OBSTACLES) => {
+export const isPositionBlocked = (position: Position, obstacles: Position[]) => {
   return obstacles.some(obstacle => 
-    obstacle.position.x === position.x && 
-    obstacle.position.y === position.y
+    obstacle.x === position.x && 
+    obstacle.y === position.y
   );
 };
 
@@ -40,7 +40,7 @@ const getHorseMove = (position: Position, gridSize: number): Position => {
 export const getValidMove = (
   currentPos: Position, 
   newPos: Position, 
-  obstacles: typeof INITIAL_OBSTACLES
+  obstacles: Position[]
 ): Position => {
   if (isPositionBlocked(newPos, obstacles)) {
     return currentPos;
@@ -50,7 +50,7 @@ export const getValidMove = (
 
 export const updateAnimalPositions = (
   currentAnimals: AnimalType[], 
-  obstacles: typeof INITIAL_OBSTACLES
+  obstacles: Position[]
 ): AnimalType[] => {
   const currentPlayerPos = positionQueue.getLatest();
   if (!currentPlayerPos) return currentAnimals;
