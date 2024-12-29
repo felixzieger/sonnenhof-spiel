@@ -125,6 +125,6 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
         moveDelay: generateMoveDelay()
       }))
     ],
-    message: "Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Bauernhof spielt verrückt! Fang alle Tiere wieder ein!"
+    message: "Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Sonnenhof spielt verrückt! Fang alle Tiere wieder ein!"
   }
 };

@@ -10,7 +10,7 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
   const messages = {
     1: "Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein!",
     2: "Das Stalltor stand offen, Pferde und Schweine sind ausgebüchst. Fang sie schnell wieder ein!",
-    3: "Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Bauernhof spielt verrückt! Fang alle Tiere wieder ein!"
+    3: "Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Sonnenhof spielt verrückt! Fang alle Tiere wieder ein!"
   };
 
   return (
@@ -18,7 +18,7 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
       {messages[level as keyof typeof messages]}
       {showControls && (
         <div className="mt-4 flex flex-col items-center">
-          <p>Nutze die Pfeiltasten, um dich auf dem Bauernhof zu bewegen:</p>
+          <p>Nutze die Pfeiltasten, um dich auf dem Sonnenhof zu bewegen:</p>
           <div className="mt-2">
             {/* Erste Reihe - Hoch */}
             <div className="flex justify-center mb-1">

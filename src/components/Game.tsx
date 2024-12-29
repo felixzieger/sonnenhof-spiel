@@ -233,7 +233,7 @@ export const Game = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Gratulation!</AlertDialogTitle>
             <AlertDialogDescription>
-              Du hast alle Level geschafft und die Farm gerettet!
+              Du hast alle Level geschafft und den Sonnenhof gerettet!
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
