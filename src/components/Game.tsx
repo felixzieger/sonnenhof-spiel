@@ -242,11 +242,10 @@ export const Game = () => {
         className="relative w-[800px] h-[800px] rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
       >
         {gridCells}
-        {obstacles.map(obstacle => (
+        {obstacles.map((obstacle, index) => (
           <Obstacle 
-            key={obstacle.id}
-            type={obstacle.type}
-            position={obstacle.position}
+            key={index}
+            position={obstacle}
             gridSize={GRID_SIZE}
           />
         ))}
