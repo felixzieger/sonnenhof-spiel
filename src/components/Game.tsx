@@ -45,8 +45,26 @@ export const Game = () => {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showLevelMessage, setShowLevelMessage] = useState(true);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
   const { toast } = useToast();
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    
+    if (startTime && !gameCompleted) {
+      intervalId = setInterval(() => {
+        const now = Date.now();
+        setCurrentTime(now - startTime);
+      }, 1000);
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [startTime, gameCompleted]);
 
   const startLevel = (level: number) => {
     setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
@@ -57,9 +75,10 @@ export const Game = () => {
     positionQueue.clear();
     setShowLevelMessage(true);
     
-    // Starte den Timer beim ersten Level
     if (level === 1) {
-      setStartTime(Date.now());
+      const now = Date.now();
+      setStartTime(now);
+      setCurrentTime(0);
       setTotalTime(0);
     }
   };
@@ -85,15 +104,11 @@ export const Game = () => {
         setCurrentLevel(nextLevel);
         startLevel(nextLevel);
       } else {
-        if (startTime) {
-          const endTime = Date.now();
-          const timeTaken = endTime - startTime;
-          setTotalTime(timeTaken);
-        }
+        setTotalTime(currentTime);
         setGameCompleted(true);
       }
     }
-  }, [animals, currentLevel, gameCompleted, startTime]);
+  }, [animals, currentLevel, gameCompleted, currentTime]);
 
   const checkCollisions = useCallback((playerPos: Position) => {
     console.log('Checking collisions with player at:', playerPos);
@@ -203,6 +218,9 @@ export const Game = () => {
       <div className="flex items-center gap-4">
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-bold">Level {currentLevel}</h2>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold">Zeit: {formatTime(gameCompleted ? totalTime : currentTime)}</h2>
         </div>
         <ScoreBoard animals={animals} />
         <Button 
