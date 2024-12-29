@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
+import { Hourglass } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -276,10 +277,12 @@ export const Game = () => {
         <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <AlertDialogHeader>
             <AlertDialogTitle>Gratulation!</AlertDialogTitle>
-            <AlertDialogDescription>
-              Du hast alle Level geschafft und den Sonnenhof gerettet! 
-              <br />
-              Deine Zeit: {formatTime(totalTime)}
+            <AlertDialogDescription className="space-y-4">
+              <p>Du hast alle Level geschafft und den Sonnenhof gerettet!</p>
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <Hourglass className="w-6 h-6" />
+                <span className="font-mono text-2xl font-bold">{formatTime(totalTime)}</span>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
