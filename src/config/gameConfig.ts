@@ -5,21 +5,20 @@ export const GRID_SIZE = 20;
 
 // Example usage of createObstacleArea - you can modify these to create your desired layout
 export const INITIAL_OBSTACLES: Position[] = [
-  // Create a 2x2 obstacle area in the top-left corner
-  ...createObstacleArea({ x: 0, y: 0 }, 2, 2),
+  // Maschinenhalle links
+  ...createObstacleArea({ x: 3, y: 8 }, 2, 4),
   
-  // Create a 2x2 obstacle area in the top-right corner
-  ...createObstacleArea({ x: 18, y: 0 }, 2, 2),
+  // Scheune mitte
+  ...createObstacleArea({ x: 7, y: 8 }, 8, 4),
   
-  // Create a 2x2 obstacle area in the bottom-left corner
-  ...createObstacleArea({ x: 0, y: 18 }, 2, 2),
+  // maschinenhalle unten
+  ...createObstacleArea({ x: 9, y: 15 }, 6, 2),
   
-  // Create a 2x2 obstacle area in the bottom-right corner
-  ...createObstacleArea({ x: 18, y: 18 }, 2, 2),
+  // altes Haus
+  ...createObstacleArea({ x: 12, y: 2 }, 2, 3),
   
-  // Create some obstacles in the middle of the map
-  ...createObstacleArea({ x: 3, y: 3 }, 2, 1),
-  ...createObstacleArea({ x: 15, y: 4 }, 2, 1),
+  // neues Haus
+  ...createObstacleArea({ x: 17, y: 2 }, 3, 3),
 ];
 
 const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100;
