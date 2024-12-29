@@ -110,6 +110,11 @@ export const Game = () => {
   const handleKeyPress = (e: KeyboardEvent) => {
     if (gameCompleted) return;
     
+    // Hide level message on any arrow key press
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      setShowLevelMessage(false);
+    }
+
     const newPosition = { ...playerPosition };
 
     switch (e.key) {
