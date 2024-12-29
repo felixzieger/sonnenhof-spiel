@@ -227,8 +227,11 @@ export const Game = () => {
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-bold">Level {currentLevel}</h2>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold">Zeit: {formatTime(gameCompleted ? totalTime : currentTime)}</h2>
+        <div className="bg-white p-4 rounded-lg shadow-md flex items-center gap-2">
+          <Hourglass className="w-6 h-6" />
+          <span className="font-mono text-2xl font-bold">
+            {formatTime(gameCompleted ? totalTime : currentTime)}
+          </span>
         </div>
         <ScoreBoard animals={animals} />
         <Button 
