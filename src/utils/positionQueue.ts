@@ -1,23 +1,18 @@
 import { Position } from '../components/Game';
 
 export class PositionQueue {
-  private positions: Position[];
-  private maxSize: number;
-
-  constructor(maxSize: number = 10) {
-    this.positions = [];
-    this.maxSize = maxSize;
-  }
+  private positions: Position[] = [];
+  private maxSize = 5;
 
   add(position: Position) {
-    this.positions.push({ ...position });
+    this.positions.push(position);
     if (this.positions.length > this.maxSize) {
       this.positions.shift();
     }
   }
 
   getLatest(): Position | null {
-    return this.positions.length > 0 ? this.positions[this.positions.length - 1] : null;
+    return this.positions[this.positions.length - 1] || null;
   }
 
   clear() {

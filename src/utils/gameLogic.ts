@@ -1,28 +1,9 @@
 import { Position, AnimalType } from '../components/Game';
 import { GRID_SIZE, INITIAL_OBSTACLES } from '../config/gameConfig';
 import { getDistance, moveTowardsPlayer, moveAwayFromPlayer, getRandomMove } from './animalMovement';
+import { PositionQueue } from './positionQueue';
 
 export const positionQueue = new PositionQueue();
-
-export class PositionQueue {
-  private positions: Position[] = [];
-  private maxSize = 5;
-
-  add(position: Position) {
-    this.positions.push(position);
-    if (this.positions.length > this.maxSize) {
-      this.positions.shift();
-    }
-  }
-
-  getLatest(): Position | null {
-    return this.positions[this.positions.length - 1] || null;
-  }
-
-  clear() {
-    this.positions = [];
-  }
-}
 
 export const isPositionBlocked = (position: Position, obstacles: typeof INITIAL_OBSTACLES) => {
   return obstacles.some(obstacle => 
@@ -77,7 +58,6 @@ export const updateAnimalPositions = (
   return currentAnimals.map(animal => {
     if (animal.caught) return animal;
 
-    // Entferne die moveDelay-basierte Logik und nutze eine einfache Zufallswahrscheinlichkeit
     const shouldMove = Math.random() < 0.4; // 40% Chance sich zu bewegen
     
     console.log(`Animal ${animal.id} (${animal.type}):`, {
