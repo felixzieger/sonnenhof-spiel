@@ -77,8 +77,7 @@ export const Game = () => {
     setShowLevelMessage(true);
     
     if (level === 1) {
-      const now = Date.now();
-      setStartTime(now);
+      setStartTime(null); // Reset startTime to null
       setCurrentTime(0);
       setTotalTime(0);
     }
@@ -87,6 +86,7 @@ export const Game = () => {
   const resetGame = () => {
     setCurrentLevel(1);
     setGameCompleted(false);
+    setStartTime(null); // Reset startTime to null
     startLevel(1);
   };
 
