@@ -44,6 +44,8 @@ export const Game = () => {
   const [obstacles] = useState(INITIAL_OBSTACLES);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showLevelMessage, setShowLevelMessage] = useState(true);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [totalTime, setTotalTime] = useState<number>(0);
   const { toast } = useToast();
 
   const startLevel = (level: number) => {
@@ -54,12 +56,25 @@ export const Game = () => {
     })));
     positionQueue.clear();
     setShowLevelMessage(true);
+    
+    // Starte den Timer beim ersten Level
+    if (level === 1) {
+      setStartTime(Date.now());
+      setTotalTime(0);
+    }
   };
 
   const resetGame = () => {
     setCurrentLevel(1);
     setGameCompleted(false);
     startLevel(1);
+  };
+
+  const formatTime = (milliseconds: number): string => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const checkLevelComplete = useCallback(() => {
@@ -70,10 +85,15 @@ export const Game = () => {
         setCurrentLevel(nextLevel);
         startLevel(nextLevel);
       } else {
+        if (startTime) {
+          const endTime = Date.now();
+          const timeTaken = endTime - startTime;
+          setTotalTime(timeTaken);
+        }
         setGameCompleted(true);
       }
     }
-  }, [animals, currentLevel, gameCompleted]);
+  }, [animals, currentLevel, gameCompleted, startTime]);
 
   const checkCollisions = useCallback((playerPos: Position) => {
     console.log('Checking collisions with player at:', playerPos);
@@ -216,7 +236,6 @@ export const Game = () => {
             />
           )
         ))}
-        {/* Level Message Overlay */}
         {showLevelMessage && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
@@ -233,7 +252,9 @@ export const Game = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Gratulation!</AlertDialogTitle>
             <AlertDialogDescription>
-              Du hast alle Level geschafft und den Sonnenhof gerettet!
+              Du hast alle Level geschafft und den Sonnenhof gerettet! 
+              <br />
+              Deine Zeit: {formatTime(totalTime)}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
