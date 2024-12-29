@@ -33,7 +33,7 @@ export const LEVEL_CONFIGS = {
     animals: [
       { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: generateMoveDelay() },
     ],
-    message: "Level 1: Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein!"
+    message: "Level 1: Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein! Nutze die Pfeiltasten, um dich auf dem Bauernhof zu bewegen."
   },
   2: {
     animals: [
