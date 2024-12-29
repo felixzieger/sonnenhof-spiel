@@ -15,7 +15,7 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
 
   return (
     <>
-      Level {level}: {messages[level as keyof typeof messages]}
+      {messages[level as keyof typeof messages]}
       {showControls && (
         <div className="mt-4 flex flex-col items-center">
           <p>Nutze die Pfeiltasten, um dich auf dem Bauernhof zu bewegen:</p>
