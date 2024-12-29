@@ -19,16 +19,17 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
       {showControls && (
         <div className="mt-4 flex flex-col items-center">
           <p>Nutze die Pfeiltasten, um dich auf dem Bauernhof zu bewegen:</p>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            <div></div>
-            <ArrowUp className="w-6 h-6" />
-            <div></div>
-            <ArrowLeft className="w-6 h-6" />
-            <div></div>
-            <ArrowRight className="w-6 h-6" />
-            <div></div>
-            <ArrowDown className="w-6 h-6" />
-            <div></div>
+          <div className="mt-2">
+            {/* Erste Reihe - Hoch */}
+            <div className="flex justify-center mb-1">
+              <ArrowUp className="w-8 h-8 p-1 border rounded bg-gray-100" />
+            </div>
+            {/* Zweite Reihe - Links, Runter, Rechts */}
+            <div className="flex justify-center gap-1">
+              <ArrowLeft className="w-8 h-8 p-1 border rounded bg-gray-100" />
+              <ArrowDown className="w-8 h-8 p-1 border rounded bg-gray-100" />
+              <ArrowRight className="w-8 h-8 p-1 border rounded bg-gray-100" />
+            </div>
           </div>
         </div>
       )}
