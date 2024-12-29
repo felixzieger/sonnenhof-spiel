@@ -23,6 +23,26 @@ export const INITIAL_OBSTACLES: Position[] = [
 
 const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100;
 
+// Helper function to check if a position is valid (not on an obstacle)
+const isValidPosition = (position: Position): boolean => {
+  return !INITIAL_OBSTACLES.some(
+    obstacle => obstacle.x === position.x && obstacle.y === position.y
+  );
+};
+
+// Helper function to generate a random valid position
+const getRandomValidPosition = (): Position => {
+  let position: Position;
+  do {
+    position = {
+      x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
+      y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
+    };
+  } while (!isValidPosition(position));
+  
+  return position;
+};
+
 export interface LevelConfig {
   animals: Array<{
     id: number;
@@ -38,7 +58,13 @@ export interface LevelConfig {
 export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   1: {
     animals: [
-      { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: generateMoveDelay() },
+      { 
+        id: 1, 
+        type: 'cat' as const, 
+        position: getRandomValidPosition(), 
+        caught: false, 
+        moveDelay: generateMoveDelay() 
+      },
     ],
     message: "Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein!",
     showControls: true
@@ -48,30 +74,21 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
       ...Array.from({ length: 3 }, (_, i) => ({
         id: i + 1,
         type: 'cat' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
+        position: getRandomValidPosition(),
         caught: false,
         moveDelay: generateMoveDelay()
       })),
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 14,
         type: 'pig' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
+        position: getRandomValidPosition(),
         caught: false,
         moveDelay: generateMoveDelay()
       })),
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 16,
         type: 'horse' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
+        position: getRandomValidPosition(),
         caught: false,
         moveDelay: generateMoveDelay()
       }))
@@ -83,40 +100,28 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
       ...Array.from({ length: 3 }, (_, i) => ({
         id: i + 1,
         type: 'cat' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
+        position: getRandomValidPosition(),
         caught: false,
         moveDelay: generateMoveDelay()
       })),
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 14,
         type: 'pig' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
+        position: getRandomValidPosition(),
         caught: false,
         moveDelay: generateMoveDelay()
       })),
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 16,
         type: 'horse' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
+        position: getRandomValidPosition(),
         caught: false,
         moveDelay: generateMoveDelay()
       })),
       ...Array.from({ length: 10 }, (_, i) => ({
         id: i + 4,
         type: 'chicken' as const,
-        position: {
-          x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
-          y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
-        },
+        position: getRandomValidPosition(),
         caught: false,
         moveDelay: generateMoveDelay()
       }))
