@@ -244,11 +244,6 @@ export const Game = () => {
       </div>
       <div 
         className="relative w-[800px] h-[800px] bg-grass rounded-lg border-4 border-fence overflow-hidden"
-        style={{
-          transform: 'rotateX(45deg) rotateZ(-45deg)',
-          transformStyle: 'preserve-3d',
-          perspective: '1000px'
-        }}
       >
         {gridCells}
         {obstacles.map(obstacle => (
@@ -271,7 +266,7 @@ export const Game = () => {
           )
         ))}
         {showLevelMessage && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50" style={{ transform: 'rotateX(-45deg) rotateZ(45deg)' }}>
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
               <LevelMessage 
                 level={currentLevel} 

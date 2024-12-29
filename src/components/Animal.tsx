@@ -29,8 +29,6 @@ export const Animal = ({ type, position, gridSize }: AnimalProps) => {
         width: `${size}px`,
         height: `${size}px`,
         fontSize: `${size * 0.6}px`,
-        transform: 'rotateX(-45deg) rotateZ(45deg)',
-        transformStyle: 'preserve-3d'
       }}
     >
       {getAnimalEmoji()}
