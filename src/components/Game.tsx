@@ -19,7 +19,7 @@ export type AnimalType = {
   position: Position;
   caught: boolean;
   lastMoveDirection?: 'towards' | 'away';
-  moveDelay: number; // Neue Property für individuelle Verzögerung
+  moveDelay: number;
 };
 
 export const Game = () => {
@@ -27,7 +27,7 @@ export const Game = () => {
   const [animals, setAnimals] = useState<AnimalType[]>(
     INITIAL_ANIMALS.map(animal => ({
       ...animal,
-      moveDelay: Math.floor(Math.random() * 750) // Zufällige Verzögerung zwischen 0-750ms
+      moveDelay: Math.floor(Math.random() * 300) // Reduziert auf 0-300ms
     }))
   );
   const [obstacles] = useState(INITIAL_OBSTACLES);
@@ -37,7 +37,7 @@ export const Game = () => {
     setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
     setAnimals(INITIAL_ANIMALS.map(animal => ({
       ...animal,
-      moveDelay: Math.floor(Math.random() * 750) // Zufällige Verzögerung zwischen 0-750ms
+      moveDelay: Math.floor(Math.random() * 300) // Reduziert auf 0-300ms
     })));
     positionQueue.clear();
     toast({
