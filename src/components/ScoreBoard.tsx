@@ -16,10 +16,10 @@ export const ScoreBoard = ({ animals }: ScoreBoardProps) => {
 
   return (
     <div className="flex gap-4">
-      <div>Katzen: {getCaughtCount('cat')}/{getTotalCount('cat')}</div>
-      <div>Hühner: {getCaughtCount('chicken')}/{getTotalCount('chicken')}</div>
-      <div>Schweine: {getCaughtCount('pig')}/{getTotalCount('pig')}</div>
-      <div>Pferde: {getCaughtCount('horse')}/{getTotalCount('horse')}</div>
+      <div>🐱 {getCaughtCount('cat')}/{getTotalCount('cat')}</div>
+      <div>🐔 {getCaughtCount('chicken')}/{getTotalCount('chicken')}</div>
+      <div>🐷 {getCaughtCount('pig')}/{getTotalCount('pig')}</div>
+      <div>🐎 {getCaughtCount('horse')}/{getTotalCount('horse')}</div>
     </div>
   );
 };
