@@ -58,7 +58,7 @@ export const updateAnimalPositions = (
   return currentAnimals.map(animal => {
     if (animal.caught) return animal;
 
-    const shouldMove = Math.random() < 0.4; // 40% Chance sich zu bewegen
+    const shouldMove = Math.random() < 0.85; // 85% Chance sich zu bewegen
     
     console.log(`Animal ${animal.id} (${animal.type}):`, {
       shouldMove,
