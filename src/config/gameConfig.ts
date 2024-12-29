@@ -1,21 +1,25 @@
 import { Position } from '../components/Game';
+import { createObstacleArea } from '../utils/obstacleUtils';
 
 export const GRID_SIZE = 20;
 
+// Example usage of createObstacleArea - you can modify these to create your desired layout
 export const INITIAL_OBSTACLES: Position[] = [
-  { x: 3, y: 3 },
-  { x: 4, y: 3 },
-  { x: 15, y: 4 },
-  { x: 16, y: 4 },
-  // Hindernisse am Rand
-  { x: 0, y: 0 },
-  { x: 1, y: 0 },
-  { x: 18, y: 0 },
-  { x: 19, y: 0 },
-  { x: 0, y: 19 },
-  { x: 1, y: 19 },
-  { x: 18, y: 19 },
-  { x: 19, y: 19 },
+  // Create a 2x2 obstacle area in the top-left corner
+  ...createObstacleArea({ x: 0, y: 0 }, 2, 2),
+  
+  // Create a 2x2 obstacle area in the top-right corner
+  ...createObstacleArea({ x: 18, y: 0 }, 2, 2),
+  
+  // Create a 2x2 obstacle area in the bottom-left corner
+  ...createObstacleArea({ x: 0, y: 18 }, 2, 2),
+  
+  // Create a 2x2 obstacle area in the bottom-right corner
+  ...createObstacleArea({ x: 18, y: 18 }, 2, 2),
+  
+  // Create some obstacles in the middle of the map
+  ...createObstacleArea({ x: 3, y: 3 }, 2, 1),
+  ...createObstacleArea({ x: 15, y: 4 }, 2, 1),
 ];
 
 const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100;
