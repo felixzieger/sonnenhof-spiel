@@ -1,6 +1,5 @@
 import { Position } from '../components/Game';
 import { ObstacleType } from '../components/Obstacle';
-import { LevelMessage } from '../components/LevelMessage';
 
 export const GRID_SIZE = 20;
 
@@ -28,12 +27,25 @@ export const INITIAL_OBSTACLES: Obstacle[] = [
 
 const generateMoveDelay = () => Math.floor(Math.random() * 4) * 100;
 
-export const LEVEL_CONFIGS = {
+export interface LevelConfig {
+  animals: Array<{
+    id: number;
+    type: 'cat' | 'chicken' | 'pig' | 'horse';
+    position: Position;
+    caught: boolean;
+    moveDelay: number;
+  }>;
+  message: string;
+  showControls?: boolean;
+}
+
+export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   1: {
     animals: [
       { id: 1, type: 'cat' as const, position: { x: 2, y: 2 }, caught: false, moveDelay: generateMoveDelay() },
     ],
-    message: <LevelMessage level={1} showControls={true} />
+    message: "Die Katze hat Schnupfen und muss zum Tierarzt. Fang die Katze ein!",
+    showControls: true
   },
   2: {
     animals: [
@@ -47,7 +59,6 @@ export const LEVEL_CONFIGS = {
         caught: false,
         moveDelay: generateMoveDelay()
       })),
-      // 10 Hühner
       ...Array.from({ length: 10 }, (_, i) => ({
         id: i + 4,
         type: 'chicken' as const,
@@ -58,7 +69,6 @@ export const LEVEL_CONFIGS = {
         caught: false,
         moveDelay: generateMoveDelay()
       })),
-      // 2 Schweine
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 14,
         type: 'pig' as const,
@@ -69,7 +79,6 @@ export const LEVEL_CONFIGS = {
         caught: false,
         moveDelay: generateMoveDelay()
       })),
-      // 2 Pferde
       ...Array.from({ length: 2 }, (_, i) => ({
         id: i + 16,
         type: 'horse' as const,
@@ -81,7 +90,7 @@ export const LEVEL_CONFIGS = {
         moveDelay: generateMoveDelay()
       }))
     ],
-    message: <LevelMessage level={2} />
+    message: "Das Stalltor stand offen, Pferde und Schweine sind ausgebüchst. Fang sie schnell wieder ein!"
   },
   3: {
     animals: [
@@ -95,7 +104,6 @@ export const LEVEL_CONFIGS = {
         caught: false,
         moveDelay: generateMoveDelay()
       })),
-      // 10 Hühner
       ...Array.from({ length: 10 }, (_, i) => ({
         id: i + 4,
         type: 'chicken' as const,
@@ -107,6 +115,6 @@ export const LEVEL_CONFIGS = {
         moveDelay: generateMoveDelay()
       }))
     ],
-    message: <LevelMessage level={3} />
+    message: "Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Bauernhof spielt verrückt! Fang alle Tiere wieder ein!"
   }
 };

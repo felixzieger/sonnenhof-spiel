@@ -16,6 +16,7 @@ import {
   AlertDialogFooter,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { LevelMessage } from './LevelMessage';
 
 export type Position = {
   x: number;
@@ -215,8 +216,10 @@ export const Game = () => {
         {showLevelMessage && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
-              <h2 className="text-xl font-bold mb-2">Level {currentLevel}</h2>
-              <p>{LEVEL_CONFIGS[currentLevel].message}</p>
+              <LevelMessage 
+                level={currentLevel} 
+                showControls={LEVEL_CONFIGS[currentLevel].showControls}
+              />
             </div>
           </div>
         )}
