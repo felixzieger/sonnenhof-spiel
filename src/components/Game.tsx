@@ -3,6 +3,7 @@ import { Player } from './Player';
 import { Animal } from './Animal';
 import { Obstacle } from './Obstacle';
 import { ScoreBoard } from './ScoreBoard';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
@@ -42,6 +43,7 @@ export const Game = () => {
   const [obstacles] = useState(INITIAL_OBSTACLES);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showLevelMessage, setShowLevelMessage] = useState(true);
+  const { toast } = useToast();
 
   const startLevel = (level: number) => {
     setPlayerPosition({ x: GRID_SIZE / 2, y: GRID_SIZE / 2 });
