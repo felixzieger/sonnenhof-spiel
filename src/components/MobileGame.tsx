@@ -132,21 +132,19 @@ export const MobileGame = () => {
     setShowLevelMessage(false);
 
     const newPosition = { ...playerPosition };
-    switch (direction) {
-      case 'ArrowUp':
-        newPosition.y = Math.max(0, playerPosition.y - 1);
-        break;
-      case 'ArrowDown':
-        newPosition.y = Math.min(GRID_SIZE - 1, playerPosition.y + 1);
-        break;
-      case 'ArrowLeft':
-        newPosition.x = Math.max(0, playerPosition.x - 1);
-        break;
-      case 'ArrowRight':
-        newPosition.x = Math.min(GRID_SIZE - 1, playerPosition.x + 1);
-        break;
-      default:
-        return;
+    
+    // Handle diagonal movements by checking if the direction is already being processed
+    if (direction === 'ArrowUp') {
+      newPosition.y = Math.max(0, playerPosition.y - 1);
+    }
+    if (direction === 'ArrowDown') {
+      newPosition.y = Math.min(GRID_SIZE - 1, playerPosition.y + 1);
+    }
+    if (direction === 'ArrowLeft') {
+      newPosition.x = Math.max(0, playerPosition.x - 1);
+    }
+    if (direction === 'ArrowRight') {
+      newPosition.x = Math.min(GRID_SIZE - 1, playerPosition.x + 1);
     }
 
     const validPosition = getValidMove(playerPosition, newPosition, obstacles);
