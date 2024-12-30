@@ -40,12 +40,15 @@ export const Joystick = ({ onMove }: JoystickProps) => {
 
     // Determine direction based on position
     const threshold = 20;
-    if (Math.abs(newX) > Math.abs(newY)) {
-      if (newX > threshold) onMove('ArrowRight');
-      else if (newX < -threshold) onMove('ArrowLeft');
-    } else {
-      if (newY > threshold) onMove('ArrowDown');
-      else if (newY < -threshold) onMove('ArrowUp');
+    
+    // Check horizontal movement
+    if (Math.abs(newX) > threshold) {
+      onMove(newX > 0 ? 'ArrowRight' : 'ArrowLeft');
+    }
+    
+    // Check vertical movement independently
+    if (Math.abs(newY) > threshold) {
+      onMove(newY > 0 ? 'ArrowDown' : 'ArrowUp');
     }
 
     lastMoveTime.current = currentTime;
