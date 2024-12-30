@@ -1,10 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Player } from './Player';
-import { Animal } from './Animal';
-import { Obstacle } from './Obstacle';
-import { ScoreBoard } from './ScoreBoard';
-import { TouchControls } from './TouchControls';
-import { GameMenu } from './GameMenu';
 import { useToast } from '@/hooks/use-toast';
 import { Hourglass } from 'lucide-react';
 import {
@@ -16,10 +10,12 @@ import {
   AlertDialogFooter,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { LevelMessage } from './LevelMessage';
+import { TouchControls } from './TouchControls';
 import { Position, AnimalType } from './Game';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
+import { GameHeader } from './game/GameHeader';
+import { GameBoard } from './game/GameBoard';
 
 export const MobileGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -170,55 +166,23 @@ export const MobileGame = () => {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="flex flex-wrap justify-center gap-2 mb-2">
-        <div className="bg-white p-2 rounded-lg shadow-md">
-          <h2 className="text-lg font-bold">Level {currentLevel}</h2>
-        </div>
-        <div className="bg-white p-2 rounded-lg shadow-md flex items-center gap-1">
-          <Hourglass className="w-4 h-4" />
-          <span className="font-mono text-lg">
-            {formatTime(gameCompleted ? totalTime : currentTime)}
-          </span>
-        </div>
-        <div className="bg-white p-2 rounded-lg shadow-md">
-          <ScoreBoard animals={animals} />
-        </div>
-      </div>
+      <GameHeader 
+        level={currentLevel}
+        animals={animals}
+        currentTime={currentTime}
+        totalTime={totalTime}
+        gameCompleted={gameCompleted}
+      />
       
-      <div 
-        className="relative w-full aspect-square rounded-lg border-2 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
-        style={{ maxWidth: '100vw', maxHeight: '60vh' }}
-      >
-        <GameMenu onRestart={resetGame} />
-        {obstacles.map((obstacle, index) => (
-          <Obstacle 
-            key={index}
-            position={obstacle}
-            gridSize={GRID_SIZE} + 1
-          />
-        ))}
-        <Player position={playerPosition} gridSize={GRID_SIZE} + 1 />
-        {animals.map(animal => (
-          !animal.caught && (
-            <Animal 
-              key={animal.id}
-              type={animal.type}
-              position={animal.position}
-              gridSize={GRID_SIZE} + 1
-            />
-          )
-        ))}
-        {showLevelMessage && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
-            <div className="bg-white p-4 rounded-lg shadow-lg max-w-[90%] text-center mx-2">
-              <LevelMessage 
-                level={currentLevel} 
-                showControls={LEVEL_CONFIGS[currentLevel].showControls}
-              />
-            </div>
-          </div>
-        )}
-      </div>
+      <GameBoard 
+        playerPosition={playerPosition}
+        animals={animals}
+        obstacles={obstacles}
+        gridSize={GRID_SIZE + 1}
+        currentLevel={currentLevel}
+        showLevelMessage={showLevelMessage}
+        onRestart={resetGame}
+      />
 
       <TouchControls onMove={handleMove} />
 
@@ -230,7 +194,9 @@ export const MobileGame = () => {
               <p>Du hast alle Level geschafft und den Sonnenhof gerettet!</p>
               <div className="flex items-center justify-center gap-2 mt-4">
                 <Hourglass className="w-6 h-6" />
-                <span className="font-mono text-2xl font-bold">{formatTime(totalTime)}</span>
+                <span className="font-mono text-2xl font-bold">
+                  {formatTime(totalTime)}
+                </span>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
