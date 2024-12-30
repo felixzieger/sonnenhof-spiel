@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowBigUp, ArrowBigDown, ArrowBigLeft, ArrowBigRight } from 'lucide-react';
 
 interface LevelMessageProps {
   level: number;
@@ -22,13 +22,13 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
           <div className="mt-2">
             {/* Erste Reihe - Hoch */}
             <div className="flex justify-center mb-1">
-              <ArrowUp className="w-8 h-8 p-1 border rounded bg-gray-100" />
+              <ArrowBigUp className="w-8 h-8 p-1 border rounded bg-gray-100" />
             </div>
             {/* Zweite Reihe - Links, Runter, Rechts */}
             <div className="flex justify-center gap-1">
-              <ArrowLeft className="w-8 h-8 p-1 border rounded bg-gray-100" />
-              <ArrowDown className="w-8 h-8 p-1 border rounded bg-gray-100" />
-              <ArrowRight className="w-8 h-8 p-1 border rounded bg-gray-100" />
+              <ArrowBigLeft className="w-8 h-8 p-1 border rounded bg-gray-100" />
+              <ArrowBigDown className="w-8 h-8 p-1 border rounded bg-gray-100" />
+              <ArrowBigRight className="w-8 h-8 p-1 border rounded bg-gray-100" />
             </div>
           </div>
         </div>

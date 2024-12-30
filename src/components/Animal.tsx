@@ -8,14 +8,15 @@ interface AnimalProps {
 }
 
 export const Animal = ({ type, position, gridSize }: AnimalProps) => {
-  const size = 800 / gridSize;
+  // Calculate size based on viewport width for mobile
+  const size = `calc(min(800px, 100vw) / ${gridSize})`;
 
   const getAnimalEmoji = () => {
     switch (type) {
       case 'cat': return '🐱';
       case 'chicken': return '🐔';
       case 'pig': return '🐷';
-      case 'horse': return '🐎';
+      case 'horse': return '🐴';
       default: return '❓';
     }
   };
@@ -24,11 +25,11 @@ export const Animal = ({ type, position, gridSize }: AnimalProps) => {
     <div 
       className="absolute transition-all duration-300 animate-bounce-small flex items-center justify-center"
       style={{
-        left: `${position.x * size}px`,
-        top: `${position.y * size}px`,
-        width: `${size}px`,
-        height: `${size}px`,
-        fontSize: `${size * 0.6}px`,
+        left: `calc((min(800px, 100vw) / ${gridSize}) * ${position.x})`,
+        top: `calc((min(800px, 100vw) / ${gridSize}) * ${position.y})`,
+        width: size,
+        height: size,
+        fontSize: `calc((min(800px, 100vw) / ${gridSize}) * 0.6)`,
       }}
     >
       {getAnimalEmoji()}

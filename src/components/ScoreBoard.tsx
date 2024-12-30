@@ -19,7 +19,7 @@ export const ScoreBoard = ({ animals }: ScoreBoardProps) => {
       <div>🐱 {getCaughtCount('cat')}/{getTotalCount('cat')}</div>
       <div>🐔 {getCaughtCount('chicken')}/{getTotalCount('chicken')}</div>
       <div>🐷 {getCaughtCount('pig')}/{getTotalCount('pig')}</div>
-      <div>🐎 {getCaughtCount('horse')}/{getTotalCount('horse')}</div>
+      <div>🐴 {getCaughtCount('horse')}/{getTotalCount('horse')}</div>
     </div>
   );
 };

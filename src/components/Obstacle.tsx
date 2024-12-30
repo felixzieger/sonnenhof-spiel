@@ -6,16 +6,16 @@ interface ObstacleProps {
 }
 
 export const Obstacle = ({ position, gridSize }: ObstacleProps) => {
-  const size = 800 / gridSize;
+  const size = `calc(min(800px, 100vw) / ${gridSize})`;
 
   return (
     <div 
       className="absolute bg-gray-500/50 rounded-md border-2 border-white/20"
       style={{
-        left: `${position.x * size}px`,
-        top: `${position.y * size}px`,
-        width: `${size}px`,
-        height: `${size}px`,
+        left: `calc((min(800px, 100vw) / ${gridSize}) * ${position.x})`,
+        top: `calc((min(800px, 100vw) / ${gridSize}) * ${position.y})`,
+        width: size,
+        height: size,
       }}
     />
   );
