@@ -42,10 +42,16 @@ export const getValidMove = (
   newPos: Position, 
   obstacles: Position[]
 ): Position => {
-  if (isPositionBlocked(newPos, obstacles)) {
+  // Ensure position stays within playable bounds (1 cell from edges)
+  const boundedPos = {
+    x: Math.max(1, Math.min(GRID_SIZE - 2, newPos.x)),
+    y: Math.max(1, Math.min(GRID_SIZE - 2, newPos.y))
+  };
+
+  if (isPositionBlocked(boundedPos, obstacles)) {
     return currentPos;
   }
-  return newPos;
+  return boundedPos;
 };
 
 export const updateAnimalPositions = (
