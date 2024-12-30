@@ -1,8 +1,11 @@
 import { Position, AnimalType } from '../components/Game';
 import { GRID_SIZE } from '../config/gameConfig';
-import { positionQueue } from './positionQueue';
+import { getDistance, moveTowardsPlayer, moveAwayFromPlayer, getRandomMove } from './animalMovement';
+import { PositionQueue } from './positionQueue';
 
-export const positionQueue = new PositionQueue();
+// Create a singleton instance of PositionQueue
+const positionQueueInstance = new PositionQueue();
+export { positionQueueInstance as positionQueue };
 
 export const isPositionBlocked = (position: Position, obstacles: Position[], playerPosition: Position): boolean => {
   // Check if position is outside game boundaries
@@ -106,7 +109,7 @@ export const updateAnimalPositions = (
   currentAnimals: AnimalType[], 
   obstacles: Position[]
 ): AnimalType[] => {
-  const currentPlayerPos = positionQueue.getLatest();
+  const currentPlayerPos = positionQueueInstance.getLatest();
   if (!currentPlayerPos) return currentAnimals;
 
   return currentAnimals.map(animal => {
