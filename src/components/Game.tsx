@@ -10,7 +10,6 @@ import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfi
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 import { Hourglass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { calculateViewport, Viewport } from '../utils/viewport';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -38,7 +37,7 @@ export type AnimalType = {
 
 export const Game = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
-  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 15, y: 5 });
+  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 10, y: 5 });
   const [animals, setAnimals] = useState<AnimalType[]>(() => 
     LEVEL_CONFIGS[1].animals.map(animal => ({
       ...animal,
@@ -53,10 +52,6 @@ export const Game = () => {
   const [totalTime, setTotalTime] = useState<number>(0);
   const { toast } = useToast();
   const isMobile = useIsMobile();
-
-  // Calculate viewport based on screen size
-  const visibleGridSize = isMobile ? 7 : GRID_SIZE;
-  const viewport: Viewport = calculateViewport(playerPosition, visibleGridSize);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -251,12 +246,7 @@ export const Game = () => {
         </div>
       </div>
       <div 
-        className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden"
-        style={{
-          backgroundImage: 'url("/lovable-uploads/281eb186-f757-4b9f-8ae3-460443537fa1.png")',
-          backgroundSize: `${800 * 3}px`,
-          backgroundPosition: `-${viewport.offsetX * (800/viewport.visibleSize)}px -${viewport.offsetY * (800/viewport.visibleSize)}px`,
-        }}
+        className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
       >
         {gridCells}
         {obstacles.map((obstacle, index) => (
@@ -264,10 +254,9 @@ export const Game = () => {
             key={index}
             position={obstacle}
             gridSize={GRID_SIZE}
-            viewport={viewport}
           />
         ))}
-        <Player position={playerPosition} gridSize={GRID_SIZE} viewport={viewport} />
+        <Player position={playerPosition} gridSize={GRID_SIZE} />
         {animals.map(animal => (
           !animal.caught && (
             <Animal 
@@ -275,7 +264,6 @@ export const Game = () => {
               type={animal.type}
               position={animal.position}
               gridSize={GRID_SIZE}
-              viewport={viewport}
             />
           )
         ))}
