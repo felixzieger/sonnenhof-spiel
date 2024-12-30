@@ -9,6 +9,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isMovingRef = useRef(false);
   const currentDirectionRef = useRef<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>(null);
+  const lastMoveTimeRef = useRef<number>(0);
 
   const startMoving = useCallback((direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => {
     console.log('startMoving called', {
@@ -26,14 +27,20 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     // Initial move
     isMovingRef.current = true;
     currentDirectionRef.current = direction;
+    lastMoveTimeRef.current = Date.now();
     onMove(direction);
 
-    // Set up interval for continuous movement
+    // Set up interval for continuous movement with rate limiting
     moveIntervalRef.current = setInterval(() => {
       if (isMovingRef.current && currentDirectionRef.current === direction) {
-        onMove(direction);
+        const now = Date.now();
+        // Ensure at least 100ms has passed since the last move
+        if (now - lastMoveTimeRef.current >= 100) {
+          lastMoveTimeRef.current = now;
+          onMove(direction);
+        }
       }
-    }, 200);
+    }, 100); // Shorter interval but with rate limiting
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
@@ -52,7 +59,6 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   }, []);
 
   const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
-    // Don't call preventDefault() here anymore
     console.log('TouchStart event', {
       direction,
       touches: e.touches.length,
