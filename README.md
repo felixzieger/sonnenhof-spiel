@@ -1,8 +1,12 @@
-# Welcome to your Lovable project
+# Sonnenhof Spiel
+
+This is the source for https://spiel.sonnenhof-zieger.de/
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/522a9a35-bfeb-4a88-a6ac-2c2963d28a0c
+Development via Lovable: https://lovable.dev/projects/522a9a35-bfeb-4a88-a6ac-2c2963d28a0c
+
+Deployment via Vercel: https://vercel.com/felixziegers-projects/sonnenhof-spiel/settings/domains 
 
 ## How can I edit this code?
 
@@ -52,7 +56,7 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with
 
 - Vite
 - TypeScript
@@ -60,10 +64,6 @@ This project is built with .
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+# Todo
 
-Simply open [Lovable](https://lovable.dev/projects/522a9a35-bfeb-4a88-a6ac-2c2963d28a0c) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- Use static background picture from public/ instead of the one hosted by lovable.
