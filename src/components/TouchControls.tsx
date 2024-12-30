@@ -10,12 +10,14 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   const isMovingRef = useRef(false);
   const currentDirectionRef = useRef<'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | null>(null);
   const lastMoveTimeRef = useRef<number>(0);
+  const isTouchStartRef = useRef(false);
 
   const startMoving = useCallback((direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => {
     console.log('startMoving called', {
       direction,
       isCurrentlyMoving: isMovingRef.current,
-      hasInterval: !!moveIntervalRef.current
+      hasInterval: !!moveIntervalRef.current,
+      isTouchStart: isTouchStartRef.current
     });
 
     // Clear any existing interval first
@@ -24,27 +26,26 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
       moveIntervalRef.current = null;
     }
     
-    // Initial move - only if enough time has passed since last move
-    const now = Date.now();
-    if (now - lastMoveTimeRef.current >= 140) { // Changed to 140ms
+    // Initial move - always move immediately on first touch
+    if (isTouchStartRef.current) {
       isMovingRef.current = true;
       currentDirectionRef.current = direction;
-      lastMoveTimeRef.current = now;
+      lastMoveTimeRef.current = Date.now();
       console.log('Player moving:', direction);
       onMove(direction);
     }
 
-    // Set up interval for continuous movement
+    // Set up interval for continuous movement when holding
     moveIntervalRef.current = setInterval(() => {
       if (isMovingRef.current && currentDirectionRef.current === direction) {
         const currentTime = Date.now();
-        if (currentTime - lastMoveTimeRef.current >= 140) { // Changed to 140ms
+        if (currentTime - lastMoveTimeRef.current >= 140) {
           lastMoveTimeRef.current = currentTime;
           console.log('Player moving (continuous):', direction);
           onMove(direction);
         }
       }
-    }, 140); // Changed to 140ms
+    }, 140);
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
@@ -60,21 +61,23 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     }
     isMovingRef.current = false;
     currentDirectionRef.current = null;
+    isTouchStartRef.current = false;
   }, []);
 
   const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevent default touch behavior
+    e.preventDefault();
     console.log('TouchStart event', {
       direction,
       touches: e.touches.length,
       targetId: (e.target as HTMLElement).id,
       timestamp: Date.now()
     });
+    isTouchStartRef.current = true;
     startMoving(direction);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevent default touch behavior
+    e.preventDefault();
     console.log('TouchEnd event', {
       touches: e.touches.length,
       targetId: (e.target as HTMLElement).id,
