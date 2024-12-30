@@ -8,8 +8,7 @@ interface AnimalProps {
 }
 
 export const Animal = ({ type, position, gridSize }: AnimalProps) => {
-  // Calculate size based on viewport width for mobile
-  const size = `calc(min(800px, 100vw) / ${gridSize})`;
+  const size = `calc(min(800px, 100vw) / (${gridSize} + 1))`;
 
   const getAnimalEmoji = () => {
     switch (type) {
@@ -25,11 +24,11 @@ export const Animal = ({ type, position, gridSize }: AnimalProps) => {
     <div 
       className="absolute transition-all duration-300 animate-bounce-small flex items-center justify-center"
       style={{
-        left: `calc((min(800px, 100vw) / ${gridSize}) * ${position.x})`,
-        top: `calc((min(800px, 100vw) / ${gridSize}) * ${position.y})`,
+        left: `calc((min(800px, 100vw) / (${gridSize} + 1)) * ${position.x})`,
+        top: `calc((min(800px, 100vw) / (${gridSize} + 1)) * ${position.y})`,
         width: size,
         height: size,
-        fontSize: `calc((min(800px, 100vw) / ${gridSize}) * 0.6)`,
+        fontSize: `calc((min(800px, 100vw) / (${gridSize} + 1)) * 0.6)`,
       }}
     >
       {getAnimalEmoji()}
