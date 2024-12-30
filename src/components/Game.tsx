@@ -251,7 +251,12 @@ export const Game = () => {
         </div>
       </div>
       <div 
-        className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
+        className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden"
+        style={{
+          backgroundImage: 'url("/lovable-uploads/281eb186-f757-4b9f-8ae3-460443537fa1.png")',
+          backgroundSize: `${800 * (GRID_SIZE / viewport.visibleSize)}px`,
+          backgroundPosition: `-${(viewport.offsetX * 800) / viewport.visibleSize}px -${(viewport.offsetY * 800) / viewport.visibleSize}px`,
+        }}
       >
         {gridCells}
         {obstacles.map((obstacle, index) => (
