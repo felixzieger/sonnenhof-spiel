@@ -22,7 +22,7 @@ export const Animal = ({ type, position, gridSize, viewport }: AnimalProps) => {
       case 'cat': return '🐱';
       case 'chicken': return '🐔';
       case 'pig': return '🐷';
-      case 'horse': return '🐎';
+      case 'horse': return '🐴';
       default: return '❓';
     }
   };
