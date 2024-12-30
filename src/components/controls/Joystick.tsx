@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDrag } from '@use-gesture/react';
 
 interface JoystickProps {
@@ -7,6 +7,8 @@ interface JoystickProps {
 
 export const Joystick = ({ onMove }: JoystickProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const lastMoveTime = useRef(0);
+  const moveDelay = 200; // 200ms delay between moves
   
   const bind = useDrag(({ movement: [x, y], down }) => {
     if (!down) {
@@ -24,6 +26,12 @@ export const Joystick = ({ onMove }: JoystickProps) => {
     
     setPosition({ x: newX, y: newY });
 
+    // Check if enough time has passed since last move
+    const currentTime = Date.now();
+    if (currentTime - lastMoveTime.current < moveDelay) {
+      return;
+    }
+
     // Determine direction based on position
     const threshold = 20;
     if (Math.abs(newX) > Math.abs(newY)) {
@@ -33,6 +41,8 @@ export const Joystick = ({ onMove }: JoystickProps) => {
       if (newY > threshold) onMove('ArrowDown');
       else if (newY < -threshold) onMove('ArrowUp');
     }
+
+    lastMoveTime.current = currentTime;
   });
 
   return (
