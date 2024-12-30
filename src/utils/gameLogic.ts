@@ -45,6 +45,40 @@ export const getValidMove = (
   return newPos;
 };
 
+const tryAlternativeEscape = (
+  animalPos: Position,
+  playerPos: Position,
+  obstacles: Position[],
+  gridSize: number
+): Position => {
+  // Calculate the main direction vector from player to animal
+  const dx = animalPos.x - playerPos.x;
+  const dy = animalPos.y - playerPos.y;
+
+  // Try moving 90 degrees to the left of the escape direction
+  const leftMove: Position = {
+    x: Math.max(0, Math.min(gridSize - 1, animalPos.x - dy)),
+    y: Math.max(0, Math.min(gridSize - 1, animalPos.y + dx))
+  };
+
+  // Try moving 90 degrees to the right of the escape direction
+  const rightMove: Position = {
+    x: Math.max(0, Math.min(gridSize - 1, animalPos.x + dy)),
+    y: Math.max(0, Math.min(gridSize - 1, animalPos.y - dx))
+  };
+
+  // Check if either alternative move is valid
+  if (!isPositionBlocked(leftMove, obstacles, playerPos)) {
+    return leftMove;
+  }
+  if (!isPositionBlocked(rightMove, obstacles, playerPos)) {
+    return rightMove;
+  }
+
+  // If no alternative moves are valid, stay in place
+  return animalPos;
+};
+
 export const updateAnimalPositions = (
   currentAnimals: AnimalType[], 
   obstacles: Position[]
@@ -76,7 +110,6 @@ export const updateAnimalPositions = (
           ? moveTowardsPlayer(animal.position, currentPlayerPos)
           : moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
         
-        // Check if the new position is blocked by player
         if (newPosition.x === currentPlayerPos.x && newPosition.y === currentPlayerPos.y) {
           return {
             ...animal,
@@ -93,7 +126,13 @@ export const updateAnimalPositions = (
       case 'chicken':
         const distanceToPlayer = getDistance(animal.position, currentPlayerPos);
         if (distanceToPlayer <= 3) {
+          // Try to move away from player
           newPosition = moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
+          
+          // If the direct escape route is blocked, try alternative paths
+          if (isPositionBlocked(newPosition, obstacles, currentPlayerPos)) {
+            newPosition = tryAlternativeEscape(animal.position, currentPlayerPos, obstacles, GRID_SIZE);
+          }
         } else {
           newPosition = getRandomMove(animal.position, GRID_SIZE);
         }
