@@ -10,6 +10,7 @@ import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfi
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 import { Hourglass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { calculateViewport, Viewport } from '../utils/viewport';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -37,7 +38,7 @@ export type AnimalType = {
 
 export const Game = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
-  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 10, y: 5 });
+  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 15, y: 5 });
   const [animals, setAnimals] = useState<AnimalType[]>(() => 
     LEVEL_CONFIGS[1].animals.map(animal => ({
       ...animal,
@@ -52,6 +53,10 @@ export const Game = () => {
   const [totalTime, setTotalTime] = useState<number>(0);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+
+  // Calculate viewport based on screen size
+  const visibleGridSize = isMobile ? 7 : GRID_SIZE;
+  const viewport: Viewport = calculateViewport(playerPosition, visibleGridSize);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -254,9 +259,10 @@ export const Game = () => {
             key={index}
             position={obstacle}
             gridSize={GRID_SIZE}
+            viewport={viewport}
           />
         ))}
-        <Player position={playerPosition} gridSize={GRID_SIZE} />
+        <Player position={playerPosition} gridSize={GRID_SIZE} viewport={viewport} />
         {animals.map(animal => (
           !animal.caught && (
             <Animal 
@@ -264,6 +270,7 @@ export const Game = () => {
               type={animal.type}
               position={animal.position}
               gridSize={GRID_SIZE}
+              viewport={viewport}
             />
           )
         ))}
