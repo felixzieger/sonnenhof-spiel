@@ -43,13 +43,21 @@ export const Joystick = ({ onMove }: JoystickProps) => {
     }
 
     lastMoveTime.current = currentTime;
+  }, {
+    // Add touch event options for better mobile support
+    pointer: { touch: true },
+    // Prevent default touch behavior to avoid scrolling
+    preventDefault: true,
+    // Add this to work better with touch events
+    filterTaps: true,
+    bounds: { left: -50, right: 50, top: -50, bottom: 50 }
   });
 
   return (
-    <div className="relative w-32 h-32 bg-white/80 rounded-full backdrop-blur-sm shadow-lg">
+    <div className="relative w-32 h-32 bg-white/80 rounded-full backdrop-blur-sm shadow-lg touch-none">
       <div 
         {...bind()}
-        className="absolute cursor-grab active:cursor-grabbing bg-blue-600 w-16 h-16 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg border-2 border-white"
+        className="absolute cursor-grab active:cursor-grabbing bg-blue-600 w-16 h-16 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg border-2 border-white touch-none"
         style={{ 
           transform: `translate(${position.x}px, ${position.y}px) translate(-50%, -50%)`
         }}
