@@ -254,8 +254,8 @@ export const Game = () => {
         className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden"
         style={{
           backgroundImage: 'url("/lovable-uploads/281eb186-f757-4b9f-8ae3-460443537fa1.png")',
-          backgroundSize: `${800 * (GRID_SIZE / viewport.visibleSize)}px`,
-          backgroundPosition: `-${(viewport.offsetX * 800) / viewport.visibleSize}px -${(viewport.offsetY * 800) / viewport.visibleSize}px`,
+          backgroundSize: `${800 * 3}px`,
+          backgroundPosition: `-${viewport.offsetX * (800/viewport.visibleSize)}px -${viewport.offsetY * (800/viewport.visibleSize)}px`,
         }}
       >
         {gridCells}
