@@ -7,8 +7,7 @@ interface PlayerProps {
 }
 
 export const Player = ({ position, gridSize }: PlayerProps) => {
-  const size = 800 / gridSize;
-  const scaleFactor = 0.7; // Reduce size by 30%
+  const size = 800 / gridSize; // 800px ist die Spielfeldgröße
 
   return (
     <div 
@@ -16,9 +15,8 @@ export const Player = ({ position, gridSize }: PlayerProps) => {
       style={{
         left: `${position.x * size}px`,
         top: `${position.y * size}px`,
-        width: `${size * scaleFactor}px`,
-        height: `${size * scaleFactor}px`,
-        transform: `translate(${(size - size * scaleFactor) / 2}px, ${(size - size * scaleFactor) / 2}px)`,
+        width: `${size}px`,
+        height: `${size}px`,
       }}
     >
       <div className="w-full h-full bg-blue-600 rounded-full border-2 border-white shadow-lg" />

@@ -37,7 +37,7 @@ export type AnimalType = {
 
 export const Game = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
-  const [playerPosition, setPlayerPosition] = useState<Position>({ x: GRID_SIZE - 2, y: 5 }); // Moved one cell in from the edge
+  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 10, y: 5 });
   const [animals, setAnimals] = useState<AnimalType[]>(() => 
     LEVEL_CONFIGS[1].animals.map(animal => ({
       ...animal,
@@ -71,7 +71,7 @@ export const Game = () => {
   }, [startTime, gameCompleted]);
 
   const startLevel = (level: number) => {
-    setPlayerPosition({ x: GRID_SIZE - 2, y: 5 }); // Also update reset position
+    setPlayerPosition({ x: 10, y: 5 });
     setAnimals(LEVEL_CONFIGS[level].animals.map(animal => ({
       ...animal,
       moveDelay: Math.floor(Math.random() * 300)
@@ -160,16 +160,16 @@ export const Game = () => {
 
     switch (direction) {
       case 'ArrowUp':
-        newPosition.y = Math.max(1, playerPosition.y - 1); // Ensure within bounds
+        newPosition.y = Math.max(0, playerPosition.y - 1);
         break;
       case 'ArrowDown':
-        newPosition.y = Math.min(GRID_SIZE - 2, playerPosition.y + 1); // Ensure within bounds
+        newPosition.y = Math.min(GRID_SIZE - 1, playerPosition.y + 1);
         break;
       case 'ArrowLeft':
-        newPosition.x = Math.max(1, playerPosition.x - 1); // Ensure within bounds
+        newPosition.x = Math.max(0, playerPosition.x - 1);
         break;
       case 'ArrowRight':
-        newPosition.x = Math.min(GRID_SIZE - 2, playerPosition.x + 1); // Ensure within bounds
+        newPosition.x = Math.min(GRID_SIZE - 1, playerPosition.x + 1);
         break;
       default:
         return;

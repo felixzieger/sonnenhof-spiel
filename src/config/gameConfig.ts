@@ -30,13 +30,13 @@ const isValidPosition = (position: Position): boolean => {
   );
 };
 
-// Helper function to generate a random valid position within safe bounds
+// Helper function to generate a random valid position
 const getRandomValidPosition = (): Position => {
   let position: Position;
   do {
     position = {
-      x: Math.floor(Math.random() * (GRID_SIZE - 8)) + 4, // Keep entities away from edges
-      y: Math.floor(Math.random() * (GRID_SIZE - 8)) + 4
+      x: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2,
+      y: Math.floor(Math.random() * (GRID_SIZE - 4)) + 2
     };
   } while (!isValidPosition(position));
   
