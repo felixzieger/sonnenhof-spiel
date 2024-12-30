@@ -15,10 +15,9 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     isMovingRef.current = true;
     onMove(direction);
 
-    // Start continuous movement after a small delay
     moveIntervalRef.current = setInterval(() => {
       onMove(direction);
-    }, 200); // Slightly increased interval for smoother movement
+    }, 200);
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
@@ -31,10 +30,15 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
 
   const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     startMoving(direction);
   };
 
   const handleMouseDown = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.MouseEvent) => {
+    // Only handle mouse events if it's not a touch device
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      return;
+    }
     e.preventDefault();
     startMoving(direction);
   };
