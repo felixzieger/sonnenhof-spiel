@@ -3,11 +3,13 @@ import { Player } from './Player';
 import { Animal } from './Animal';
 import { Obstacle } from './Obstacle';
 import { ScoreBoard } from './ScoreBoard';
+import { TouchControls } from './TouchControls';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 import { Hourglass } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -35,7 +37,7 @@ export type AnimalType = {
 
 export const Game = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
-  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 10, y: 5 }); // Updated initial position
+  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 10, y: 5 });
   const [animals, setAnimals] = useState<AnimalType[]>(() => 
     LEVEL_CONFIGS[1].animals.map(animal => ({
       ...animal,
@@ -49,6 +51,7 @@ export const Game = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -68,7 +71,7 @@ export const Game = () => {
   }, [startTime, gameCompleted]);
 
   const startLevel = (level: number) => {
-    setPlayerPosition({ x: 10, y: 5 }); // Also update the position reset in startLevel
+    setPlayerPosition({ x: 10, y: 5 });
     setAnimals(LEVEL_CONFIGS[level].animals.map(animal => ({
       ...animal,
       moveDelay: Math.floor(Math.random() * 300)
@@ -77,7 +80,7 @@ export const Game = () => {
     setShowLevelMessage(true);
     
     if (level === 1) {
-      setStartTime(null); // Reset startTime to null
+      setStartTime(null);
       setCurrentTime(0);
       setTotalTime(0);
     }
@@ -86,7 +89,7 @@ export const Game = () => {
   const resetGame = () => {
     setCurrentLevel(1);
     setGameCompleted(false);
-    setStartTime(null); // Reset startTime to null
+    setStartTime(null);
     startLevel(1);
   };
 
@@ -142,24 +145,20 @@ export const Game = () => {
     checkLevelComplete();
   }, [animals, checkLevelComplete]);
 
-  const handleKeyPress = (e: KeyboardEvent) => {
+  const handleMove = useCallback((direction: string) => {
     if (gameCompleted) return;
     
-    // Start timer on first movement if not already started
-    if (!startTime && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+    if (!startTime) {
       const now = Date.now();
       setStartTime(now);
       setCurrentTime(0);
     }
     
-    // Hide level message on any arrow key press
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-      setShowLevelMessage(false);
-    }
+    setShowLevelMessage(false);
 
     const newPosition = { ...playerPosition };
 
-    switch (e.key) {
+    switch (direction) {
       case 'ArrowUp':
         newPosition.y = Math.max(0, playerPosition.y - 1);
         break;
@@ -180,7 +179,16 @@ export const Game = () => {
     setPlayerPosition(validPosition);
     positionQueue.add(validPosition);
     checkCollisions(validPosition);
-  };
+  }, [playerPosition, gameCompleted, startTime, obstacles, checkCollisions]);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      handleMove(e.key);
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [handleMove]);
 
   const getAnimalName = (type: AnimalType['type']) => {
     switch (type) {
@@ -190,11 +198,6 @@ export const Game = () => {
       case 'horse': return 'Pferd';
     }
   };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [playerPosition, gameCompleted]);
 
   const getCellBackground = (x: number, y: number) => {
     return 'bg-transparent';
@@ -218,8 +221,8 @@ export const Game = () => {
   });
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
-      <div className="flex items-center gap-4">
+    <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
+      <div className="flex flex-wrap justify-center gap-4">
         <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
           <h2 className="text-xl font-bold">Level {currentLevel}</h2>
         </div>
@@ -243,7 +246,7 @@ export const Game = () => {
         </div>
       </div>
       <div 
-        className="relative w-[800px] h-[800px] rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
+        className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
       >
         {gridCells}
         {obstacles.map((obstacle, index) => (
@@ -266,7 +269,7 @@ export const Game = () => {
         ))}
         {showLevelMessage && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center mx-4">
               <LevelMessage 
                 level={currentLevel} 
                 showControls={LEVEL_CONFIGS[currentLevel].showControls}
@@ -275,8 +278,9 @@ export const Game = () => {
           </div>
         )}
       </div>
+      {isMobile && <TouchControls onMove={handleMove} />}
       <AlertDialog open={gameCompleted}>
-        <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-4">
           <AlertDialogHeader>
             <AlertDialogTitle>Gratulation!</AlertDialogTitle>
             <AlertDialogDescription className="space-y-4">
