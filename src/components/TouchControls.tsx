@@ -17,22 +17,23 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
       hasInterval: !!moveIntervalRef.current
     });
 
+    // Clear any existing interval first
     if (moveIntervalRef.current) {
-      console.log('Clearing existing interval');
       clearInterval(moveIntervalRef.current);
       moveIntervalRef.current = null;
     }
     
-    console.log('Starting movement in direction:', direction);
+    // Initial move
     isMovingRef.current = true;
     currentDirectionRef.current = direction;
     onMove(direction);
 
+    // Set up interval for continuous movement
     moveIntervalRef.current = setInterval(() => {
       if (isMovingRef.current && currentDirectionRef.current === direction) {
         onMove(direction);
       }
-    }, 150);
+    }, 200); // Slightly longer interval to reduce unnecessary checks
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
