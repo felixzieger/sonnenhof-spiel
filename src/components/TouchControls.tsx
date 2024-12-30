@@ -17,7 +17,6 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
       hasInterval: !!moveIntervalRef.current
     });
 
-    // Clear any existing interval first
     if (moveIntervalRef.current) {
       console.log('Clearing existing interval');
       clearInterval(moveIntervalRef.current);
@@ -29,10 +28,8 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     currentDirectionRef.current = direction;
     onMove(direction);
 
-    console.log('Setting up movement interval');
     moveIntervalRef.current = setInterval(() => {
       if (isMovingRef.current && currentDirectionRef.current === direction) {
-        console.log('Interval triggered - moving in direction:', direction);
         onMove(direction);
       }
     }, 150);
@@ -46,7 +43,6 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     });
 
     if (moveIntervalRef.current) {
-      console.log('Clearing movement interval');
       clearInterval(moveIntervalRef.current);
       moveIntervalRef.current = null;
     }
@@ -55,14 +51,13 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   }, []);
 
   const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
+    e.preventDefault();
     console.log('TouchStart event', {
       direction,
       touches: e.touches.length,
       targetId: (e.target as HTMLElement).id,
       timestamp: Date.now()
     });
-    e.preventDefault();
-    e.stopPropagation();
     startMoving(direction);
   };
 
@@ -73,34 +68,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
       timestamp: Date.now(),
       currentDirection: currentDirectionRef.current
     });
-    e.preventDefault();
-    e.stopPropagation();
     stopMoving();
-  };
-
-  const handleTouchCancel = (e: React.TouchEvent) => {
-    console.log('TouchCancel event', {
-      touches: e.touches.length,
-      targetId: (e.target as HTMLElement).id,
-      timestamp: Date.now(),
-      currentDirection: currentDirectionRef.current
-    });
-    e.preventDefault();
-    e.stopPropagation();
-    stopMoving();
-  };
-
-  const handleMouseDown = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.MouseEvent) => {
-    if (window.matchMedia('(pointer: coarse)').matches) {
-      console.log('Ignoring mouse event on touch device');
-      return;
-    }
-    console.log('MouseDown event', {
-      direction,
-      timestamp: Date.now()
-    });
-    e.preventDefault();
-    startMoving(direction);
   };
 
   return (
@@ -111,10 +79,8 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
           onTouchStart={handleTouchStart('ArrowUp')}
           onTouchEnd={handleTouchEnd}
-          onTouchCancel={handleTouchCancel}
-          onMouseDown={handleMouseDown('ArrowUp')}
-          onMouseUp={stopMoving}
-          onMouseLeave={stopMoving}
+          onTouchCancel={handleTouchEnd}
+          style={{ touchAction: 'none' }}
         >
           <ArrowBigUp className="w-12 h-12 pointer-events-none" />
         </button>
@@ -124,10 +90,8 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
             className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
             onTouchStart={handleTouchStart('ArrowLeft')}
             onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchCancel}
-            onMouseDown={handleMouseDown('ArrowLeft')}
-            onMouseUp={stopMoving}
-            onMouseLeave={stopMoving}
+            onTouchCancel={handleTouchEnd}
+            style={{ touchAction: 'none' }}
           >
             <ArrowBigLeft className="w-12 h-12 pointer-events-none" />
           </button>
@@ -136,10 +100,8 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
             className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
             onTouchStart={handleTouchStart('ArrowDown')}
             onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchCancel}
-            onMouseDown={handleMouseDown('ArrowDown')}
-            onMouseUp={stopMoving}
-            onMouseLeave={stopMoving}
+            onTouchCancel={handleTouchEnd}
+            style={{ touchAction: 'none' }}
           >
             <ArrowBigDown className="w-12 h-12 pointer-events-none" />
           </button>
@@ -148,10 +110,8 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
             className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
             onTouchStart={handleTouchStart('ArrowRight')}
             onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchCancel}
-            onMouseDown={handleMouseDown('ArrowRight')}
-            onMouseUp={stopMoving}
-            onMouseLeave={stopMoving}
+            onTouchCancel={handleTouchEnd}
+            style={{ touchAction: 'none' }}
           >
             <ArrowBigRight className="w-12 h-12 pointer-events-none" />
           </button>
