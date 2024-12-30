@@ -17,7 +17,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
 
     moveIntervalRef.current = setInterval(() => {
       onMove(direction);
-    }, 200);
+    }, 150);
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
@@ -34,8 +34,13 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     startMoving(direction);
   };
 
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    stopMoving();
+  };
+
   const handleMouseDown = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.MouseEvent) => {
-    // Only handle mouse events if it's not a touch device
     if (window.matchMedia('(pointer: coarse)').matches) {
       return;
     }
@@ -49,7 +54,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
         <button
           className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200"
           onTouchStart={handleTouchStart('ArrowUp')}
-          onTouchEnd={stopMoving}
+          onTouchEnd={handleTouchEnd}
           onMouseDown={handleMouseDown('ArrowUp')}
           onMouseUp={stopMoving}
           onMouseLeave={stopMoving}
@@ -60,7 +65,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           <button
             className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200"
             onTouchStart={handleTouchStart('ArrowLeft')}
-            onTouchEnd={stopMoving}
+            onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown('ArrowLeft')}
             onMouseUp={stopMoving}
             onMouseLeave={stopMoving}
@@ -70,7 +75,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           <button
             className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200"
             onTouchStart={handleTouchStart('ArrowDown')}
-            onTouchEnd={stopMoving}
+            onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown('ArrowDown')}
             onMouseUp={stopMoving}
             onMouseLeave={stopMoving}
@@ -80,7 +85,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           <button
             className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200"
             onTouchStart={handleTouchStart('ArrowRight')}
-            onTouchEnd={stopMoving}
+            onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown('ArrowRight')}
             onMouseUp={stopMoving}
             onMouseLeave={stopMoving}
