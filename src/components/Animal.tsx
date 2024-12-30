@@ -33,9 +33,10 @@ export const Animal = ({ type, position, gridSize, viewport }: AnimalProps) => {
       style={{
         left: `${adjustedPosition.x * size}px`,
         top: `${adjustedPosition.y * size}px`,
-        width: `${size}px`,
-        height: `${size}px`,
-        fontSize: `${size * 0.6}px`,
+        width: `${size * 0.8}px`,
+        height: `${size * 0.8}px`,
+        transform: 'translate(10%, 10%)',
+        fontSize: `${size * 0.5}px`,
       }}
     >
       {getAnimalEmoji()}

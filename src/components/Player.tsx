@@ -18,9 +18,9 @@ export const Player = ({ position, gridSize, viewport }: PlayerProps) => {
       style={{
         left: `${adjustedPosition.x * size}px`,
         top: `${adjustedPosition.y * size}px`,
-        width: `${size * 0.8}px`,
-        height: `${size * 0.8}px`,
-        transform: 'translate(10%, 10%)',
+        width: `${size * 0.6}px`,
+        height: `${size * 0.6}px`,
+        transform: 'translate(20%, 20%)',
       }}
     >
       <div className="w-full h-full bg-blue-600 rounded-full border-2 border-white shadow-lg" />

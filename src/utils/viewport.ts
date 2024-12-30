@@ -12,12 +12,8 @@ export const calculateViewport = (playerPos: Position, visibleGridSize: number):
   const halfVisible = Math.floor(visibleGridSize / 2);
   
   // Calculate initial offsets that would center the player
-  let offsetX = playerPos.x - halfVisible;
-  let offsetY = playerPos.y - halfVisible;
-  
-  // Adjust offsets to prevent showing beyond map boundaries
-  offsetX = Math.max(0, Math.min(offsetX, GRID_SIZE - visibleGridSize));
-  offsetY = Math.max(0, Math.min(offsetY, GRID_SIZE - visibleGridSize));
+  let offsetX = Math.max(0, Math.min(playerPos.x - halfVisible, GRID_SIZE - visibleGridSize));
+  let offsetY = Math.max(0, Math.min(playerPos.y - halfVisible, GRID_SIZE - visibleGridSize));
 
   return {
     offsetX,
