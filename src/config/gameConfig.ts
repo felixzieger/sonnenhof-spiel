@@ -1,7 +1,7 @@
 import { Position } from '../components/Game';
 import { createObstacleArea } from '../utils/obstacleUtils';
 
-export const GRID_SIZE = 18; // Changed from 19 to 18 to fix off-by-one error
+export const GRID_SIZE = 20; // Changed from 18 to 20 to ensure all columns are visible
 
 // Example usage of createObstacleArea - you can modify these to create your desired layout
 export const INITIAL_OBSTACLES: Position[] = [
