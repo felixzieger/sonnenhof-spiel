@@ -5,44 +5,31 @@ import { PositionQueue } from './positionQueue';
 
 export const positionQueue = new PositionQueue();
 
-export const isPositionBlocked = (position: Position, obstacles: Position[], playerPosition: Position) => {
-  return obstacles.some(obstacle => 
-    obstacle.x === position.x && 
-    obstacle.y === position.y
-  ) || (position.x === playerPosition.x && position.y === playerPosition.y);
-};
-
-const getHorseMove = (position: Position, gridSize: number): Position => {
-  const moveDistance = Math.floor(Math.random() * 2) + 2;
-  
-  const directions = [
-    { dx: 1, dy: 0 },
-    { dx: -1, dy: 0 },
-    { dx: 0, dy: 1 },
-    { dx: 0, dy: -1 },
-    { dx: 1, dy: 1 },
-    { dx: -1, dy: 1 },
-    { dx: 1, dy: -1 },
-    { dx: -1, dy: -1 },
-  ];
-  
-  const direction = directions[Math.floor(Math.random() * directions.length)];
-  
-  return {
-    x: Math.max(0, Math.min(gridSize - 1, position.x + (direction.dx * moveDistance))),
-    y: Math.max(0, Math.min(gridSize - 1, position.y + (direction.dy * moveDistance)))
-  };
-};
-
-export const getValidMove = (
-  currentPos: Position, 
-  newPos: Position, 
-  obstacles: Position[]
-): Position => {
-  if (isPositionBlocked(newPos, obstacles, currentPos)) {
-    return currentPos;
+export const isPositionBlocked = (position: Position, obstacles: Position[], playerPosition: Position): boolean => {
+  // Check if position is outside game boundaries
+  if (position.x < 0 || position.x >= GRID_SIZE || position.y < 0 || position.y >= GRID_SIZE) {
+    console.log('Position blocked: Outside game boundaries', position);
+    return true;
   }
-  return newPos;
+
+  // Check if position is blocked by an obstacle
+  const blockedByObstacle = obstacles.some(obstacle => 
+    obstacle.x === position.x && obstacle.y === position.y
+  );
+  
+  if (blockedByObstacle) {
+    console.log('Position blocked: Obstacle present', position);
+    return true;
+  }
+
+  // Check if position is blocked by player
+  const blockedByPlayer = position.x === playerPosition.x && position.y === playerPosition.y;
+  if (blockedByPlayer) {
+    console.log('Position blocked: Player present', position);
+    return true;
+  }
+
+  return false;
 };
 
 const tryAlternativeEscape = (
@@ -67,16 +54,31 @@ const tryAlternativeEscape = (
     y: Math.max(0, Math.min(gridSize - 1, animalPos.y - dx))
   };
 
+  console.log('Trying alternative escape moves:', { leftMove, rightMove });
+
   // Check if either alternative move is valid
   if (!isPositionBlocked(leftMove, obstacles, playerPos)) {
+    console.log('Using left alternative move');
     return leftMove;
   }
   if (!isPositionBlocked(rightMove, obstacles, playerPos)) {
+    console.log('Using right alternative move');
     return rightMove;
   }
 
-  // If no alternative moves are valid, stay in place
+  console.log('No valid alternative moves found, staying in place');
   return animalPos;
+};
+
+export const getValidMove = (
+  currentPos: Position, 
+  newPos: Position, 
+  obstacles: Position[]
+): Position => {
+  if (isPositionBlocked(newPos, obstacles, currentPos)) {
+    return currentPos;
+  }
+  return newPos;
 };
 
 export const updateAnimalPositions = (
