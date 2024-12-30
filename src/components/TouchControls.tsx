@@ -28,19 +28,20 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     isMovingRef.current = true;
     currentDirectionRef.current = direction;
     lastMoveTimeRef.current = Date.now();
+    console.log('Player moving:', direction);
     onMove(direction);
 
-    // Set up interval for continuous movement with rate limiting
+    // Set up interval for continuous movement
     moveIntervalRef.current = setInterval(() => {
       if (isMovingRef.current && currentDirectionRef.current === direction) {
         const now = Date.now();
-        // Ensure at least 100ms has passed since the last move
         if (now - lastMoveTimeRef.current >= 100) {
           lastMoveTimeRef.current = now;
+          console.log('Player moving (continuous):', direction);
           onMove(direction);
         }
       }
-    }, 100); // Shorter interval but with rate limiting
+    }, 100);
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
@@ -59,6 +60,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   }, []);
 
   const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
+    e.preventDefault(); // Prevent default touch behavior
     console.log('TouchStart event', {
       direction,
       touches: e.touches.length,
@@ -69,6 +71,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    e.preventDefault(); // Prevent default touch behavior
     console.log('TouchEnd event', {
       touches: e.touches.length,
       targetId: (e.target as HTMLElement).id,
