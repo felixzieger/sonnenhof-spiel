@@ -153,9 +153,13 @@ export const DesktopGame = () => {
     }
 
     const validPosition = getValidMove(playerPosition, newPosition, obstacles);
-    setPlayerPosition(validPosition);
-    positionQueue.add(validPosition);
-    checkCollisions(validPosition);
+    
+    // Only check collisions and update position if it actually changed
+    if (validPosition.x !== playerPosition.x || validPosition.y !== playerPosition.y) {
+      setPlayerPosition(validPosition);
+      positionQueue.add(validPosition);
+      checkCollisions(validPosition);
+    }
   }, [playerPosition, gameCompleted, startTime, obstacles, checkCollisions]);
 
   useEffect(() => {
