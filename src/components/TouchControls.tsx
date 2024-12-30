@@ -33,7 +33,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
       if (isMovingRef.current && currentDirectionRef.current === direction) {
         onMove(direction);
       }
-    }, 200); // Slightly longer interval to reduce unnecessary checks
+    }, 200);
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
@@ -52,7 +52,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   }, []);
 
   const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
-    e.preventDefault();
+    // Don't call preventDefault() here anymore
     console.log('TouchStart event', {
       direction,
       touches: e.touches.length,
@@ -81,7 +81,6 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           onTouchStart={handleTouchStart('ArrowUp')}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
-          style={{ touchAction: 'none' }}
         >
           <ArrowBigUp className="w-12 h-12 pointer-events-none" />
         </button>
@@ -92,7 +91,6 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
             onTouchStart={handleTouchStart('ArrowLeft')}
             onTouchEnd={handleTouchEnd}
             onTouchCancel={handleTouchEnd}
-            style={{ touchAction: 'none' }}
           >
             <ArrowBigLeft className="w-12 h-12 pointer-events-none" />
           </button>
@@ -102,7 +100,6 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
             onTouchStart={handleTouchStart('ArrowDown')}
             onTouchEnd={handleTouchEnd}
             onTouchCancel={handleTouchEnd}
-            style={{ touchAction: 'none' }}
           >
             <ArrowBigDown className="w-12 h-12 pointer-events-none" />
           </button>
@@ -112,7 +109,6 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
             onTouchStart={handleTouchStart('ArrowRight')}
             onTouchEnd={handleTouchEnd}
             onTouchCancel={handleTouchEnd}
-            style={{ touchAction: 'none' }}
           >
             <ArrowBigRight className="w-12 h-12 pointer-events-none" />
           </button>
