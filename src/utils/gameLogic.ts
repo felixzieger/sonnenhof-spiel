@@ -1,7 +1,6 @@
 import { Position, AnimalType } from '../components/Game';
 import { GRID_SIZE } from '../config/gameConfig';
-import { getDistance, moveTowardsPlayer, moveAwayFromPlayer, getRandomMove } from './animalMovement';
-import { PositionQueue } from './positionQueue';
+import { positionQueue } from './positionQueue';
 
 export const positionQueue = new PositionQueue();
 
@@ -30,6 +29,28 @@ export const isPositionBlocked = (position: Position, obstacles: Position[], pla
   }
 
   return false;
+};
+
+const getHorseMove = (position: Position, gridSize: number): Position => {
+  const moveDistance = Math.floor(Math.random() * 2) + 2;
+  
+  const directions = [
+    { dx: 1, dy: 0 },
+    { dx: -1, dy: 0 },
+    { dx: 0, dy: 1 },
+    { dx: 0, dy: -1 },
+    { dx: 1, dy: 1 },
+    { dx: -1, dy: 1 },
+    { dx: 1, dy: -1 },
+    { dx: -1, dy: -1 },
+  ];
+  
+  const direction = directions[Math.floor(Math.random() * directions.length)];
+  
+  return {
+    x: Math.max(0, Math.min(gridSize - 1, position.x + (direction.dx * moveDistance))),
+    y: Math.max(0, Math.min(gridSize - 1, position.y + (direction.dy * moveDistance)))
+  };
 };
 
 const tryAlternativeEscape = (
