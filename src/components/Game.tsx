@@ -37,7 +37,7 @@ export type AnimalType = {
 
 export const Game = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
-  const [playerPosition, setPlayerPosition] = useState<Position>({ x: 10, y: 5 });
+  const [playerPosition, setPlayerPosition] = useState<Position>({ x: GRID_SIZE - 1, y: 5 }); // Changed starting position to right edge
   const [animals, setAnimals] = useState<AnimalType[]>(() => 
     LEVEL_CONFIGS[1].animals.map(animal => ({
       ...animal,
@@ -71,7 +71,7 @@ export const Game = () => {
   }, [startTime, gameCompleted]);
 
   const startLevel = (level: number) => {
-    setPlayerPosition({ x: 10, y: 5 });
+    setPlayerPosition({ x: GRID_SIZE - 1, y: 5 }); // Update reset position as well
     setAnimals(LEVEL_CONFIGS[level].animals.map(animal => ({
       ...animal,
       moveDelay: Math.floor(Math.random() * 300)
