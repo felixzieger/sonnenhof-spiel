@@ -28,13 +28,10 @@ const getHorseMove = (position: Position, gridSize: number): Position => {
   
   const direction = directions[Math.floor(Math.random() * directions.length)];
   
-  const newPosition = {
+  return {
     x: Math.max(0, Math.min(gridSize - 1, position.x + (direction.dx * moveDistance))),
     y: Math.max(0, Math.min(gridSize - 1, position.y + (direction.dy * moveDistance)))
   };
-  
-  console.log('Horse moving from:', position, 'to:', newPosition, 'with distance:', moveDistance);
-  return newPosition;
 };
 
 export const getValidMove = (
@@ -60,11 +57,6 @@ export const updateAnimalPositions = (
 
     const shouldMove = Math.random() < 0.85; // 85% Chance sich zu bewegen
     
-    console.log(`Animal ${animal.id} (${animal.type}):`, {
-      shouldMove,
-      currentTime: Date.now()
-    });
-
     if (!shouldMove) {
       return animal;
     }
