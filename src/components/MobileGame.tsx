@@ -194,17 +194,17 @@ export const MobileGame = () => {
           <Obstacle 
             key={index}
             position={obstacle}
-            gridSize={GRID_SIZE}
+            gridSize={GRID_SIZE} + 1
           />
         ))}
-        <Player position={playerPosition} gridSize={GRID_SIZE} />
+        <Player position={playerPosition} gridSize={GRID_SIZE} + 1 />
         {animals.map(animal => (
           !animal.caught && (
             <Animal 
               key={animal.id}
               type={animal.type}
               position={animal.position}
-              gridSize={GRID_SIZE}
+              gridSize={GRID_SIZE} + 1
             />
           )
         ))}
