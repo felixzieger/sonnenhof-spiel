@@ -4,10 +4,8 @@ import { Animal } from './Animal';
 import { Obstacle } from './Obstacle';
 import { ScoreBoard } from './ScoreBoard';
 import { TouchControls } from './TouchControls';
+import { GameMenu } from './GameMenu';
 import { useToast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
-import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 import { Hourglass } from 'lucide-react';
 import {
   AlertDialog,
@@ -20,6 +18,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { LevelMessage } from './LevelMessage';
 import { Position, AnimalType } from './Game';
+import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
+import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 
 export const MobileGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -189,6 +189,7 @@ export const MobileGame = () => {
         className="relative w-full aspect-square rounded-lg border-2 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
         style={{ maxWidth: '100vw', maxHeight: '60vh' }}
       >
+        <GameMenu onRestart={resetGame} />
         {obstacles.map((obstacle, index) => (
           <Obstacle 
             key={index}
@@ -220,17 +221,6 @@ export const MobileGame = () => {
       </div>
 
       <TouchControls onMove={handleMove} />
-      
-      <div className="mt-2">
-        <Button 
-          onClick={resetGame}
-          variant="outline"
-          size="sm"
-          className="bg-white hover:bg-gray-100"
-        >
-          🔄 Neu starten
-        </Button>
-      </div>
 
       <AlertDialog open={gameCompleted}>
         <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-4 w-[90%] max-w-md">
