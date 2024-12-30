@@ -49,7 +49,7 @@ export const MobileGame = () => {
         playerPosition={playerPosition}
         animals={animals}
         obstacles={obstacles}
-        gridSize={21}
+        gridSize={20}
         currentLevel={currentLevel}
         showLevelMessage={showLevelMessage}
         onRestart={resetGame}
