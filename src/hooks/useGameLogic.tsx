@@ -86,33 +86,38 @@ export const useGameLogic = () => {
     
     setShowLevelMessage(false);
 
-    const newPosition = { ...playerPosition };
-    switch (direction) {
-      case 'ArrowUp':
-        newPosition.y = Math.max(0, playerPosition.y - 1);
-        break;
-      case 'ArrowDown':
-        newPosition.y = Math.min(GRID_SIZE - 1, playerPosition.y + 1);
-        break;
-      case 'ArrowLeft':
-        newPosition.x = Math.max(0, playerPosition.x - 1);
-        break;
-      case 'ArrowRight':
-        newPosition.x = Math.min(GRID_SIZE - 1, playerPosition.x + 1);
-        break;
-      default:
-        return;
-    }
+    setPlayerPosition(prevPosition => {
+      const newPosition = { ...prevPosition };
+      
+      switch (direction) {
+        case 'ArrowUp':
+          newPosition.y = Math.max(0, prevPosition.y - 1);
+          break;
+        case 'ArrowDown':
+          newPosition.y = Math.min(GRID_SIZE - 1, prevPosition.y + 1);
+          break;
+        case 'ArrowLeft':
+          newPosition.x = Math.max(0, prevPosition.x - 1);
+          break;
+        case 'ArrowRight':
+          newPosition.x = Math.min(GRID_SIZE - 1, prevPosition.x + 1);
+          break;
+        default:
+          return prevPosition;
+      }
 
-    const validPosition = getValidMove(playerPosition, newPosition, obstacles);
-    
-    if (validPosition.x !== playerPosition.x || validPosition.y !== playerPosition.y) {
+      const validPosition = getValidMove(prevPosition, newPosition, obstacles);
       console.log('Moving player to:', validPosition);
-      setPlayerPosition(validPosition);
-      positionQueue.add(validPosition);
-      checkCollisions(validPosition);
-    }
-  }, [playerPosition, gameCompleted, startTime, obstacles, checkCollisions]);
+      
+      if (validPosition.x !== prevPosition.x || validPosition.y !== prevPosition.y) {
+        positionQueue.add(validPosition);
+        checkCollisions(validPosition);
+        return validPosition;
+      }
+      
+      return prevPosition;
+    });
+  }, [gameCompleted, startTime, obstacles, checkCollisions]);
 
   useEffect(() => {
     const moveInterval = setInterval(() => {
