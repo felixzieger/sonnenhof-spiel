@@ -82,11 +82,11 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   };
 
   return (
-    <div className="mt-4 w-full max-w-[400px] mx-auto bg-white/80 p-4 rounded-lg shadow-lg backdrop-blur-sm">
+    <div className="mt-4 w-full max-w-[400px] mx-auto">
       <div className="flex flex-col items-center gap-2">
         <button
           id="up-button"
-          className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
+          className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
           onTouchStart={handleTouchStart('ArrowUp')}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
@@ -96,7 +96,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
         <div className="flex gap-2">
           <button
             id="left-button"
-            className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
+            className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
             onTouchStart={handleTouchStart('ArrowLeft')}
             onTouchEnd={handleTouchEnd}
             onTouchCancel={handleTouchEnd}
@@ -105,7 +105,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           </button>
           <button
             id="down-button"
-            className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
+            className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
             onTouchStart={handleTouchStart('ArrowDown')}
             onTouchEnd={handleTouchEnd}
             onTouchCancel={handleTouchEnd}
@@ -114,7 +114,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           </button>
           <button
             id="right-button"
-            className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg active:bg-gray-200 touch-none select-none"
+            className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
             onTouchStart={handleTouchStart('ArrowRight')}
             onTouchEnd={handleTouchEnd}
             onTouchCancel={handleTouchEnd}
