@@ -24,24 +24,27 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
       moveIntervalRef.current = null;
     }
     
-    // Initial move
-    isMovingRef.current = true;
-    currentDirectionRef.current = direction;
-    lastMoveTimeRef.current = Date.now();
-    console.log('Player moving:', direction);
-    onMove(direction);
+    // Initial move - only if enough time has passed since last move
+    const now = Date.now();
+    if (now - lastMoveTimeRef.current >= 250) { // Increased from 100ms to 250ms
+      isMovingRef.current = true;
+      currentDirectionRef.current = direction;
+      lastMoveTimeRef.current = now;
+      console.log('Player moving:', direction);
+      onMove(direction);
+    }
 
-    // Set up interval for continuous movement
+    // Set up interval for continuous movement with increased delay
     moveIntervalRef.current = setInterval(() => {
       if (isMovingRef.current && currentDirectionRef.current === direction) {
-        const now = Date.now();
-        if (now - lastMoveTimeRef.current >= 100) {
-          lastMoveTimeRef.current = now;
+        const currentTime = Date.now();
+        if (currentTime - lastMoveTimeRef.current >= 250) { // Increased from 100ms to 250ms
+          lastMoveTimeRef.current = currentTime;
           console.log('Player moving (continuous):', direction);
           onMove(direction);
         }
       }
-    }, 100);
+    }, 250); // Increased from 100ms to 250ms
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
