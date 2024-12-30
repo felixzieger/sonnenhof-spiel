@@ -7,23 +7,22 @@ interface TouchControlsProps {
 
 export const TouchControls = ({ onMove }: TouchControlsProps) => {
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isMovingRef = useRef(false);
 
   const startMoving = useCallback((direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => {
-    // Clear any existing interval
-    if (moveIntervalRef.current) {
-      clearInterval(moveIntervalRef.current);
-    }
-
-    // Initial move
+    if (isMovingRef.current) return;
+    
+    isMovingRef.current = true;
     onMove(direction);
 
-    // Set up continuous movement
+    // Start continuous movement after a small delay
     moveIntervalRef.current = setInterval(() => {
       onMove(direction);
-    }, 150); // Adjust this value to control movement speed
+    }, 200); // Slightly increased interval for smoother movement
   }, [onMove]);
 
   const stopMoving = useCallback(() => {
+    isMovingRef.current = false;
     if (moveIntervalRef.current) {
       clearInterval(moveIntervalRef.current);
       moveIntervalRef.current = null;
@@ -31,12 +30,12 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
   }, []);
 
   const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevent default touch behavior
+    e.preventDefault();
     startMoving(direction);
   };
 
   const handleMouseDown = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent default mouse behavior
+    e.preventDefault();
     startMoving(direction);
   };
 
