@@ -5,11 +5,11 @@ import { PositionQueue } from './positionQueue';
 
 export const positionQueue = new PositionQueue();
 
-export const isPositionBlocked = (position: Position, obstacles: Position[]) => {
+export const isPositionBlocked = (position: Position, obstacles: Position[], playerPosition: Position) => {
   return obstacles.some(obstacle => 
     obstacle.x === position.x && 
     obstacle.y === position.y
-  );
+  ) || (position.x === playerPosition.x && position.y === playerPosition.y);
 };
 
 const getHorseMove = (position: Position, gridSize: number): Position => {
@@ -39,7 +39,7 @@ export const getValidMove = (
   newPos: Position, 
   obstacles: Position[]
 ): Position => {
-  if (isPositionBlocked(newPos, obstacles)) {
+  if (isPositionBlocked(newPos, obstacles, currentPos)) {
     return currentPos;
   }
   return newPos;
@@ -75,6 +75,16 @@ export const updateAnimalPositions = (
         newPosition = newDirection === 'towards'
           ? moveTowardsPlayer(animal.position, currentPlayerPos)
           : moveAwayFromPlayer(animal.position, currentPlayerPos, GRID_SIZE);
+        
+        // Check if the new position is blocked by player
+        if (newPosition.x === currentPlayerPos.x && newPosition.y === currentPlayerPos.y) {
+          return {
+            ...animal,
+            position: animal.position,
+            lastMoveDirection: newDirection
+          };
+        }
+        
         return {
           ...animal,
           position: getValidMove(animal.position, newPosition, obstacles),
@@ -90,6 +100,11 @@ export const updateAnimalPositions = (
         break;
       default:
         return animal;
+    }
+
+    // Check if the new position is blocked by player
+    if (newPosition.x === currentPlayerPos.x && newPosition.y === currentPlayerPos.y) {
+      return animal;
     }
 
     return {
