@@ -8,6 +8,7 @@ interface AnimalProps {
 }
 
 export const Animal = ({ type, position, gridSize }: AnimalProps) => {
+  // Calculate size based on viewport width for mobile
   const size = `calc(min(800px, 100vw) / ${gridSize})`;
 
   const getAnimalEmoji = () => {
