@@ -26,7 +26,7 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
       moveIntervalRef.current = null;
     }
     
-    // Initial move - always move immediately on first touch
+    // Initial move - always move immediately on first interaction
     if (isTouchStartRef.current) {
       isMovingRef.current = true;
       currentDirectionRef.current = direction;
@@ -64,11 +64,11 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     isTouchStartRef.current = false;
   }, []);
 
-  const handleTouchStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent) => {
+  const handleStart = (direction: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') => (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
-    console.log('TouchStart event', {
+    console.log('Start event', {
       direction,
-      touches: e.touches.length,
+      type: e.type,
       targetId: (e.target as HTMLElement).id,
       timestamp: Date.now()
     });
@@ -76,10 +76,10 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
     startMoving(direction);
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleEnd = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
-    console.log('TouchEnd event', {
-      touches: e.touches.length,
+    console.log('End event', {
+      type: e.type,
       targetId: (e.target as HTMLElement).id,
       timestamp: Date.now(),
       currentDirection: currentDirectionRef.current
@@ -93,9 +93,12 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
         <button
           id="up-button"
           className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
-          onTouchStart={handleTouchStart('ArrowUp')}
-          onTouchEnd={handleTouchEnd}
-          onTouchCancel={handleTouchEnd}
+          onTouchStart={handleStart('ArrowUp')}
+          onTouchEnd={handleEnd}
+          onTouchCancel={handleEnd}
+          onMouseDown={handleStart('ArrowUp')}
+          onMouseUp={handleEnd}
+          onMouseLeave={handleEnd}
         >
           <ArrowBigUp className="w-12 h-12 pointer-events-none" />
         </button>
@@ -103,27 +106,36 @@ export const TouchControls = ({ onMove }: TouchControlsProps) => {
           <button
             id="left-button"
             className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
-            onTouchStart={handleTouchStart('ArrowLeft')}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchEnd}
+            onTouchStart={handleStart('ArrowLeft')}
+            onTouchEnd={handleEnd}
+            onTouchCancel={handleEnd}
+            onMouseDown={handleStart('ArrowLeft')}
+            onMouseUp={handleEnd}
+            onMouseLeave={handleEnd}
           >
             <ArrowBigLeft className="w-12 h-12 pointer-events-none" />
           </button>
           <button
             id="down-button"
             className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
-            onTouchStart={handleTouchStart('ArrowDown')}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchEnd}
+            onTouchStart={handleStart('ArrowDown')}
+            onTouchEnd={handleEnd}
+            onTouchCancel={handleEnd}
+            onMouseDown={handleStart('ArrowDown')}
+            onMouseUp={handleEnd}
+            onMouseLeave={handleEnd}
           >
             <ArrowBigDown className="w-12 h-12 pointer-events-none" />
           </button>
           <button
             id="right-button"
             className="w-16 h-16 flex items-center justify-center bg-gray-100/50 backdrop-blur-sm rounded-lg active:bg-gray-200/50 touch-none select-none"
-            onTouchStart={handleTouchStart('ArrowRight')}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchEnd}
+            onTouchStart={handleStart('ArrowRight')}
+            onTouchEnd={handleEnd}
+            onTouchCancel={handleEnd}
+            onMouseDown={handleStart('ArrowRight')}
+            onMouseUp={handleEnd}
+            onMouseLeave={handleEnd}
           >
             <ArrowBigRight className="w-12 h-12 pointer-events-none" />
           </button>
