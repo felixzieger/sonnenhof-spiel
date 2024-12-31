@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -27,6 +27,19 @@ export const MobileGame = () => {
     handleMove,
     resetGame,
   } = useGameLogic();
+
+  // Add keyboard support
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        console.log('Keyboard event in mobile view:', e.key);
+        handleMove(e.key as 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [handleMove]);
 
   const formatTime = (milliseconds: number): string => {
     const totalSeconds = Math.floor(milliseconds / 1000);
