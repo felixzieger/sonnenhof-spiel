@@ -71,11 +71,11 @@ export const MobileGame = () => {
       <TouchControls onMove={handleMove} />
 
       <AlertDialog open={gameCompleted}>
-        <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-4 w-[90%] max-w-md">
+        <AlertDialogContent className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md mx-auto">
           <AlertDialogHeader>
-            <AlertDialogTitle>Gratulation!</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Gratulation!</AlertDialogTitle>
             <AlertDialogDescription className="space-y-4">
-              <p>Du hast alle Level geschafft und den Sonnenhof gerettet!</p>
+              <p className="text-center">Du hast alle Level geschafft und den Sonnenhof gerettet!</p>
               <div className="flex items-center justify-center gap-2 mt-4">
                 <Hourglass className="w-6 h-6" />
                 <span className="font-mono text-2xl font-bold">
@@ -84,8 +84,8 @@ export const MobileGame = () => {
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={resetGame}>
+          <AlertDialogFooter className="flex justify-center sm:justify-center">
+            <AlertDialogAction onClick={resetGame} className="w-full sm:w-auto">
               Nochmal spielen
             </AlertDialogAction>
           </AlertDialogFooter>
