@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { LevelMessage } from './LevelMessage';
 import { Position, AnimalType } from './Game';
-import { HighscoreDialog } from './game/HighscoreDialog';
 import { HighscoreList } from './game/HighscoreList';
+import { SeasonToggle } from './game/SeasonToggle';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -41,6 +41,12 @@ export const DesktopGame = () => {
   const [showHighscoreList, setShowHighscoreList] = useState(false);
   const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
+  const [isWinter, setIsWinter] = useState(false);
+
+  useEffect(() => {
+    const currentMonth = new Date().getMonth();
+    setIsWinter(currentMonth >= 9 || currentMonth <= 2); // October (9) to March (2)
+  }, []);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -63,7 +69,6 @@ export const DesktopGame = () => {
     })));
     positionQueue.clear();
     setShowLevelMessage(true);
-    setIsLevelRunning(false);
     
     if (level === 1) {
       setStartTime(null);
@@ -188,6 +193,10 @@ export const DesktopGame = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleMove]);
 
+  const toggleSeason = () => {
+    setIsWinter(prev => !prev);
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
       <div className="flex flex-wrap justify-center gap-4">
@@ -214,8 +223,13 @@ export const DesktopGame = () => {
         </div>
       </div>
       <div 
-        className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
+        className={`relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-cover bg-center ${
+          isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
+        }`}
       >
+        <div className="absolute top-4 left-4 z-50">
+          <SeasonToggle isWinter={isWinter} onToggle={toggleSeason} />
+        </div>
         {obstacles.map((obstacle, index) => (
           <Obstacle 
             key={index}
@@ -276,7 +290,7 @@ export const DesktopGame = () => {
       <HighscoreList
         isOpen={showHighscoreList}
         onClose={() => setShowHighscoreList(false)}
-        onSaveScore={() => setShowHighscoreDialog(true)}
+        onSaveScore={() => setShowHighscoreList(false)}
         currentScore={gameCompleted ? totalTime : null}
       />
     </div>
