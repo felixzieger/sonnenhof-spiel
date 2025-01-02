@@ -53,6 +53,10 @@ export const MobileGame = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const handleStartLevel = () => {
+    startLevel(currentLevel);
+  };
+
   return (
     <div className="flex flex-col items-center gap-2">
       <GameHeader 
@@ -71,7 +75,7 @@ export const MobileGame = () => {
         currentLevel={currentLevel}
         showLevelMessage={showLevelMessage}
         onRestart={resetGame}
-        onStart={startLevel}
+        onStart={handleStartLevel}
       />
 
       <TouchControls onMove={handleMove} />
