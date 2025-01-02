@@ -38,13 +38,13 @@ export const DesktopGame = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
-  const [showHighscoreDialog, setShowHighscoreDialog] = useState(false);
   const [showHighscoreList, setShowHighscoreList] = useState(false);
+  const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-    if (startTime && !gameCompleted) {
+    if (startTime && isLevelRunning && !gameCompleted) {
       intervalId = setInterval(() => {
         const now = Date.now();
         setCurrentTime(now - startTime);
@@ -53,7 +53,7 @@ export const DesktopGame = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [startTime, gameCompleted]);
+  }, [startTime, isLevelRunning, gameCompleted]);
 
   const startLevel = (level: number) => {
     setPlayerPosition({ x: 10, y: 5 });
@@ -63,6 +63,7 @@ export const DesktopGame = () => {
     })));
     positionQueue.clear();
     setShowLevelMessage(true);
+    setIsLevelRunning(false);
     
     if (level === 1) {
       setStartTime(null);
@@ -71,10 +72,21 @@ export const DesktopGame = () => {
     }
   };
 
+  const handleStartLevel = () => {
+    setShowLevelMessage(false);
+    setIsLevelRunning(true);
+    if (!startTime) {
+      setStartTime(Date.now());
+    } else {
+      setStartTime(Date.now() - currentTime);
+    }
+  };
+
   const resetGame = () => {
     setCurrentLevel(1);
     setGameCompleted(false);
     setStartTime(null);
+    setIsLevelRunning(false);
     startLevel(1);
   };
 
@@ -88,6 +100,7 @@ export const DesktopGame = () => {
   const checkLevelComplete = useCallback(() => {
     const allCaught = animals.every(animal => animal.caught);
     if (allCaught && !gameCompleted) {
+      setIsLevelRunning(false);
       if (currentLevel < 3) {
         const nextLevel = currentLevel + 1;
         setCurrentLevel(nextLevel);
@@ -120,22 +133,19 @@ export const DesktopGame = () => {
 
   useEffect(() => {
     const moveInterval = setInterval(() => {
-      setAnimals(prevAnimals => updateAnimalPositions(prevAnimals, obstacles));
+      if (isLevelRunning) {
+        setAnimals(prevAnimals => updateAnimalPositions(prevAnimals, obstacles));
+      }
     }, 750);
     return () => clearInterval(moveInterval);
-  }, [obstacles]);
+  }, [obstacles, isLevelRunning]);
 
   useEffect(() => {
     checkLevelComplete();
   }, [animals, checkLevelComplete]);
 
   const handleMove = useCallback((direction: string) => {
-    if (gameCompleted) return;
-    
-    if (!startTime) {
-      setStartTime(Date.now());
-      setCurrentTime(0);
-    }
+    if (gameCompleted || !isLevelRunning) return;
     
     setShowLevelMessage(false);
 
@@ -164,11 +174,10 @@ export const DesktopGame = () => {
       positionQueue.add(validPosition);
       checkCollisions(validPosition);
     }
-  }, [playerPosition, gameCompleted, startTime, obstacles, checkCollisions]);
+  }, [playerPosition, gameCompleted, isLevelRunning, obstacles, checkCollisions]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      console.log('Key pressed:', event.key);
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
         event.preventDefault();
         handleMove(event.key);
@@ -231,6 +240,7 @@ export const DesktopGame = () => {
               <LevelMessage 
                 level={currentLevel} 
                 showControls={LEVEL_CONFIGS[currentLevel].showControls}
+                onStart={handleStartLevel}
               />
             </div>
           </div>
@@ -262,12 +272,6 @@ export const DesktopGame = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      <HighscoreDialog
-        isOpen={showHighscoreDialog}
-        onClose={() => setShowHighscoreDialog(false)}
-        time={totalTime}
-      />
 
       <HighscoreList
         isOpen={showHighscoreList}

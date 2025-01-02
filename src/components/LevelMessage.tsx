@@ -1,25 +1,39 @@
 import React from 'react';
+import { Button } from './ui/button';
 
 interface LevelMessageProps {
   level: number;
   showControls?: boolean;
+  onStart: () => void;
 }
 
-export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls = false }) => {
+export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls = false, onStart }) => {
   const messages = {
     1: "Lilly hat Schnupfen und muss zum Tierarzt. Fang Lilly ein!",
     2: "Das Stalltor stand offen, Pferde und Schweine sind ausgebüchst. Fang sie schnell wieder ein!",
     3: "Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Sonnenhof spielt verrückt! Fang alle Tiere wieder ein!"
   };
 
+  React.useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        onStart();
+      }
+    };
+
+    window.addEventListener('keypress', handleKeyPress);
+    return () => window.removeEventListener('keypress', handleKeyPress);
+  }, [onStart]);
+
   return (
     <>
-      {messages[level as keyof typeof messages]}
+      <p className="mb-4">{messages[level as keyof typeof messages]}</p>
       {showControls && (
-        <div className="mt-4">
-          <p>Nutze die Pfeiltasten, um dich auf dem Sonnenhof zu bewegen.</p>
-        </div>
+        <p className="mb-4">Nutze die Pfeiltasten, um dich auf dem Sonnenhof zu bewegen.</p>
       )}
+      <Button onClick={onStart} className="w-full">
+        Level starten
+      </Button>
     </>
   );
 };
