@@ -25,13 +25,18 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
     return () => window.removeEventListener('keypress', handleKeyPress);
   }, [onStart]);
 
+  const handleStartClick = () => {
+    console.log('Start button clicked');
+    onStart();
+  };
+
   return (
     <>
       <p className="mb-4">{messages[level as keyof typeof messages]}</p>
       {showControls && (
         <p className="mb-4">Nutze die Pfeiltasten, um dich auf dem Sonnenhof zu bewegen.</p>
       )}
-      <Button onClick={onStart} className="w-full">
+      <Button onClick={handleStartClick} className="w-full">
         Level starten
       </Button>
     </>
