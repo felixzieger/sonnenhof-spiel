@@ -49,7 +49,7 @@ export const useHighscores = () => {
     console.log('Saving highscore:', { playerName, timeMs });
     
     const { data, error } = await supabase
-      .rpc<SaveHighscoreResponse, UpdateHighscoreParams>('update_highscore', {
+      .rpc('update_highscore', {
         p_player_name: playerName,
         p_time_ms: timeMs
       });

@@ -35,7 +35,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_highscore: {
+        Args: {
+          p_player_name: string
+          p_time_ms: number
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
