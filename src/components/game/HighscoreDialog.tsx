@@ -9,7 +9,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { useHighscores } from "@/hooks/useHighscores";
 
 interface HighscoreDialogProps {
   isOpen: boolean;
@@ -19,9 +19,9 @@ interface HighscoreDialogProps {
 
 export const HighscoreDialog = ({ isOpen, onClose, time }: HighscoreDialogProps) => {
   const [playerName, setPlayerName] = useState("");
-  const { toast } = useToast();
+  const { saveHighscore } = useHighscores();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!playerName.trim()) {
       toast({
         title: "Fehler",
@@ -31,30 +31,13 @@ export const HighscoreDialog = ({ isOpen, onClose, time }: HighscoreDialogProps)
       return;
     }
 
-    // Bestehende Highscores aus dem localStorage holen
-    const existingScores = JSON.parse(localStorage.getItem("highscores") || "[]");
-    
-    // Neuen Score hinzufügen
-    const newScore = {
-      name: playerName,
-      time: time,
-      date: new Date().toISOString(),
-    };
-    
-    // Scores sortieren (niedrigste Zeit zuerst)
-    const updatedScores = [...existingScores, newScore]
-      .sort((a, b) => a.time - b.time)
-      .slice(0, 10); // Nur die besten 10 behalten
-    
-    // Im localStorage speichern
-    localStorage.setItem("highscores", JSON.stringify(updatedScores));
-    
-    toast({
-      title: "Erfolgreich gespeichert!",
-      description: "Deine Zeit wurde in der Bestenliste gespeichert.",
-    });
-    
-    onClose();
+    try {
+      await saveHighscore({ playerName: playerName.trim(), timeMs: time });
+      onClose();
+    } catch (error) {
+      // Error handling is done in the mutation
+      console.error('Error saving highscore:', error);
+    }
   };
 
   return (
