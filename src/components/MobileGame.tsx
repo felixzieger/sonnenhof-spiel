@@ -73,8 +73,7 @@ export const MobileGame = () => {
 
   const handleHighscoreDialogClose = () => {
     setShowHighscoreDialog(false);
-    setGameCompleted(false);
-    resetGame();
+    setShowHighscoreList(true); // Show the highscore list instead of resetting
   };
 
   const toggleSeason = () => {

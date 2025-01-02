@@ -206,8 +206,7 @@ export const DesktopGame = () => {
 
   const handleHighscoreDialogClose = () => {
     setShowHighscoreDialog(false);
-    setGameCompleted(false);
-    resetGame();
+    setShowHighscoreList(true); // Show the highscore list instead of resetting
   };
 
   return (
