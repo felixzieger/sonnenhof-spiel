@@ -24,6 +24,7 @@ import { Position, AnimalType } from './Game';
 import { HighscoreList } from './game/HighscoreList';
 import { SeasonToggle } from './game/SeasonToggle';
 import { useWinterMode } from '@/hooks/useWinterMode';
+import { HighscoreDialog } from './game/HighscoreDialog';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -41,13 +42,14 @@ export const DesktopGame = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
   const [showHighscoreList, setShowHighscoreList] = useState(false);
+  const [showHighscoreDialog, setShowHighscoreDialog] = useState(false);
   const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
   const { isWinter, setIsWinter } = useWinterMode();
 
   useEffect(() => {
     const currentMonth = new Date().getMonth();
-    setIsWinter(currentMonth >= 9 || currentMonth <= 2); // October (9) to March (2)
+    setIsWinter(currentMonth >= 9 || currentMonth <= 2);
   }, [setIsWinter]);
 
   useEffect(() => {
@@ -196,6 +198,17 @@ export const DesktopGame = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleMove]);
 
+  const handleHighscoreSubmit = () => {
+    setShowHighscoreList(false);
+    setShowHighscoreDialog(true);
+  };
+
+  const handleHighscoreDialogClose = () => {
+    setShowHighscoreDialog(false);
+    setGameCompleted(false);
+    resetGame();
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
       <div className="flex flex-wrap justify-center gap-4">
@@ -287,8 +300,14 @@ export const DesktopGame = () => {
       <HighscoreList
         isOpen={showHighscoreList}
         onClose={() => setShowHighscoreList(false)}
-        onSaveScore={() => setShowHighscoreList(false)}
+        onSaveScore={handleHighscoreSubmit}
         currentScore={gameCompleted ? totalTime : null}
+      />
+
+      <HighscoreDialog
+        isOpen={showHighscoreDialog}
+        onClose={handleHighscoreDialogClose}
+        time={totalTime}
       />
     </div>
   );

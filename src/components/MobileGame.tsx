@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -33,8 +33,8 @@ export const MobileGame = () => {
     startLevel,
   } = useGameLogic();
 
-  const [showHighscoreDialog, setShowHighscoreDialog] = React.useState(false);
-  const [showHighscoreList, setShowHighscoreList] = React.useState(false);
+  const [showHighscoreDialog, setShowHighscoreDialog] = useState(false);
+  const [showHighscoreList, setShowHighscoreList] = useState(false);
   const { isWinter, setIsWinter } = useWinterMode();
 
   useEffect(() => {
@@ -63,6 +63,17 @@ export const MobileGame = () => {
 
   const handleStartLevel = () => {
     startLevel(currentLevel);
+  };
+
+  const handleHighscoreSubmit = () => {
+    setShowHighscoreList(false);
+    setShowHighscoreDialog(true);
+  };
+
+  const handleHighscoreDialogClose = () => {
+    setShowHighscoreDialog(false);
+    setGameCompleted(false);
+    resetGame();
   };
 
   const toggleSeason = () => {
@@ -130,14 +141,14 @@ export const MobileGame = () => {
 
       <HighscoreDialog
         isOpen={showHighscoreDialog}
-        onClose={() => setShowHighscoreDialog(false)}
+        onClose={handleHighscoreDialogClose}
         time={totalTime}
       />
 
       <HighscoreList
         isOpen={showHighscoreList}
         onClose={() => setShowHighscoreList(false)}
-        onSaveScore={() => setShowHighscoreDialog(true)}
+        onSaveScore={handleHighscoreSubmit}
         currentScore={gameCompleted ? totalTime : null}
       />
     </div>
