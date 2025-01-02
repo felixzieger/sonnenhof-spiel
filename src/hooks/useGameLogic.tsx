@@ -21,6 +21,7 @@ export const useGameLogic = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
+  const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
 
   const startLevel = (level: number) => {
@@ -161,11 +162,13 @@ export const useGameLogic = () => {
     animals,
     obstacles,
     gameCompleted,
+    setGameCompleted, // Added this line
     showLevelMessage,
     currentTime,
     totalTime,
     handleMove,
     resetGame,
     startLevel,
+    isLevelRunning
   };
 };

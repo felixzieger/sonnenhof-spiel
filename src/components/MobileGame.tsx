@@ -25,6 +25,7 @@ export const MobileGame = () => {
     animals,
     obstacles,
     gameCompleted,
+    setGameCompleted,
     showLevelMessage,
     currentTime,
     totalTime,
