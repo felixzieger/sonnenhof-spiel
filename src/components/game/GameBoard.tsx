@@ -41,12 +41,11 @@ export const GameBoard = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-[500px] mx-auto">
       <div 
         className={`relative w-full aspect-square rounded-lg border-2 border-fence overflow-hidden bg-cover bg-center ${
           isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
         }`}
-        style={{ maxWidth: '100vw', maxHeight: '60vh' }}
       >
         <div className="absolute top-4 left-4 z-50">
           <SeasonToggle isWinter={isWinter} onToggle={toggleSeason} />
