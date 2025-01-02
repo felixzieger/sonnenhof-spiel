@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowBigUp, ArrowBigDown, ArrowBigLeft, ArrowBigRight } from 'lucide-react';
 
 interface LevelMessageProps {
   level: number;
@@ -16,6 +15,11 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
   return (
     <>
       {messages[level as keyof typeof messages]}
+      {showControls && (
+        <div className="mt-4">
+          <p>Nutze die Pfeiltasten, um dich auf dem Sonnenhof zu bewegen.</p>
+        </div>
+      )}
     </>
   );
 };
