@@ -28,6 +28,7 @@ export const MobileGame = () => {
     totalTime,
     handleMove,
     resetGame,
+    startLevel,
   } = useGameLogic();
 
   const [showHighscoreDialog, setShowHighscoreDialog] = React.useState(false);
@@ -70,6 +71,7 @@ export const MobileGame = () => {
         currentLevel={currentLevel}
         showLevelMessage={showLevelMessage}
         onRestart={resetGame}
+        onStart={startLevel}
       />
 
       <TouchControls onMove={handleMove} />
