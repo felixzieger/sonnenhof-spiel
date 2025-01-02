@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 import { getAnimalName } from '../utils/animalUtils';
+import { playCatchSound } from '../utils/soundEffects';
 import { Hourglass } from 'lucide-react';
 import {
   AlertDialog,
@@ -126,6 +127,7 @@ export const DesktopGame = () => {
             Math.abs(animal.position.x - playerPos.x) < 1 && 
             Math.abs(animal.position.y - playerPos.y) < 1) {
           console.log(`Collision detected with ${animal.type} at position:`, animal.position);
+          playCatchSound(animal.type);
           toast({
             title: "Tier gefangen!",
             description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
