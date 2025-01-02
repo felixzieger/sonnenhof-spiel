@@ -13,6 +13,8 @@ import { TouchControls } from './TouchControls';
 import { GameHeader } from './game/GameHeader';
 import { GameBoard } from './game/GameBoard';
 import { useGameLogic } from '../hooks/useGameLogic';
+import { HighscoreDialog } from './game/HighscoreDialog';
+import { HighscoreList } from './game/HighscoreList';
 
 export const MobileGame = () => {
   const {
@@ -28,7 +30,9 @@ export const MobileGame = () => {
     resetGame,
   } = useGameLogic();
 
-  // Add keyboard support
+  const [showHighscoreDialog, setShowHighscoreDialog] = React.useState(false);
+  const [showHighscoreList, setShowHighscoreList] = React.useState(false);
+
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
@@ -84,13 +88,36 @@ export const MobileGame = () => {
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex justify-center sm:justify-center">
+          <AlertDialogFooter className="flex justify-center sm:justify-center gap-2">
             <AlertDialogAction onClick={resetGame} className="w-full sm:w-auto">
               Nochmal spielen
+            </AlertDialogAction>
+            <AlertDialogAction 
+              onClick={() => setShowHighscoreDialog(true)} 
+              className="w-full sm:w-auto"
+            >
+              Zeit speichern
+            </AlertDialogAction>
+            <AlertDialogAction 
+              onClick={() => setShowHighscoreList(true)}
+              className="w-full sm:w-auto"
+            >
+              Bestenliste
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <HighscoreDialog
+        isOpen={showHighscoreDialog}
+        onClose={() => setShowHighscoreDialog(false)}
+        time={totalTime}
+      />
+
+      <HighscoreList
+        isOpen={showHighscoreList}
+        onClose={() => setShowHighscoreList(false)}
+      />
     </div>
   );
 };

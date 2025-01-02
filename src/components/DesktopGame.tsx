@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
+import { getAnimalName } from '../utils/animalUtils';
 import { Hourglass } from 'lucide-react';
 import {
   AlertDialog,
@@ -19,6 +20,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { LevelMessage } from './LevelMessage';
 import { Position, AnimalType } from './Game';
+import { HighscoreDialog } from './game/HighscoreDialog';
+import { HighscoreList } from './game/HighscoreList';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -35,6 +38,8 @@ export const DesktopGame = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
+  const [showHighscoreDialog, setShowHighscoreDialog] = useState(false);
+  const [showHighscoreList, setShowHighscoreList] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -154,7 +159,6 @@ export const DesktopGame = () => {
 
     const validPosition = getValidMove(playerPosition, newPosition, obstacles);
     
-    // Only check collisions and update position if it actually changed
     if (validPosition.x !== playerPosition.x || validPosition.y !== playerPosition.y) {
       setPlayerPosition(validPosition);
       positionQueue.add(validPosition);
@@ -163,22 +167,17 @@ export const DesktopGame = () => {
   }, [playerPosition, gameCompleted, startTime, obstacles, checkCollisions]);
 
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      handleMove(e.key);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      console.log('Key pressed:', event.key);
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.preventDefault();
+        handleMove(event.key);
+      }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleMove]);
-
-  const getAnimalName = (type: AnimalType['type']) => {
-    switch (type) {
-      case 'cat': return 'Katze';
-      case 'chicken': return 'Huhn';
-      case 'pig': return 'Schwein';
-      case 'horse': return 'Pferd';
-    }
-  };
 
   return (
     <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
@@ -250,13 +249,36 @@ export const DesktopGame = () => {
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex justify-center sm:justify-center">
+          <AlertDialogFooter className="flex justify-center sm:justify-center gap-2">
             <AlertDialogAction onClick={resetGame} className="w-full sm:w-auto">
               Nochmal spielen
+            </AlertDialogAction>
+            <AlertDialogAction 
+              onClick={() => setShowHighscoreDialog(true)} 
+              className="w-full sm:w-auto"
+            >
+              Zeit speichern
+            </AlertDialogAction>
+            <AlertDialogAction 
+              onClick={() => setShowHighscoreList(true)}
+              className="w-full sm:w-auto"
+            >
+              Bestenliste
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <HighscoreDialog
+        isOpen={showHighscoreDialog}
+        onClose={() => setShowHighscoreDialog(false)}
+        time={totalTime}
+      />
+
+      <HighscoreList
+        isOpen={showHighscoreList}
+        onClose={() => setShowHighscoreList(false)}
+      />
     </div>
   );
 };
