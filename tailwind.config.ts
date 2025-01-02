@@ -60,6 +60,7 @@ export default {
         grass: "#90b167",
         fence: "#8b4513",
         "game-bg": "#c8e6c9",
+        "frosty-blue": "#D3E4FD",
       },
       keyframes: {
         "bounce-small": {
