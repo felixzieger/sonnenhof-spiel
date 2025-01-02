@@ -16,23 +16,6 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
   return (
     <>
       {messages[level as keyof typeof messages]}
-      {showControls && (
-        <div className="mt-4 flex flex-col items-center">
-          <p>Nutze die Pfeiltasten, um dich auf dem Sonnenhof zu bewegen.</p>
-          <div className="mt-2">
-            {/* Erste Reihe - Hoch */}
-            <div className="flex justify-center mb-1">
-              <ArrowBigUp className="w-8 h-8 p-1 border rounded bg-gray-100" />
-            </div>
-            {/* Zweite Reihe - Links, Runter, Rechts */}
-            <div className="flex justify-center gap-1">
-              <ArrowBigLeft className="w-8 h-8 p-1 border rounded bg-gray-100" />
-              <ArrowBigDown className="w-8 h-8 p-1 border rounded bg-gray-100" />
-              <ArrowBigRight className="w-8 h-8 p-1 border rounded bg-gray-100" />
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
