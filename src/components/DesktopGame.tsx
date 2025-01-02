@@ -20,8 +20,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { LevelMessage } from './LevelMessage';
 import { Position, AnimalType } from './Game';
-import { HighscoreDialog } from './game/HighscoreDialog';
 import { HighscoreList } from './game/HighscoreList';
+import { SeasonToggle } from './game/SeasonToggle';
+import { useWinterMode } from '@/hooks/useWinterMode';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -38,13 +39,19 @@ export const DesktopGame = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
-  const [showHighscoreDialog, setShowHighscoreDialog] = useState(false);
   const [showHighscoreList, setShowHighscoreList] = useState(false);
+  const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
+  const { isWinter, setIsWinter } = useWinterMode();
+
+  useEffect(() => {
+    const currentMonth = new Date().getMonth();
+    setIsWinter(currentMonth >= 9 || currentMonth <= 2); // October (9) to March (2)
+  }, [setIsWinter]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-    if (startTime && !gameCompleted) {
+    if (startTime && isLevelRunning && !gameCompleted) {
       intervalId = setInterval(() => {
         const now = Date.now();
         setCurrentTime(now - startTime);
@@ -53,7 +60,7 @@ export const DesktopGame = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [startTime, gameCompleted]);
+  }, [startTime, isLevelRunning, gameCompleted]);
 
   const startLevel = (level: number) => {
     setPlayerPosition({ x: 10, y: 5 });
@@ -71,10 +78,21 @@ export const DesktopGame = () => {
     }
   };
 
+  const handleStartLevel = () => {
+    setShowLevelMessage(false);
+    setIsLevelRunning(true);
+    if (!startTime) {
+      setStartTime(Date.now());
+    } else {
+      setStartTime(Date.now() - currentTime);
+    }
+  };
+
   const resetGame = () => {
     setCurrentLevel(1);
     setGameCompleted(false);
     setStartTime(null);
+    setIsLevelRunning(false);
     startLevel(1);
   };
 
@@ -88,6 +106,7 @@ export const DesktopGame = () => {
   const checkLevelComplete = useCallback(() => {
     const allCaught = animals.every(animal => animal.caught);
     if (allCaught && !gameCompleted) {
+      setIsLevelRunning(false);
       if (currentLevel < 3) {
         const nextLevel = currentLevel + 1;
         setCurrentLevel(nextLevel);
@@ -120,22 +139,19 @@ export const DesktopGame = () => {
 
   useEffect(() => {
     const moveInterval = setInterval(() => {
-      setAnimals(prevAnimals => updateAnimalPositions(prevAnimals, obstacles));
+      if (isLevelRunning) {
+        setAnimals(prevAnimals => updateAnimalPositions(prevAnimals, obstacles));
+      }
     }, 750);
     return () => clearInterval(moveInterval);
-  }, [obstacles]);
+  }, [obstacles, isLevelRunning]);
 
   useEffect(() => {
     checkLevelComplete();
   }, [animals, checkLevelComplete]);
 
   const handleMove = useCallback((direction: string) => {
-    if (gameCompleted) return;
-    
-    if (!startTime) {
-      setStartTime(Date.now());
-      setCurrentTime(0);
-    }
+    if (gameCompleted || !isLevelRunning) return;
     
     setShowLevelMessage(false);
 
@@ -164,11 +180,10 @@ export const DesktopGame = () => {
       positionQueue.add(validPosition);
       checkCollisions(validPosition);
     }
-  }, [playerPosition, gameCompleted, startTime, obstacles, checkCollisions]);
+  }, [playerPosition, gameCompleted, isLevelRunning, obstacles, checkCollisions]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      console.log('Key pressed:', event.key);
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
         event.preventDefault();
         handleMove(event.key);
@@ -194,7 +209,7 @@ export const DesktopGame = () => {
         <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
           <ScoreBoard animals={animals} />
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
+        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center gap-2">
           <Button 
             onClick={resetGame}
             variant="outline"
@@ -202,10 +217,13 @@ export const DesktopGame = () => {
           >
             🔄 Neu starten
           </Button>
+          <SeasonToggle />
         </div>
       </div>
       <div 
-        className="relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
+        className={`relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-cover bg-center ${
+          isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
+        }`}
       >
         {obstacles.map((obstacle, index) => (
           <Obstacle 
@@ -231,6 +249,7 @@ export const DesktopGame = () => {
               <LevelMessage 
                 level={currentLevel} 
                 showControls={LEVEL_CONFIGS[currentLevel].showControls}
+                onStart={handleStartLevel}
               />
             </div>
           </div>
@@ -254,12 +273,6 @@ export const DesktopGame = () => {
               Nochmal spielen
             </AlertDialogAction>
             <AlertDialogAction 
-              onClick={() => setShowHighscoreDialog(true)} 
-              className="w-full sm:w-auto"
-            >
-              Zeit speichern
-            </AlertDialogAction>
-            <AlertDialogAction 
               onClick={() => setShowHighscoreList(true)}
               className="w-full sm:w-auto"
             >
@@ -269,15 +282,11 @@ export const DesktopGame = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <HighscoreDialog
-        isOpen={showHighscoreDialog}
-        onClose={() => setShowHighscoreDialog(false)}
-        time={totalTime}
-      />
-
       <HighscoreList
         isOpen={showHighscoreList}
         onClose={() => setShowHighscoreList(false)}
+        onSaveScore={() => setShowHighscoreList(false)}
+        currentScore={gameCompleted ? totalTime : null}
       />
     </div>
   );

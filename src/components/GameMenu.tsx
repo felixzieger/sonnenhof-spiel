@@ -7,12 +7,18 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar"
 import { Button } from "@/components/ui/button"
+import { SeasonToggle } from './game/SeasonToggle'
 
 interface GameMenuProps {
   onRestart: () => void;
+  isWinter?: boolean;
+  onToggleSeason?: () => void;
+  isMobile?: boolean;
 }
 
-export const GameMenu = ({ onRestart }: GameMenuProps) => {
+export const GameMenu = ({ onRestart, isWinter, onToggleSeason, isMobile = false }: GameMenuProps) => {
+  if (!isMobile) return null;
+
   return (
     <div className="fixed top-4 right-4 z-50">
       <Menubar className="border-none bg-transparent">
@@ -24,6 +30,11 @@ export const GameMenu = ({ onRestart }: GameMenuProps) => {
             <MenubarItem onClick={onRestart}>
               <span>🔄 Neu starten</span>
             </MenubarItem>
+            {onToggleSeason && (
+              <MenubarItem onClick={onToggleSeason}>
+                <span>{isWinter ? '☀️ Sommer' : '❄️ Winter'}</span>
+              </MenubarItem>
+            )}
           </MenubarContent>
         </MenubarMenu>
       </Menubar>

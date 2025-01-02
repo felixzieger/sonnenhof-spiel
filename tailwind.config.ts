@@ -20,6 +20,8 @@ export default {
     extend: {
       backgroundImage: {
         'farm-aerial': "url('/lovable-uploads/281eb186-f757-4b9f-8ae3-460443537fa1.png')",
+        'farm-winter': "url('/sonnenhof-board-winter.png')",
+        'farm-summer': "url('/sonnenhof-board-summer.png')",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -58,6 +60,7 @@ export default {
         grass: "#90b167",
         fence: "#8b4513",
         "game-bg": "#c8e6c9",
+        "frosty-blue": "#D3E4FD",
       },
       keyframes: {
         "bounce-small": {

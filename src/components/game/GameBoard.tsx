@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Player } from '../Player';
 import { Animal } from '../Animal';
 import { Obstacle } from '../Obstacle';
@@ -14,6 +15,8 @@ interface GameBoardProps {
   currentLevel: number;
   showLevelMessage: boolean;
   onRestart: () => void;
+  onStart: () => void;
+  isWinter: boolean;
 }
 
 export const GameBoard = ({ 
@@ -23,42 +26,48 @@ export const GameBoard = ({
   gridSize, 
   currentLevel, 
   showLevelMessage, 
-  onRestart 
+  onRestart,
+  onStart,
+  isWinter
 }: GameBoardProps) => {
   return (
-    <div 
-      className="relative w-full aspect-square rounded-lg border-2 border-fence overflow-hidden bg-farm-aerial bg-cover bg-center"
-      style={{ maxWidth: '100vw', maxHeight: '60vh' }}
-    >
-      <GameMenu onRestart={onRestart} />
-      {obstacles.map((obstacle, index) => (
-        <Obstacle 
-          key={index}
-          position={obstacle}
-          gridSize={gridSize}
-        />
-      ))}
-      <Player position={playerPosition} gridSize={gridSize} />
-      {animals.map(animal => (
-        !animal.caught && (
-          <Animal 
-            key={animal.id}
-            type={animal.type}
-            position={animal.position}
+    <div className="relative w-full max-w-[500px] mx-auto">
+      <div 
+        className={`relative w-full aspect-square rounded-lg border-2 border-fence overflow-hidden bg-cover bg-center ${
+          isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
+        }`}
+      >
+        <GameMenu onRestart={onRestart} />
+        {obstacles.map((obstacle, index) => (
+          <Obstacle 
+            key={index}
+            position={obstacle}
             gridSize={gridSize}
           />
-        )
-      ))}
-      {showLevelMessage && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg max-w-[90%] text-center mx-2">
-            <LevelMessage 
-              level={currentLevel} 
-              showControls={LEVEL_CONFIGS[currentLevel].showControls}
+        ))}
+        <Player position={playerPosition} gridSize={gridSize} />
+        {animals.map(animal => (
+          !animal.caught && (
+            <Animal 
+              key={animal.id}
+              type={animal.type}
+              position={animal.position}
+              gridSize={gridSize}
             />
+          )
+        ))}
+        {showLevelMessage && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-4 rounded-lg shadow-lg max-w-[90%] text-center mx-2">
+              <LevelMessage 
+                level={currentLevel} 
+                showControls={LEVEL_CONFIGS[currentLevel].showControls}
+                onStart={onStart}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

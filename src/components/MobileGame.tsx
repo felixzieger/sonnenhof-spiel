@@ -15,6 +15,8 @@ import { GameBoard } from './game/GameBoard';
 import { useGameLogic } from '../hooks/useGameLogic';
 import { HighscoreDialog } from './game/HighscoreDialog';
 import { HighscoreList } from './game/HighscoreList';
+import { GameMenu } from './GameMenu';
+import { useWinterMode } from '@/hooks/useWinterMode';
 
 export const MobileGame = () => {
   const {
@@ -28,10 +30,17 @@ export const MobileGame = () => {
     totalTime,
     handleMove,
     resetGame,
+    startLevel,
   } = useGameLogic();
 
   const [showHighscoreDialog, setShowHighscoreDialog] = React.useState(false);
   const [showHighscoreList, setShowHighscoreList] = React.useState(false);
+  const { isWinter, setIsWinter } = useWinterMode();
+
+  useEffect(() => {
+    const currentMonth = new Date().getMonth();
+    setIsWinter(currentMonth >= 9 || currentMonth <= 2);
+  }, [setIsWinter]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -52,6 +61,14 @@ export const MobileGame = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const handleStartLevel = () => {
+    startLevel(currentLevel);
+  };
+
+  const toggleSeason = () => {
+    setIsWinter(!isWinter);
+  };
+
   return (
     <div className="flex flex-col items-center gap-2">
       <GameHeader 
@@ -62,6 +79,13 @@ export const MobileGame = () => {
         gameCompleted={gameCompleted}
       />
       
+      <GameMenu 
+        onRestart={resetGame}
+        isWinter={isWinter}
+        onToggleSeason={toggleSeason}
+        isMobile={true}
+      />
+      
       <GameBoard 
         playerPosition={playerPosition}
         animals={animals}
@@ -70,6 +94,8 @@ export const MobileGame = () => {
         currentLevel={currentLevel}
         showLevelMessage={showLevelMessage}
         onRestart={resetGame}
+        onStart={handleStartLevel}
+        isWinter={isWinter}
       />
 
       <TouchControls onMove={handleMove} />
@@ -93,12 +119,6 @@ export const MobileGame = () => {
               Nochmal spielen
             </AlertDialogAction>
             <AlertDialogAction 
-              onClick={() => setShowHighscoreDialog(true)} 
-              className="w-full sm:w-auto"
-            >
-              Zeit speichern
-            </AlertDialogAction>
-            <AlertDialogAction 
               onClick={() => setShowHighscoreList(true)}
               className="w-full sm:w-auto"
             >
@@ -117,6 +137,8 @@ export const MobileGame = () => {
       <HighscoreList
         isOpen={showHighscoreList}
         onClose={() => setShowHighscoreList(false)}
+        onSaveScore={() => setShowHighscoreDialog(true)}
+        currentScore={gameCompleted ? totalTime : null}
       />
     </div>
   );

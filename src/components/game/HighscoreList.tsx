@@ -3,16 +3,20 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useHighscores } from "@/hooks/useHighscores";
 import { Loader2 } from "lucide-react";
 
 interface HighscoreListProps {
   isOpen: boolean;
   onClose: () => void;
+  onSaveScore: () => void;
+  currentScore: number | null;
 }
 
-export const HighscoreList = ({ isOpen, onClose }: HighscoreListProps) => {
+export const HighscoreList = ({ isOpen, onClose, onSaveScore, currentScore }: HighscoreListProps) => {
   const { highscores, isLoading } = useHighscores();
 
   const formatTime = (milliseconds: number): string => {
@@ -54,6 +58,13 @@ export const HighscoreList = ({ isOpen, onClose }: HighscoreListProps) => {
             </div>
           )}
         </div>
+        {currentScore && (
+          <DialogFooter>
+            <Button onClick={onSaveScore} className="w-full">
+              In Bestenliste eintragen
+            </Button>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );
