@@ -34,10 +34,27 @@ export const HighscoreDialog = ({ isOpen, onClose, time }: HighscoreDialogProps)
     }
 
     try {
-      await saveHighscore({ playerName: playerName.trim(), timeMs: time });
-      onClose();
+      const { success, message } = await saveHighscore({ 
+        playerName: playerName.trim(), 
+        timeMs: time 
+      });
+
+      toast({
+        title: success ? "Erfolg" : "Hinweis",
+        description: message,
+        variant: success ? "default" : "destructive",
+      });
+
+      if (success) {
+        onClose();
+      }
     } catch (error) {
       console.error('Error saving highscore:', error);
+      toast({
+        title: "Fehler",
+        description: "Beim Speichern ist ein Fehler aufgetreten",
+        variant: "destructive",
+      });
     }
   };
 
