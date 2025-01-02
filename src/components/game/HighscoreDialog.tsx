@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,7 @@ interface HighscoreDialogProps {
 
 export const HighscoreDialog = ({ isOpen, onClose, time }: HighscoreDialogProps) => {
   const [playerName, setPlayerName] = useState("");
+  const { toast } = useToast();
   const { saveHighscore } = useHighscores();
 
   const handleSubmit = async () => {
@@ -35,7 +37,6 @@ export const HighscoreDialog = ({ isOpen, onClose, time }: HighscoreDialogProps)
       await saveHighscore({ playerName: playerName.trim(), timeMs: time });
       onClose();
     } catch (error) {
-      // Error handling is done in the mutation
       console.error('Error saving highscore:', error);
     }
   };

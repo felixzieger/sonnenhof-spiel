@@ -254,12 +254,6 @@ export const DesktopGame = () => {
               Nochmal spielen
             </AlertDialogAction>
             <AlertDialogAction 
-              onClick={() => setShowHighscoreDialog(true)} 
-              className="w-full sm:w-auto"
-            >
-              Zeit speichern
-            </AlertDialogAction>
-            <AlertDialogAction 
               onClick={() => setShowHighscoreList(true)}
               className="w-full sm:w-auto"
             >
@@ -278,6 +272,8 @@ export const DesktopGame = () => {
       <HighscoreList
         isOpen={showHighscoreList}
         onClose={() => setShowHighscoreList(false)}
+        onSaveScore={() => setShowHighscoreDialog(true)}
+        currentScore={gameCompleted ? totalTime : null}
       />
     </div>
   );
