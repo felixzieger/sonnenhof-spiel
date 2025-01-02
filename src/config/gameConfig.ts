@@ -66,7 +66,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
         moveDelay: generateMoveDelay() 
       },
     ],
-    message: "Lilly hat Schnupfen und muss zum Tierarzt. Fang Lilly ein!",
+    message: "Die Katze Lilly hat Schnupfen und muss zum Tierarzt. Fang Lilly ein!",
     showControls: true
   },
   2: {

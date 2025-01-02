@@ -9,8 +9,8 @@ interface LevelMessageProps {
 
 export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls = false, onStart }) => {
   const messages = {
-    1: "Lilly hat Schnupfen und muss zum Tierarzt. Fang Lilly ein!",
-    2: "Das Stalltor stand offen, Pferde und Schweine sind ausgebüchst. Fang sie schnell wieder ein!",
+    1: "Die Katze Lilly hat Schnupfen und muss zum Tierarzt. Fang Lilly ein!",
+    2: "Das Stalltor stand offen, die Pferde und Schweine sind ausgebüchst. Fang sie schnell wieder ein!",
     3: "Oh nein, jetzt ist auch noch der Hühnerpförtner kaputt - der Sonnenhof spielt verrückt! Fang alle Tiere wieder ein!"
   };
 
