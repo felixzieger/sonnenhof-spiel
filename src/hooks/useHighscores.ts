@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Highscore {
@@ -11,6 +11,11 @@ interface Highscore {
 interface SaveHighscoreResponse {
   success: boolean;
   message: string;
+}
+
+interface UpdateHighscoreParams {
+  p_player_name: string;
+  p_time_ms: number;
 }
 
 export const useHighscores = () => {
@@ -44,7 +49,7 @@ export const useHighscores = () => {
     console.log('Saving highscore:', { playerName, timeMs });
     
     const { data, error } = await supabase
-      .rpc('update_highscore', {
+      .rpc<SaveHighscoreResponse, UpdateHighscoreParams>('update_highscore', {
         p_player_name: playerName,
         p_time_ms: timeMs
       });
