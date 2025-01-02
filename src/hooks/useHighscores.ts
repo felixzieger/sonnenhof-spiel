@@ -1,12 +1,21 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 
 interface Highscore {
   id: string;
   player_name: string;
   time_ms: number;
   created_at: string;
+}
+
+interface SaveHighscoreResponse {
+  success: boolean;
+  message: string;
+}
+
+interface UpdateHighscoreParams {
+  p_player_name: string;
+  p_time_ms: number;
 }
 
 export const useHighscores = () => {
@@ -19,8 +28,7 @@ export const useHighscores = () => {
       const { data, error } = await supabase
         .from('highscores')
         .select('*')
-        .order('time_ms', { ascending: true })
-        .limit(10);
+        .order('time_ms', { ascending: true });
 
       if (error) {
         console.error('Error fetching highscores:', error);
@@ -31,33 +39,31 @@ export const useHighscores = () => {
     },
   });
 
-  const { mutateAsync: saveHighscore } = useMutation({
-    mutationFn: async ({ playerName, timeMs }: { playerName: string; timeMs: number }) => {
-      console.log('Saving highscore to Supabase:', { playerName, timeMs });
-      const { data, error } = await supabase
-        .from('highscores')
-        .insert([{ player_name: playerName, time_ms: timeMs }])
-        .select()
-        .single();
+  const saveHighscore = async ({ 
+    playerName, 
+    timeMs 
+  }: { 
+    playerName: string; 
+    timeMs: number 
+  }): Promise<SaveHighscoreResponse> => {
+    console.log('Saving highscore:', { playerName, timeMs });
+    
+    const { data, error } = await supabase
+      .rpc('update_highscore', {
+        p_player_name: playerName,
+        p_time_ms: timeMs
+      });
 
-      if (error) {
-        if (error.code === '23505') { // Unique violation
-          throw new Error('Du hast bereits einen Highscore eingetragen!');
-        }
-        console.error('Error saving highscore:', error);
-        throw error;
-      }
+    if (error) {
+      console.error('Error saving highscore:', error);
+      throw error;
+    }
 
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['highscores'] });
-      toast.success('Dein Highscore wurde gespeichert!');
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
-  });
+    // Invalidate and refetch highscores after successful save
+    await queryClient.invalidateQueries({ queryKey: ['highscores'] });
+
+    return data as SaveHighscoreResponse;
+  };
 
   return {
     highscores,
