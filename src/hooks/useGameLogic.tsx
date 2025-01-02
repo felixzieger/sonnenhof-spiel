@@ -28,6 +28,7 @@ export const useGameLogic = () => {
     console.log('startLevel called in useGameLogic');
     console.log('level:', level);
     console.log('Current showLevelMessage state:', showLevelMessage);
+    console.log('isLevelRunning state:', isLevelRunning);
     
     setPlayerPosition({ x: 10, y: 5 });
     setAnimals(LEVEL_CONFIGS[level].animals.map(animal => ({
@@ -35,17 +36,29 @@ export const useGameLogic = () => {
       moveDelay: Math.floor(Math.random() * 300)
     })));
     positionQueue.clear();
-    setShowLevelMessage(false);
-    setIsLevelRunning(true);
     
-    console.log('Updated showLevelMessage to false');
+    // Set these states in a more predictable order
+    setIsLevelRunning(true);
+    setShowLevelMessage(false);
     
     if (level === 1) {
-      setStartTime(null);
+      setStartTime(Date.now());
       setCurrentTime(0);
       setTotalTime(0);
     }
-  }, [showLevelMessage]);
+    
+    console.log('States updated in startLevel');
+  }, []); // Remove showLevelMessage from dependencies to avoid cycles
+
+  const resetGame = useCallback(() => {
+    console.log('resetGame called');
+    setCurrentLevel(1);
+    setGameCompleted(false);
+    setStartTime(null);
+    setShowLevelMessage(true);
+    setIsLevelRunning(false);
+    startLevel(1);
+  }, [startLevel]);
 
   const checkLevelComplete = useCallback(() => {
     const allCaught = animals.every(animal => animal.caught);
@@ -53,13 +66,16 @@ export const useGameLogic = () => {
       if (currentLevel < 3) {
         const nextLevel = currentLevel + 1;
         setCurrentLevel(nextLevel);
+        setShowLevelMessage(true);
+        setIsLevelRunning(false);
         startLevel(nextLevel);
       } else {
         setTotalTime(currentTime);
         setGameCompleted(true);
+        setIsLevelRunning(false);
       }
     }
-  }, [animals, currentLevel, gameCompleted, currentTime]);
+  }, [animals, currentLevel, gameCompleted, currentTime, startLevel]);
 
   const checkCollisions = useCallback((playerPos: Position) => {
     console.log('Checking collisions with player at:', playerPos);
@@ -81,14 +97,12 @@ export const useGameLogic = () => {
   }, [toast]);
 
   const handleMove = useCallback((direction: string) => {
-    if (gameCompleted) return;
+    if (gameCompleted || !isLevelRunning) return;
     
     if (!startTime) {
       setStartTime(Date.now());
       setCurrentTime(0);
     }
-    
-    setShowLevelMessage(false);
 
     setPlayerPosition(prevPosition => {
       const newPosition = { ...prevPosition };
@@ -121,7 +135,7 @@ export const useGameLogic = () => {
       
       return prevPosition;
     });
-  }, [gameCompleted, startTime, obstacles, checkCollisions]);
+  }, [gameCompleted, isLevelRunning, startTime, obstacles, checkCollisions]);
 
   useEffect(() => {
     const moveInterval = setInterval(() => {
@@ -136,7 +150,7 @@ export const useGameLogic = () => {
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-    if (startTime && !gameCompleted) {
+    if (startTime && !gameCompleted && isLevelRunning) {
       intervalId = setInterval(() => {
         const now = Date.now();
         setCurrentTime(now - startTime);
@@ -145,7 +159,7 @@ export const useGameLogic = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [startTime, gameCompleted]);
+  }, [startTime, gameCompleted, isLevelRunning]);
 
   return {
     currentLevel,
@@ -158,13 +172,7 @@ export const useGameLogic = () => {
     currentTime,
     totalTime,
     handleMove,
-    resetGame: useCallback(() => {
-      console.log('resetGame called');
-      setCurrentLevel(1);
-      setGameCompleted(false);
-      setStartTime(null);
-      startLevel(1);
-    }, [startLevel]),
+    resetGame,
     startLevel,
     isLevelRunning
   };
