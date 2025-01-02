@@ -42,12 +42,12 @@ export const DesktopGame = () => {
   const [showHighscoreList, setShowHighscoreList] = useState(false);
   const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
-  const { isWinter } = useWinterMode();
+  const { isWinter, setIsWinter } = useWinterMode();
 
   useEffect(() => {
     const currentMonth = new Date().getMonth();
     setIsWinter(currentMonth >= 9 || currentMonth <= 2); // October (9) to March (2)
-  }, []);
+  }, [setIsWinter]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
