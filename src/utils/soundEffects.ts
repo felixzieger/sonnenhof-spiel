@@ -1,4 +1,10 @@
+import { useSoundEnabled } from '@/hooks/useSoundEnabled';
+
 const playSound = (soundUrl: string) => {
+  const { isEnabled } = useSoundEnabled.getState();
+  
+  if (!isEnabled) return;
+  
   const audio = new Audio(soundUrl);
   audio.play().catch(error => {
     console.log('Error playing sound:', error);

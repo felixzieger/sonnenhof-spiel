@@ -25,6 +25,7 @@ import { HighscoreList } from './game/HighscoreList';
 import { SeasonToggle } from './game/SeasonToggle';
 import { useWinterMode } from '@/hooks/useWinterMode';
 import { HighscoreDialog } from './game/HighscoreDialog';
+import { SoundToggle } from './game/SoundToggle';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -233,6 +234,7 @@ export const DesktopGame = () => {
             🔄 Neu starten
           </Button>
           <SeasonToggle />
+          <SoundToggle />
         </div>
       </div>
       <div 
