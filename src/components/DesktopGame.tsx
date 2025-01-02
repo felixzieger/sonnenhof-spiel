@@ -166,6 +166,19 @@ export const DesktopGame = () => {
     }
   }, [playerPosition, gameCompleted, startTime, obstacles, checkCollisions]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      console.log('Key pressed:', event.key);
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.preventDefault();
+        handleMove(event.key);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleMove]);
+
   return (
     <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
       <div className="flex flex-wrap justify-center gap-4">
