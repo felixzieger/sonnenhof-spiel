@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
 import { getAnimalName } from '../utils/animalUtils';
+import { playCatchSound } from '../utils/soundEffects';
 import { Hourglass } from 'lucide-react';
 import {
   AlertDialog,
@@ -23,6 +24,8 @@ import { Position, AnimalType } from './Game';
 import { HighscoreList } from './game/HighscoreList';
 import { SeasonToggle } from './game/SeasonToggle';
 import { useWinterMode } from '@/hooks/useWinterMode';
+import { HighscoreDialog } from './game/HighscoreDialog';
+import { SoundToggle } from './game/SoundToggle';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -40,13 +43,14 @@ export const DesktopGame = () => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
   const [showHighscoreList, setShowHighscoreList] = useState(false);
+  const [showHighscoreDialog, setShowHighscoreDialog] = useState(false);
   const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
   const { isWinter, setIsWinter } = useWinterMode();
 
   useEffect(() => {
     const currentMonth = new Date().getMonth();
-    setIsWinter(currentMonth >= 9 || currentMonth <= 2); // October (9) to March (2)
+    setIsWinter(currentMonth >= 9 || currentMonth <= 2);
   }, [setIsWinter]);
 
   useEffect(() => {
@@ -126,6 +130,7 @@ export const DesktopGame = () => {
             Math.abs(animal.position.x - playerPos.x) < 1 && 
             Math.abs(animal.position.y - playerPos.y) < 1) {
           console.log(`Collision detected with ${animal.type} at position:`, animal.position);
+          playCatchSound(animal.type);
           toast({
             title: "Tier gefangen!",
             description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
@@ -194,6 +199,16 @@ export const DesktopGame = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleMove]);
 
+  const handleHighscoreSubmit = () => {
+    setShowHighscoreList(false);
+    setShowHighscoreDialog(true);
+  };
+
+  const handleHighscoreDialogClose = () => {
+    setShowHighscoreDialog(false);
+    setShowHighscoreList(true); // Show the highscore list instead of resetting
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
       <div className="flex flex-wrap justify-center gap-4">
@@ -218,6 +233,7 @@ export const DesktopGame = () => {
             🔄 Neu starten
           </Button>
           <SeasonToggle />
+          <SoundToggle />
         </div>
       </div>
       <div 
@@ -285,8 +301,14 @@ export const DesktopGame = () => {
       <HighscoreList
         isOpen={showHighscoreList}
         onClose={() => setShowHighscoreList(false)}
-        onSaveScore={() => setShowHighscoreList(false)}
+        onSaveScore={handleHighscoreSubmit}
         currentScore={gameCompleted ? totalTime : null}
+      />
+
+      <HighscoreDialog
+        isOpen={showHighscoreDialog}
+        onClose={handleHighscoreDialogClose}
+        time={totalTime}
       />
     </div>
   );

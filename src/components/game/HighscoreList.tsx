@@ -58,13 +58,19 @@ export const HighscoreList = ({ isOpen, onClose, onSaveScore, currentScore }: Hi
             </div>
           )}
         </div>
-        {currentScore && (
-          <DialogFooter>
+        <DialogFooter className="flex gap-2">
+          {currentScore && (
             <Button onClick={onSaveScore} className="w-full">
               In Bestenliste eintragen
             </Button>
-          </DialogFooter>
-        )}
+          )}
+          <Button onClick={() => {
+            onClose();
+            window.location.reload(); // Restart the game when closing the highscore list
+          }} variant="outline" className="w-full">
+            Neues Spiel
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

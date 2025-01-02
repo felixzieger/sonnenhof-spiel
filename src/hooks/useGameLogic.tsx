@@ -3,6 +3,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Position, AnimalType } from '../components/Game';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
+import { getAnimalName } from '../utils/animalUtils';
+import { playCatchSound } from '../utils/soundEffects';
 
 export const useGameLogic = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -19,6 +21,7 @@ export const useGameLogic = () => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [totalTime, setTotalTime] = useState<number>(0);
+  const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
 
   const startLevel = (level: number) => {
@@ -65,6 +68,7 @@ export const useGameLogic = () => {
         if (!animal.caught && 
             Math.abs(animal.position.x - playerPos.x) < 1 && 
             Math.abs(animal.position.y - playerPos.y) < 1) {
+          playCatchSound(animal.type);
           toast({
             title: "Tier gefangen!",
             description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
@@ -158,11 +162,13 @@ export const useGameLogic = () => {
     animals,
     obstacles,
     gameCompleted,
+    setGameCompleted, // Added this line
     showLevelMessage,
     currentTime,
     totalTime,
     handleMove,
     resetGame,
     startLevel,
+    isLevelRunning
   };
 };

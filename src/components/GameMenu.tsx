@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/menubar"
 import { Button } from "@/components/ui/button"
 import { SeasonToggle } from './game/SeasonToggle'
+import { useSoundEnabled } from '@/hooks/useSoundEnabled'
 
 interface GameMenuProps {
   onRestart: () => void;
@@ -17,6 +18,8 @@ interface GameMenuProps {
 }
 
 export const GameMenu = ({ onRestart, isWinter, onToggleSeason, isMobile = false }: GameMenuProps) => {
+  const { isEnabled, setIsEnabled } = useSoundEnabled();
+  
   if (!isMobile) return null;
 
   return (
@@ -35,6 +38,9 @@ export const GameMenu = ({ onRestart, isWinter, onToggleSeason, isMobile = false
                 <span>{isWinter ? '☀️ Sommer' : '❄️ Winter'}</span>
               </MenubarItem>
             )}
+            <MenubarItem onClick={() => setIsEnabled(!isEnabled)}>
+              <span>{isEnabled ? '🔊 Ton aus' : '🔈 Ton an'}</span>
+            </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
