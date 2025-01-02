@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { GRID_SIZE, INITIAL_OBSTACLES, LEVEL_CONFIGS } from '../config/gameConfig';
 import { updateAnimalPositions, positionQueue, getValidMove } from '../utils/gameLogic';
+import { getAnimalName } from '../utils/animalUtils';
 import { Hourglass } from 'lucide-react';
 import {
   AlertDialog,
