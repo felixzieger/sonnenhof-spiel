@@ -30,6 +30,13 @@ export const GameBoard = ({
   onStart,
   isWinter
 }: GameBoardProps) => {
+  const handleStart = () => {
+    console.log('handleStart called in GameBoard');
+    console.log('showLevelMessage:', showLevelMessage);
+    console.log('onStart function:', onStart);
+    onStart();
+  };
+
   return (
     <div className="relative w-full max-w-[500px] mx-auto">
       <div 
@@ -62,7 +69,7 @@ export const GameBoard = ({
               <LevelMessage 
                 level={currentLevel} 
                 showControls={LEVEL_CONFIGS[currentLevel].showControls}
-                onStart={onStart}
+                onStart={handleStart}
               />
             </div>
           </div>

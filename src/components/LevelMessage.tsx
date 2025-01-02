@@ -17,6 +17,7 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
   React.useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
+        console.log('Enter key pressed in LevelMessage');
         onStart();
       }
     };
@@ -26,7 +27,8 @@ export const LevelMessage: React.FC<LevelMessageProps> = ({ level, showControls 
   }, [onStart]);
 
   const handleStartClick = () => {
-    console.log('Start button clicked');
+    console.log('Start button clicked in LevelMessage');
+    console.log('onStart function:', onStart);
     onStart();
   };
 

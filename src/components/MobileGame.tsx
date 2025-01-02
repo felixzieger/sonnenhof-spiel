@@ -63,6 +63,9 @@ export const MobileGame = () => {
   };
 
   const handleStartLevel = () => {
+    console.log('handleStartLevel called in MobileGame');
+    console.log('currentLevel:', currentLevel);
+    console.log('showLevelMessage:', showLevelMessage);
     startLevel(currentLevel);
   };
 
