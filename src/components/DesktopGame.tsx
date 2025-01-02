@@ -22,6 +22,7 @@ import { LevelMessage } from './LevelMessage';
 import { Position, AnimalType } from './Game';
 import { HighscoreList } from './game/HighscoreList';
 import { SeasonToggle } from './game/SeasonToggle';
+import { useWinterMode } from '@/hooks/useWinterMode';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -41,7 +42,7 @@ export const DesktopGame = () => {
   const [showHighscoreList, setShowHighscoreList] = useState(false);
   const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
-  const [isWinter, setIsWinter] = useState(false);
+  const { isWinter } = useWinterMode();
 
   useEffect(() => {
     const currentMonth = new Date().getMonth();
@@ -193,10 +194,6 @@ export const DesktopGame = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleMove]);
 
-  const toggleSeason = () => {
-    setIsWinter(prev => !prev);
-  };
-
   return (
     <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
       <div className="flex flex-wrap justify-center gap-4">
@@ -220,7 +217,7 @@ export const DesktopGame = () => {
           >
             🔄 Neu starten
           </Button>
-          <SeasonToggle isWinter={isWinter} onToggle={toggleSeason} />
+          <SeasonToggle />
         </div>
       </div>
       <div 
