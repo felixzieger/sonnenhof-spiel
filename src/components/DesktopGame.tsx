@@ -212,7 +212,7 @@ export const DesktopGame = () => {
         <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
           <ScoreBoard animals={animals} />
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
+        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center gap-2">
           <Button 
             onClick={resetGame}
             variant="outline"
@@ -220,6 +220,7 @@ export const DesktopGame = () => {
           >
             🔄 Neu starten
           </Button>
+          <SeasonToggle isWinter={isWinter} onToggle={toggleSeason} />
         </div>
       </div>
       <div 
@@ -227,9 +228,6 @@ export const DesktopGame = () => {
           isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
         }`}
       >
-        <div className="absolute top-4 left-4 z-50">
-          <SeasonToggle isWinter={isWinter} onToggle={toggleSeason} />
-        </div>
         {obstacles.map((obstacle, index) => (
           <Obstacle 
             key={index}

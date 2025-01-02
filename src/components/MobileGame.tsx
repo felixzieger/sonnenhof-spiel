@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -15,6 +15,7 @@ import { GameBoard } from './game/GameBoard';
 import { useGameLogic } from '../hooks/useGameLogic';
 import { HighscoreDialog } from './game/HighscoreDialog';
 import { HighscoreList } from './game/HighscoreList';
+import { GameMenu } from './GameMenu';
 
 export const MobileGame = () => {
   const {
@@ -33,6 +34,12 @@ export const MobileGame = () => {
 
   const [showHighscoreDialog, setShowHighscoreDialog] = React.useState(false);
   const [showHighscoreList, setShowHighscoreList] = React.useState(false);
+  const [isWinter, setIsWinter] = useState(false);
+
+  useEffect(() => {
+    const currentMonth = new Date().getMonth();
+    setIsWinter(currentMonth >= 9 || currentMonth <= 2);
+  }, []);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -57,6 +64,10 @@ export const MobileGame = () => {
     startLevel(currentLevel);
   };
 
+  const toggleSeason = () => {
+    setIsWinter(prev => !prev);
+  };
+
   return (
     <div className="flex flex-col items-center gap-2">
       <GameHeader 
@@ -65,6 +76,13 @@ export const MobileGame = () => {
         currentTime={currentTime}
         totalTime={totalTime}
         gameCompleted={gameCompleted}
+      />
+      
+      <GameMenu 
+        onRestart={resetGame}
+        isWinter={isWinter}
+        onToggleSeason={toggleSeason}
+        isMobile={true}
       />
       
       <GameBoard 
@@ -76,6 +94,7 @@ export const MobileGame = () => {
         showLevelMessage={showLevelMessage}
         onRestart={resetGame}
         onStart={handleStartLevel}
+        isWinter={isWinter}
       />
 
       <TouchControls onMove={handleMove} />

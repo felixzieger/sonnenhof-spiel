@@ -6,7 +6,6 @@ import { GameMenu } from '../GameMenu';
 import { LevelMessage } from '../LevelMessage';
 import { Position, AnimalType } from '../Game';
 import { LEVEL_CONFIGS } from '../../config/gameConfig';
-import { SeasonToggle } from './SeasonToggle';
 
 interface GameBoardProps {
   playerPosition: Position;
@@ -17,6 +16,7 @@ interface GameBoardProps {
   showLevelMessage: boolean;
   onRestart: () => void;
   onStart: () => void;
+  isWinter: boolean;
 }
 
 export const GameBoard = ({ 
@@ -27,19 +27,9 @@ export const GameBoard = ({
   currentLevel, 
   showLevelMessage, 
   onRestart,
-  onStart
+  onStart,
+  isWinter
 }: GameBoardProps) => {
-  const [isWinter, setIsWinter] = useState(false);
-
-  useEffect(() => {
-    const currentMonth = new Date().getMonth();
-    setIsWinter(currentMonth >= 9 || currentMonth <= 2); // October (9) to March (2)
-  }, []);
-
-  const toggleSeason = () => {
-    setIsWinter(prev => !prev);
-  };
-
   return (
     <div className="relative w-full max-w-[500px] mx-auto">
       <div 
@@ -47,9 +37,6 @@ export const GameBoard = ({
           isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
         }`}
       >
-        <div className="absolute top-4 left-4 z-50">
-          <SeasonToggle isWinter={isWinter} onToggle={toggleSeason} />
-        </div>
         <GameMenu onRestart={onRestart} />
         {obstacles.map((obstacle, index) => (
           <Obstacle 
