@@ -24,28 +24,28 @@ export const useGameLogic = () => {
   const [isLevelRunning, setIsLevelRunning] = useState(false);
   const { toast } = useToast();
 
-  const startLevel = (level: number) => {
+  const startLevel = useCallback((level: number) => {
+    console.log('startLevel called in useGameLogic');
+    console.log('level:', level);
+    console.log('Current showLevelMessage state:', showLevelMessage);
+    
     setPlayerPosition({ x: 10, y: 5 });
     setAnimals(LEVEL_CONFIGS[level].animals.map(animal => ({
       ...animal,
       moveDelay: Math.floor(Math.random() * 300)
     })));
     positionQueue.clear();
-    setShowLevelMessage(true);
+    setShowLevelMessage(false);
+    setIsLevelRunning(true);
+    
+    console.log('Updated showLevelMessage to false');
     
     if (level === 1) {
       setStartTime(null);
       setCurrentTime(0);
       setTotalTime(0);
     }
-  };
-
-  const resetGame = () => {
-    setCurrentLevel(1);
-    setGameCompleted(false);
-    setStartTime(null);
-    startLevel(1);
-  };
+  }, [showLevelMessage]);
 
   const checkLevelComplete = useCallback(() => {
     const allCaught = animals.every(animal => animal.caught);
@@ -147,27 +147,24 @@ export const useGameLogic = () => {
     };
   }, [startTime, gameCompleted]);
 
-  const getAnimalName = (type: AnimalType['type']) => {
-    switch (type) {
-      case 'cat': return 'Katze';
-      case 'chicken': return 'Huhn';
-      case 'pig': return 'Schwein';
-      case 'horse': return 'Pferd';
-    }
-  };
-
   return {
     currentLevel,
     playerPosition,
     animals,
     obstacles,
     gameCompleted,
-    setGameCompleted, // Added this line
+    setGameCompleted,
     showLevelMessage,
     currentTime,
     totalTime,
     handleMove,
-    resetGame,
+    resetGame: useCallback(() => {
+      console.log('resetGame called');
+      setCurrentLevel(1);
+      setGameCompleted(false);
+      setStartTime(null);
+      startLevel(1);
+    }, [startLevel]),
     startLevel,
     isLevelRunning
   };

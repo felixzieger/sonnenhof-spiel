@@ -66,6 +66,8 @@ export const MobileGame = () => {
     console.log('handleStartLevel called in MobileGame');
     console.log('currentLevel:', currentLevel);
     console.log('showLevelMessage:', showLevelMessage);
+    console.log('startLevel function type:', typeof startLevel);
+    console.log('startLevel function:', startLevel);
     startLevel(currentLevel);
   };
 
@@ -76,7 +78,7 @@ export const MobileGame = () => {
 
   const handleHighscoreDialogClose = () => {
     setShowHighscoreDialog(false);
-    setShowHighscoreList(true); // Show the highscore list instead of resetting
+    setShowHighscoreList(true);
   };
 
   const toggleSeason = () => {
