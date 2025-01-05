@@ -13,11 +13,6 @@ interface SaveHighscoreResponse {
   message: string;
 }
 
-interface UpdateHighscoreParams {
-  p_player_name: string;
-  p_time_ms: number;
-}
-
 export const useHighscores = () => {
   const queryClient = useQueryClient();
 
@@ -59,10 +54,13 @@ export const useHighscores = () => {
       throw error;
     }
 
+    // Cast the response to SaveHighscoreResponse
+    const response = data as SaveHighscoreResponse;
+
     // Invalidate and refetch highscores after successful save
     await queryClient.invalidateQueries({ queryKey: ['highscores'] });
 
-    return data as SaveHighscoreResponse;
+    return response;
   };
 
   return {
