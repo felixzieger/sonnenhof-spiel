@@ -15,7 +15,7 @@ export const ScoreBoard = ({ animals }: ScoreBoardProps) => {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 h-[28px]">
       <div>🐱 {getCaughtCount('cat')}/{getTotalCount('cat')}</div>
       <div>🐔 {getCaughtCount('chicken')}/{getTotalCount('chicken')}</div>
       <div>🐷 {getCaughtCount('pig')}/{getTotalCount('pig')}</div>
