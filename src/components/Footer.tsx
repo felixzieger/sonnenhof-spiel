@@ -1,4 +1,4 @@
-import { Globe, Instagram, User } from "lucide-react";
+import { Globe, Instagram } from "lucide-react";
 import { Link } from "@/components/ui/link";
 
 export const Footer = () => {
@@ -25,14 +25,22 @@ export const Footer = () => {
         </Link>
       </div>
       <div>
-        made by Johanna and{" "}
+        made by
+        <Link
+          href="https://www.linkedin.com/in/johanna-thierkopf-79560a33b/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-gray-900 inline-flex items-center gap-1"
+        >
+          Johanna
+        </Link> and
         <Link
           href="https://felixzieger.de"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-gray-900 inline-flex items-center gap-1"
         >
-          Felix <User className="h-3 w-3 inline" />
+          Felix
         </Link>
       </div>
     </footer>
