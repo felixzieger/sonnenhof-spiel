@@ -16,7 +16,7 @@ export const SeasonToggle = ({ className }: SeasonToggleProps) => {
       variant="outline"
       className={`bg-white hover:bg-gray-100 ${className}`}
     >
-      {isWinter ? <Sun className="w-4 h-4" /> : <Snowflake className="w-4 h-4" />}
+       <span>{isWinter ? '☀️' : '❄️'}</span>
     </Button>
   );
 };
