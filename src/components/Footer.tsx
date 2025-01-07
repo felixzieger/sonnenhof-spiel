@@ -25,7 +25,7 @@ export const Footer = () => {
         </Link>
       </div>
       <div>
-        made by
+        made by{" "}
         <Link
           href="https://www.linkedin.com/in/johanna-thierkopf-79560a33b/"
           target="_blank"
