@@ -42,7 +42,7 @@ export const GameHeader = ({
           {formatTime(gameCompleted ? totalTime : currentTime)}
         </span>
       </div>
-      <div className="bg-white p-2 rounded-lg shadow-md">
+      <div className="bg-white p-2 rounded-lg shadow-md h-[28px]">
         <ScoreBoard animals={animals} />
       </div>
       <GameMenu 
