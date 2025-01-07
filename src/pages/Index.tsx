@@ -1,4 +1,5 @@
 import { Game } from "@/components/Game";
+import { Footer } from "@/components/Footer";
 import { useWinterMode } from "@/hooks/useWinterMode";
 
 const Index = () => {
@@ -10,6 +11,7 @@ const Index = () => {
         {isWinter ? '⛄' : '👨‍🌾'} Rette den Sonnenhof
       </h1>
       <Game />
+      <Footer />
     </div>
   );
 };
