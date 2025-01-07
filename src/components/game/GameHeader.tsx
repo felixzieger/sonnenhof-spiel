@@ -1,6 +1,7 @@
 import { Hourglass } from 'lucide-react';
 import { ScoreBoard } from '../ScoreBoard';
 import { AnimalType } from '../Game';
+import { GameMenu } from '../GameMenu';
 
 interface GameHeaderProps {
   level: number;
@@ -8,9 +9,21 @@ interface GameHeaderProps {
   currentTime: number;
   totalTime: number;
   gameCompleted: boolean;
+  onRestart: () => void;
+  isWinter?: boolean;
+  onToggleSeason?: () => void;
 }
 
-export const GameHeader = ({ level, animals, currentTime, totalTime, gameCompleted }: GameHeaderProps) => {
+export const GameHeader = ({
+  level,
+  animals,
+  currentTime,
+  totalTime,
+  gameCompleted,
+  onRestart,
+  isWinter,
+  onToggleSeason
+}: GameHeaderProps) => {
   const formatTime = (milliseconds: number): string => {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -19,7 +32,14 @@ export const GameHeader = ({ level, animals, currentTime, totalTime, gameComplet
   };
 
   return (
-    <div className="flex flex-wrap justify-center gap-2 mb-2">
+    <div className="flex flex-wrap justify-center items-center gap-2 mb-2">
+      <GameMenu
+        onRestart={onRestart}
+        isWinter={isWinter}
+        onToggleSeason={onToggleSeason}
+        isMobile={true}
+        className="bg-white p-2 rounded-lg shadow-md md:hidden"
+      />
       <div className="bg-white p-2 rounded-lg shadow-md">
         <h2 className="text-lg font-bold">Level {level}</h2>
       </div>

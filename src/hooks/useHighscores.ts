@@ -54,8 +54,11 @@ export const useHighscores = () => {
       throw error;
     }
 
-    // Cast the response to SaveHighscoreResponse
+    // Cast the response to SaveHighscoreResponse and validate its shape
     const response = data as SaveHighscoreResponse;
+    if (typeof response.success !== 'boolean' || typeof response.message !== 'string') {
+      throw new Error('Invalid response format from update_highscore');
+    }
 
     // Invalidate and refetch highscores after successful save
     await queryClient.invalidateQueries({ queryKey: ['highscores'] });

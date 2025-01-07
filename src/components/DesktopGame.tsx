@@ -131,16 +131,12 @@ export const DesktopGame = () => {
             Math.abs(animal.position.y - playerPos.y) < 1) {
           console.log(`Collision detected with ${animal.type} at position:`, animal.position);
           playCatchSound(animal.type);
-          toast({
-            title: "Tier gefangen!",
-            description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
-          });
           return { ...animal, caught: true };
         }
         return animal;
       })
     );
-  }, [toast]);
+  }, []);
 
   useEffect(() => {
     const moveInterval = setInterval(() => {

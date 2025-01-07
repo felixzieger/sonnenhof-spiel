@@ -16,7 +16,7 @@ export const SoundToggle = ({ className }: SoundToggleProps) => {
       variant="outline"
       className={`bg-white hover:bg-gray-100 ${className}`}
     >
-      {isEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+      {isEnabled ? '🔊' : '🔈'}
     </Button>
   );
 };

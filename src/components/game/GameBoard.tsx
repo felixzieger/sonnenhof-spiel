@@ -38,7 +38,7 @@ export const GameBoard = ({
   };
 
   return (
-    <div className="relative w-full max-w-[500px] mx-auto">
+    <div className="relative w-full mx-auto">
       <div 
         className={`relative w-full aspect-square rounded-lg border-2 border-fence overflow-hidden bg-cover bg-center ${
           isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
