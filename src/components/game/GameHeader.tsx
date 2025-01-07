@@ -32,23 +32,28 @@ export const GameHeader = ({
   };
 
   return (
-    <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
-      <div className="bg-white p-2 rounded-lg shadow-md">
-        <h2 className="text-lg font-bold">Level {level}</h2>
+    <div className="flex flex-col gap-2 mb-2">
+      <div className="flex flex-wrap justify-between items-center gap-2">
+        <div className="bg-white p-2 rounded-lg shadow-md">
+          <h2 className="text-lg font-bold">Level {level}</h2>
+        </div>
+        <div className="bg-white p-2 rounded-lg shadow-md flex items-center gap-1">
+          <Hourglass className="w-4 h-4" />
+          <span className="font-mono text-lg">
+            {formatTime(gameCompleted ? totalTime : currentTime)}
+          </span>
+        </div>
+        <GameMenu 
+          onRestart={onRestart}
+          isWinter={isWinter}
+          onToggleSeason={onToggleSeason}
+          isMobile={true}
+          className="bg-white p-2 rounded-lg shadow-md md:hidden"
+        />
       </div>
-      <div className="bg-white p-2 rounded-lg shadow-md flex items-center gap-1">
-        <Hourglass className="w-4 h-4" />
-        <span className="font-mono text-lg">
-          {formatTime(gameCompleted ? totalTime : currentTime)}
-        </span>
+      <div className="bg-white p-2 rounded-lg shadow-md w-full">
+        <ScoreBoard animals={animals} />
       </div>
-      <GameMenu 
-        onRestart={onRestart}
-        isWinter={isWinter}
-        onToggleSeason={onToggleSeason}
-        isMobile={true}
-        className="bg-white p-2 rounded-lg shadow-md md:hidden"
-      />
     </div>
   );
 };
