@@ -28,7 +28,7 @@ export const GameMenu = ({ onRestart, isWinter, onToggleSeason, isMobile = false
       <Menubar className="border-none bg-transparent h-auto p-0">
         <MenubarMenu>
           <MenubarTrigger className="bg-transparent hover:bg-transparent data-[state=open]:bg-transparent p-0 h-auto">
-            <Menu className="h-4 w-4" />
+            <Menu className="h-[28px] w-[28px]" />
           </MenubarTrigger>
           <MenubarContent align="end" className="bg-white/95 backdrop-blur-sm">
             <MenubarItem onClick={onRestart}>
