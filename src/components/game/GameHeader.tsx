@@ -42,9 +42,6 @@ export const GameHeader = ({
           {formatTime(gameCompleted ? totalTime : currentTime)}
         </span>
       </div>
-      <div className="bg-white p-2 rounded-lg shadow-md">
-        <ScoreBoard animals={animals} />
-      </div>
       <GameMenu 
         onRestart={onRestart}
         isWinter={isWinter}
