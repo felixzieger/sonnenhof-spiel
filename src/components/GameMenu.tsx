@@ -15,21 +15,22 @@ interface GameMenuProps {
   isWinter?: boolean;
   onToggleSeason?: () => void;
   isMobile?: boolean;
+  className?: string;
 }
 
-export const GameMenu = ({ onRestart, isWinter, onToggleSeason, isMobile = false }: GameMenuProps) => {
+export const GameMenu = ({ onRestart, isWinter, onToggleSeason, isMobile = false, className = '' }: GameMenuProps) => {
   const { isEnabled, setIsEnabled } = useSoundEnabled();
   
   if (!isMobile) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className={className}>
       <Menubar className="border-none bg-transparent">
         <MenubarMenu>
-          <MenubarTrigger className="bg-white/80 backdrop-blur-sm data-[state=open]:bg-white">
-            <Menu className="h-4 w-4" />
+          <MenubarTrigger className="bg-transparent hover:bg-transparent data-[state=open]:bg-transparent p-0">
+            <Menu className="h-5 w-5" />
           </MenubarTrigger>
-          <MenubarContent align="end" className="bg-white/80 backdrop-blur-sm">
+          <MenubarContent align="end" className="bg-white/95 backdrop-blur-sm">
             <MenubarItem onClick={onRestart}>
               <span>🔄 Neu starten</span>
             </MenubarItem>

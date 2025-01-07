@@ -93,13 +93,9 @@ export const MobileGame = () => {
         currentTime={currentTime}
         totalTime={totalTime}
         gameCompleted={gameCompleted}
-      />
-      
-      <GameMenu 
         onRestart={resetGame}
         isWinter={isWinter}
         onToggleSeason={toggleSeason}
-        isMobile={true}
       />
       
       <GameBoard 
