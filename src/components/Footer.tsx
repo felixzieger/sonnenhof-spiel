@@ -34,7 +34,7 @@ export const Footer = () => {
         >
           Johanna
         </Link>
-        and
+        {" "}and{" "}
         <Link
           href="https://felixzieger.de"
           target="_blank"
