@@ -33,7 +33,8 @@ export const Footer = () => {
           className="hover:text-gray-900 inline-flex items-center gap-1"
         >
           Johanna
-        </Link> and 
+        </Link>
+        and
         <Link
           href="https://felixzieger.de"
           target="_blank"
