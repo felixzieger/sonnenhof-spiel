@@ -85,16 +85,12 @@ export const useGameLogic = () => {
             Math.abs(animal.position.x - playerPos.x) < 1 && 
             Math.abs(animal.position.y - playerPos.y) < 1) {
           playCatchSound(animal.type);
-          toast({
-            title: "Tier gefangen!",
-            description: `Du hast ein${animal.type === 'cat' ? 'e' : ''} ${getAnimalName(animal.type)} gefangen!`,
-          });
           return { ...animal, caught: true };
         }
         return animal;
       })
     );
-  }, [toast]);
+  }, []);
 
   const handleMove = useCallback((direction: string) => {
     if (gameCompleted || !isLevelRunning) return;
