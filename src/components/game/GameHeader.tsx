@@ -2,6 +2,9 @@ import { Hourglass } from 'lucide-react';
 import { ScoreBoard } from '../ScoreBoard';
 import { AnimalType } from '../Game';
 import { GameMenu } from '../GameMenu';
+import { Button } from '@/components/ui/button';
+import { SeasonToggle } from './SeasonToggle';
+import { SoundToggle } from './SoundToggle';
 
 interface GameHeaderProps {
   level: number;
