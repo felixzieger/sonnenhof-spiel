@@ -40,8 +40,8 @@ export const useHighscores = () => {
 
       if (error) throw error;
 
-      // Validate the response format
-      const response = data as SaveHighscoreResponse;
+      // Cast to unknown first, then to SaveHighscoreResponse to satisfy TypeScript
+      const response = data as unknown as SaveHighscoreResponse;
       if (typeof response.success !== 'boolean' || typeof response.message !== 'string') {
         throw new Error('Invalid response format from update_highscore');
       }
