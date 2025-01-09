@@ -40,7 +40,6 @@ export const GameHeader = ({
         onRestart={onRestart}
         isWinter={isWinter}
         onToggleSeason={onToggleSeason}
-        isMobile={isMobile}
         className="bg-white p-2 rounded-lg shadow-md"
       />
       <div className="bg-white p-2 rounded-lg shadow-md">

@@ -18,11 +18,9 @@ interface GameMenuProps {
   className?: string;
 }
 
-export const GameMenu = ({ onRestart, isWinter, onToggleSeason, isMobile = false, className = '' }: GameMenuProps) => {
+export const GameMenu = ({ onRestart, isWinter, onToggleSeason, className = '' }: GameMenuProps) => {
   const { isEnabled, setIsEnabled } = useSoundEnabled();
   
-  if (!isMobile) return null;
-
   return (
     <div className={className}>
       <Menubar className="border-none bg-transparent h-auto p-0">

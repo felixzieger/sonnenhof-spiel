@@ -217,6 +217,7 @@ export const DesktopGame = () => {
         onRestart={resetGame}
         isWinter={isWinter}
         onToggleSeason={() => setIsWinter(!isWinter)}
+        isMobile={false}
       />
       <div 
         className={`relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-cover bg-center ${
