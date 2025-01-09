@@ -1,4 +1,4 @@
-import { Menu, Award } from "lucide-react"
+import { Menu } from "lucide-react"
 import {
   Menubar,
   MenubarContent,
@@ -9,7 +9,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { SeasonToggle } from './game/SeasonToggle'
 import { useSoundEnabled } from '@/hooks/useSoundEnabled'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { HighscoreList } from './game/HighscoreList'
 
 interface GameMenuProps {
   onRestart: () => void;
@@ -21,7 +22,7 @@ interface GameMenuProps {
 
 export const GameMenu = ({ onRestart, isWinter, onToggleSeason, className = '' }: GameMenuProps) => {
   const { isEnabled, setIsEnabled } = useSoundEnabled();
-  const navigate = useNavigate();
+  const [showHighscores, setShowHighscores] = useState(false);
   
   return (
     <div className={className}>
@@ -42,13 +43,19 @@ export const GameMenu = ({ onRestart, isWinter, onToggleSeason, className = '' }
             <MenubarItem onClick={() => setIsEnabled(!isEnabled)}>
               <span>{isEnabled ? '🔊 Ton aus' : '🔈 Ton an'}</span>
             </MenubarItem>
-            <MenubarItem onClick={() => navigate('/leaderboard')}>
-              <Award className="mr-2" />
-              <span>Bestenliste</span>
+            <MenubarItem onClick={() => setShowHighscores(true)}>
+              <span>🏆 Bestenliste</span>
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
+
+      <HighscoreList 
+        isOpen={showHighscores}
+        onClose={() => setShowHighscores(false)}
+        onSaveScore={() => {}}
+        currentScore={null}
+      />
     </div>
   );
 };
