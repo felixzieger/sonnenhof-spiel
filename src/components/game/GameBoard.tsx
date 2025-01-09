@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Player } from '../Player';
 import { Animal } from '../Animal';
 import { Obstacle } from '../Obstacle';
-import { GameMenu } from '../GameMenu';
 import { LevelMessage } from '../LevelMessage';
 import { Position, AnimalType } from '../Game';
 import { LEVEL_CONFIGS } from '../../config/gameConfig';
@@ -26,7 +25,6 @@ export const GameBoard = ({
   gridSize, 
   currentLevel, 
   showLevelMessage, 
-  onRestart,
   onStart,
   isWinter
 }: GameBoardProps) => {
@@ -44,7 +42,6 @@ export const GameBoard = ({
           isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
         }`}
       >
-        <GameMenu onRestart={onRestart} />
         {obstacles.map((obstacle, index) => (
           <Obstacle 
             key={index}

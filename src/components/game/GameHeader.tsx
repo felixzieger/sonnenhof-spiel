@@ -2,6 +2,7 @@ import { Hourglass } from 'lucide-react';
 import { ScoreBoard } from '../ScoreBoard';
 import { AnimalType } from '../Game';
 import { GameMenu } from '../GameMenu';
+import { Button } from '@/components/ui/button';
 
 interface GameHeaderProps {
   level: number;
@@ -12,6 +13,7 @@ interface GameHeaderProps {
   onRestart: () => void;
   isWinter?: boolean;
   onToggleSeason?: () => void;
+  isMobile?: boolean;
 }
 
 export const GameHeader = ({
@@ -22,7 +24,8 @@ export const GameHeader = ({
   gameCompleted,
   onRestart,
   isWinter,
-  onToggleSeason
+  onToggleSeason,
+  isMobile
 }: GameHeaderProps) => {
   const formatTime = (milliseconds: number): string => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -32,20 +35,19 @@ export const GameHeader = ({
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center gap-2 mb-2">
+    <div className={`flex flex-wrap justify-center items-center gap-2 mb-2 ${isMobile ? '' : 'md:mb-4'}`}>
       <GameMenu
         onRestart={onRestart}
         isWinter={isWinter}
         onToggleSeason={onToggleSeason}
-        isMobile={true}
-        className="bg-white p-2 rounded-lg shadow-md md:hidden"
+        className="bg-white p-2 rounded-lg shadow-md"
       />
       <div className="bg-white p-2 rounded-lg shadow-md">
-        <h2 className="text-lg font-bold">Level {level}</h2>
+        <h2 className={`text-lg font-bold ${isMobile ? '' : 'text-xl'}`}>Level {level}</h2>
       </div>
       <div className="bg-white p-2 rounded-lg shadow-md flex items-center gap-1">
-        <Hourglass className="w-4 h-4" />
-        <span className="font-mono text-lg">
+        <Hourglass className={`w-4 h-4 ${isMobile ? '' : 'w-6 h-6'}`} />
+        <span className={`font-mono text-lg ${isMobile ? '' : 'text-2xl'}`}>
           {formatTime(gameCompleted ? totalTime : currentTime)}
         </span>
       </div>
