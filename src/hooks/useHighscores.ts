@@ -23,7 +23,7 @@ export const useHighscores = () => {
         .from('highscores')
         .select('*')
         .order('time_ms', { ascending: true })
-        .limit(10);
+        .limit(32);
 
       if (error) throw error;
       return data as Highscore[];
