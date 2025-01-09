@@ -3,8 +3,6 @@ import { ScoreBoard } from '../ScoreBoard';
 import { AnimalType } from '../Game';
 import { GameMenu } from '../GameMenu';
 import { Button } from '@/components/ui/button';
-import { SeasonToggle } from './SeasonToggle';
-import { SoundToggle } from './SoundToggle';
 
 interface GameHeaderProps {
   level: number;
@@ -43,7 +41,7 @@ export const GameHeader = ({
         isWinter={isWinter}
         onToggleSeason={onToggleSeason}
         isMobile={isMobile}
-        className={`bg-white p-2 rounded-lg shadow-md ${isMobile ? 'md:hidden' : 'hidden'}`}
+        className="bg-white p-2 rounded-lg shadow-md"
       />
       <div className="bg-white p-2 rounded-lg shadow-md">
         <h2 className={`text-lg font-bold ${isMobile ? '' : 'text-xl'}`}>Level {level}</h2>
@@ -57,19 +55,6 @@ export const GameHeader = ({
       <div className="bg-white p-2 rounded-lg shadow-md">
         <ScoreBoard animals={animals} />
       </div>
-      {!isMobile && (
-        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center gap-2">
-          <Button 
-            onClick={onRestart}
-            variant="outline"
-            className="bg-white hover:bg-gray-100"
-          >
-            🔄 Neu starten
-          </Button>
-          <SeasonToggle onToggle={onToggleSeason} isWinter={isWinter} />
-          <SoundToggle />
-        </div>
-      )}
     </div>
   );
 };
