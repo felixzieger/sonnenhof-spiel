@@ -26,6 +26,7 @@ import { SeasonToggle } from './game/SeasonToggle';
 import { useWinterMode } from '@/hooks/useWinterMode';
 import { HighscoreDialog } from './game/HighscoreDialog';
 import { SoundToggle } from './game/SoundToggle';
+import { GameHeader } from './game/GameHeader';
 
 export const DesktopGame = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -207,31 +208,16 @@ export const DesktopGame = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 p-2 sm:p-4">
-      <div className="flex flex-wrap justify-center gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
-          <h2 className="text-xl font-bold">Level {currentLevel}</h2>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center gap-2">
-          <Hourglass className="w-6 h-6" />
-          <span className="font-mono text-2xl font-bold">
-            {formatTime(gameCompleted ? totalTime : currentTime)}
-          </span>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center">
-          <ScoreBoard animals={animals} />
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md h-[88px] flex items-center justify-center gap-2">
-          <Button 
-            onClick={resetGame}
-            variant="outline"
-            className="bg-white hover:bg-gray-100"
-          >
-            🔄 Neu starten
-          </Button>
-          <SeasonToggle />
-          <SoundToggle />
-        </div>
-      </div>
+      <GameHeader
+        level={currentLevel}
+        animals={animals}
+        currentTime={currentTime}
+        totalTime={totalTime}
+        gameCompleted={gameCompleted}
+        onRestart={resetGame}
+        isWinter={isWinter}
+        onToggleSeason={() => setIsWinter(!isWinter)}
+      />
       <div 
         className={`relative w-full sm:w-[800px] aspect-square rounded-lg border-4 border-fence overflow-hidden bg-cover bg-center ${
           isWinter ? 'bg-farm-winter' : 'bg-farm-summer'
