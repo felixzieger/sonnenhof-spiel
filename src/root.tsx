@@ -25,7 +25,7 @@ export function Layout({
         <title>Rette den Sonnenhof</title>
         <meta name="description" content="Hilf uns die Tiere auf dem Sonnenhof einzufangen!" />
         <meta name="author" content="Johanna und Felix" />
-        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:image" content="/og-image.webp" />
         <script defer data-domain="spiel.sonnenhof-zieger.de" src="https://plausible.sonnenhof-zieger.de/js/script.js"></script>
         <Meta />
         <Links />

@@ -19,8 +19,8 @@ export default {
     },
     extend: {
       backgroundImage: {
-        'farm-winter': "url('/sonnenhof-board-winter.jpeg')",
-        'farm-summer': "url('/sonnenhof-board-summer.jpeg')",
+        'farm-winter': "url('/sonnenhof-board-winter.webp')",
+        'farm-summer': "url('/sonnenhof-board-summer.webp')",
       },
       colors: {
         border: "hsl(var(--border))",
